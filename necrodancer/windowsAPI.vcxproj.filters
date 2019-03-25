@@ -55,6 +55,15 @@
     <Filter Include="PlayGround\camera">
       <UniqueIdentifier>{411658ea-c87c-4119-a62f-1966e33e45a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\object">
+      <UniqueIdentifier>{ab60129a-ecb7-4a06-9391-805bded8c5b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\mapTool">
+      <UniqueIdentifier>{6fc4ad5f-820b-4cd5-a707-5708dabed8f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\item">
+      <UniqueIdentifier>{bf02c4ba-61fe-4f18-bab4-efce04f37434}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -138,6 +147,24 @@
     <ClInclude Include="camera.h">
       <Filter>PlayGround\camera</Filter>
     </ClInclude>
+    <ClInclude Include="parentObj.h">
+      <Filter>PlayGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>PlayGround\mapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="tileNode.h">
+      <Filter>PlayGround\mapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="mapToolScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="itemInfomation.h">
+      <Filter>PlayGround\item</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyInfomation.h">
+      <Filter>PlayGround</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -209,6 +236,15 @@
     <ClCompile Include="camera.cpp">
       <Filter>PlayGround\camera</Filter>
     </ClCompile>
+    <ClCompile Include="parentObj.cpp">
+      <Filter>PlayGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>PlayGround\mapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc">
@@ -224,7 +260,16 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Menu.cur">
+    <None Include="a.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="b.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="c.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="d.cur">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

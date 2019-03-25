@@ -295,3 +295,13 @@ void soundManager::setAllSoundResume()
 	_bgmGroup->setPaused(false);
 	_effectGroup->setPaused(false);
 }
+
+void soundManager::allSoundStop()
+{
+	int count = 0;
+	arrSoundsIter iter = _mTotalSounds.begin();
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		_channel[count]->stop();
+	}
+}

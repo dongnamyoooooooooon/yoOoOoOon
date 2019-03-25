@@ -72,7 +72,22 @@ namespace TEAM_15DUCK_UTILL
 		return rc;
 	}
 
+	RECT makeRECT(D2D1_RECT_F rc)
+	{
+		return RECT{ (LONG)rc.left, (LONG)rc.top,
+					 (LONG)rc.right,(LONG)rc.bottom };
+	}
 
+	POINT makePOINT(POINTF pt)
+	{
+		return POINT{ (LONG)pt.x, (LONG)pt.y };
+	}
+
+	POINT makePOINT_NoCamera(POINTF pt)
+	{
+		return POINT{ (LONG)pt.x - (LONG)CAMERA->getPosX(),
+					  (LONG)pt.y - (LONG)CAMERA->getPosY() };
+	}
 
 	ELLIPSE EllipseMake(float x, float y, float r)
 	{

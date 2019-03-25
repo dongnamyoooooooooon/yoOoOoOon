@@ -64,6 +64,8 @@ public:
 	void setBgmResume();
 	void setAllSoundResume();
 
+	void allSoundStop();
+
 
 	soundManager();
 	~soundManager();
