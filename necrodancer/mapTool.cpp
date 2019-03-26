@@ -195,7 +195,7 @@ void mapTool::choiceButton()
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 		{
 			_isEnter = true;																				//방향키 작동을 못하게 하도록 한다.
-			if(_curButtonNum < MAPTOOL_BUTTON_NAME)
+			if (_curButtonNum < MAPTOOL_BUTTON_NAME)
 				_choiceNum = _curButtonNum;
 			activeButton(_curButtonNum);																	//버튼을 눌렀을때 세팅해준다.
 
@@ -399,52 +399,6 @@ void mapTool::pickSampleTile()
 			count++;
 			itemCount++;
 		}
-		//if (_curButtonNum == MAPTOOL_BUTTON_WALL)																//벽일때
-		//{
-		//	indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / TILE_SIZE;					//인덱스X는 48기준
-		//	indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / WALLHEIGHT;					//인덱스Y는 96기준
-		//}
-		//else if (_curButtonNum == MAPTOOL_BUTTON_ETC)															//기타일때 
-		//{
-		//	if (_curImgNum == IMAGE_NAME_ETC_02)																//현재이미지가 상점주인이면
-		//	{
-		//		indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / SIZE_144;				//인덱스X는 144기준
-		//		indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / WALLHEIGHT;				//인덱스Y는 96기준
-		//	}
-		//	else if (_curImgNum == IMAGE_NAME_ETC_03)															//현재이미지가 문이면
-		//	{
-		//		indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / TILE_SIZE;				//인덱스X는 48기준
-		//		indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / WALLHEIGHT;				//인덱스Y는 96기준
-		//	}
-		//	else																								//현재이미지가 횃불, 나무상자일때
-		//	{
-		//		indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / TILE_SIZE;				//인덱스X는 48기준
-		//		indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / TILE_SIZE;				//인덱스Y는 48기준
-		//	}
-		//}
-		//else if (_curButtonNum == MAPTOOL_BUTTON_ENEMY && _curImgNum != IMAGE_NAME_ENEMY_01)					//적이고 일반적이 아닐경우
-		//{
-		//	indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / SIZE_144;					//전체적으로 인덱스X는 144
-
-		//	if (_curImgNum == IMAGE_NAME_ENEMY_02)																//현재이미지가 박쥐, 코랄리프보스면
-		//		indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / SIZE_192;				//인덱스Y는 192기준
-		//	else if (_curImgNum == IMAGE_NAME_ENEMY_03 || _curImgNum == IMAGE_NAME_ENEMY_04)					//현재이미지가 코랄리프쫄병, 미니보스면
-		//		indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / SIZE_144;				//인덱스Y는 144기준
-		//}
-		//else if (_curButtonNum == MAPTOOL_BUTTON_SHRINE)														//사원일때
-		//{
-		//	indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / SIZE_144;					//인덱스X는 144기준
-		//	indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / SIZE_144;					//인덱스Y는 144기준
-		//}
-		//else																									//그 외
-		//{
-		//	indX = (_ptMouse.x - CAMERA->getPosX() - (_sampleWindow.rc.left + 30)) / TILE_SIZE;					//인덱스X는 48기준
-		//	indY = (_ptMouse.y - CAMERA->getPosY() - (_sampleWindow.rc.top + 70)) / TILE_SIZE;					//인덱스Y는 48기준
-		//}
-
-		//if (indX >= SAMPLETILE || indX < 0) return;																//인덱스 범위 밖은 안된다.
-		//if (indY >= SAMPLETILE || indY < 0) return;																//인덱스 범위 밖은 안된다.
-
 		//if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))																//우클릭할경우
 		//{
 		//	_isTileClick = true;																				//타일클릭은 트루
@@ -473,538 +427,808 @@ void mapTool::pickSampleTile()
 	}
 }
 
-	void mapTool::dragSampleTile()
+void mapTool::dragSampleTile()
+{
+	//샘플타일창을 드래그할때
+	if (PtInRect(&makeRECT(_sampleWindow.rc), makePOINT_NoCamera(_ptMouse)))
 	{
-		//샘플타일창을 드래그할때
-		if (PtInRect(&makeRECT(_sampleWindow.rc), makePOINT_NoCamera(_ptMouse)))
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+			_isDrag = true;																															//드래그온
+			_sampleWindow.rc.left = _sampleWindow.rc.left + _ptMouse.x - _curPoint.x;																//클릭한 순간의 좌표와 이동중일때의 좌표를
+			_sampleWindow.rc.top = _sampleWindow.rc.top + _ptMouse.y - _curPoint.y;																//계산해서 샘플타일창을
+			_sampleWindow.rc.right = _sampleWindow.rc.left + 400;																					//이동시켜준다.
+			_sampleWindow.rc.bottom = _sampleWindow.rc.top + 400;
+			_prevButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top,		_sampleWindow.rc.right + 30, _sampleWindow.rc.top + 30 };		//창의 위치에 따라 같이 이동
+			_nextButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 30, _sampleWindow.rc.right + 30, _sampleWindow.rc.top + 60 };		//창의 위치에 따라 같이 이동
+			_rendomButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 60,	_sampleWindow.rc.right + 60, _sampleWindow.rc.top + 90 };		//창의 위치에 따라 같이 이동
+			_floorButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 60,	_sampleWindow.rc.right + 70, _sampleWindow.rc.top + 90 };		//창의 위치에 따라 같이 이동
+			_eraseButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 90,	_sampleWindow.rc.right + 40, _sampleWindow.rc.top + 120 };		//창의 위치에 따라 같이 이동
+		}
+	}
+	else
+		_isDrag = false;																															//아니면 드래그오프
+	_curPoint.x = _ptMouse.x;																														//클릭한 순간의 좌표 기억
+	_curPoint.y = _ptMouse.y;																														//클릭한 순간의 좌표 기억
+}
+
+void mapTool::setTile()
+{
+	//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
+	for (UINT i = 0; i < _tileY; i++)
+	{
+		//처음에는 vTile과 vRECT에 초기화한 값들을 넣어주고
+		//그담에 이중벡터인 vvTile과 vvRECT에 넣어준다.
+
+		vector<tagTile*> vTile;
+		vector<D2D1_RECT_F> vRECT;
+		for (UINT j = 0; j < _tileX; j++)
+		{
+			tagTile* tempTile = new tagTile;
+			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
+			parentObj* floor = new parentObj;
+
+			if ((j % 2 == 1 && i % 2 == 0) || (j % 2 == 0 && i % 2 == 1))						//y->홀 x->짝 / y->짝 x->홀 일때
 			{
-				_isDrag = true;																															//드래그온
-				_sampleWindow.rc.left = _sampleWindow.rc.left + _ptMouse.x - _curPoint.x;																//클릭한 순간의 좌표와 이동중일때의 좌표를
-				_sampleWindow.rc.top = _sampleWindow.rc.top + _ptMouse.y - _curPoint.y;																//계산해서 샘플타일창을
-				_sampleWindow.rc.right = _sampleWindow.rc.left + 400;																					//이동시켜준다.
-				_sampleWindow.rc.bottom = _sampleWindow.rc.top + 400;
-				_prevButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top,		_sampleWindow.rc.right + 30, _sampleWindow.rc.top + 30 };		//창의 위치에 따라 같이 이동
-				_nextButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 30, _sampleWindow.rc.right + 30, _sampleWindow.rc.top + 60 };		//창의 위치에 따라 같이 이동
-				_rendomButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 60,	_sampleWindow.rc.right + 60, _sampleWindow.rc.top + 90 };		//창의 위치에 따라 같이 이동
-				_floorButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 60,	_sampleWindow.rc.right + 70, _sampleWindow.rc.top + 90 };		//창의 위치에 따라 같이 이동
-				_eraseButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 90,	_sampleWindow.rc.right + 40, _sampleWindow.rc.top + 120 };		//창의 위치에 따라 같이 이동
+				tempTile->floorName = "floor_01";
+				tempTile->terrain_frameX = 1;
+				tempTile->terrain_frameY = 0;
+				tempTile->type_floor = OBJECT_TYPE_FLOOR;
+				tempTile->floorPosX = j;
+				tempTile->floorPosY = i;
+				tempTile->floor = floor;
 			}
+			else if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1))					//y->짝 x->짝 / y->홀 x->홀 일때
+			{
+				tempTile->floorName = "floor_01";
+				tempTile->terrain_frameX = 0;
+				tempTile->terrain_frameY = 0;
+				tempTile->type_floor = OBJECT_TYPE_FLOOR;
+				tempTile->floorPosX = j;
+				tempTile->floorPosY = i;
+				tempTile->floor = floor;
+			}
+			tempTile->wall = nullptr;
+			tempTile->item = nullptr;
+			tempTile->enemy = nullptr;
+			tempTile->player = nullptr;
+			tempTile->objETC = nullptr;
+			tempTile->trap = nullptr;
+			tempTile->objName = "";
+			tempTile->objPosX = j;
+			tempTile->objPosY = i;
+			tempTile->type_obj = OBJECT_TYPE_NONE;
+
+			tempTile->object_frameX = NULL;
+			tempTile->object_frameY = NULL;
+			tempTile->isTorch = false;
+
+			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
+						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
+
+			vTile.push_back(tempTile);
+			vRECT.push_back(*tempRECT);
+		}
+		_vvTile.push_back(vTile);
+		_vvRECT.push_back(vRECT);
+	}
+
+	{
+		parentObj object;
+
+		for (int i = 0; i < 8; i++)
+		{
+			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_FLOOR);
+			_vObj.push_back(object);
+		}
+
+		for (int i = 8; i < 20; i++)
+		{
+			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_WALL);
+			_vObj.push_back(object);
+		}
+
+		object.init(IMAGE_NAME[IMAGE_NAME_CHEST], 0, 0, OBJECT_TYPE_ITEM);
+		_vObj.push_back(object);
+
+		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_01], 0, 0, OBJECT_TYPE_ETC);
+		//_vObj.push_back(object);
+
+		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_02], 0, 0, OBJECT_TYPE_ETC);
+		//_vObj.push_back(object);
+
+		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_03], 0, 0, OBJECT_TYPE_ETC);
+		//_vObj.push_back(object);
+
+		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_04], 0, 0, OBJECT_TYPE_ETC);
+		//_vObj.push_back(object);
+
+		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_05], 0, 0, OBJECT_TYPE_ETC);
+		//_vObj.push_back(object);
+
+		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_06], 0, 0, OBJECT_TYPE_ETC);
+		//_vObj.push_back(object);
+
+		object.init(IMAGE_NAME[IMAGE_NAME_ETC_01], 0, 0, OBJECT_TYPE_ETC);
+		_vObj.push_back(object);
+
+		for (const string& elem : ENEMY_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ENEMY);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : ARMOR_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : SHOVEL_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : TORCH_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : WEAPON_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : HEADWEAR_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : FOOTWEAR_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : CONSUMABLE_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : HEART_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : COIN_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+
+		for (const string& elem : BOMB_NAME)
+		{
+			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			_vObj.push_back(object);
+		}
+	}
+}
+
+void mapTool::drawTile()
+{
+	parentObj tempObj;
+
+	tempObj.init("", -1, -1, OBJECT_TYPE_NONE);
+
+	if (_ptMouse.x - CAMERA->getPosX() > WINSIZEX - TOTAL_SAMPLE_SIZE + TILE_SIZE)	return;								//샘플타일쪽 그리면 안돼
+	if (_ptMouse.x > _vvRECT[0][_tileX - 1].right)									return;								//맵 제일 오른쪽 안돼
+	if (_ptMouse.x < _vvRECT[0][0].left)											return;								//맵 제일 왼쪽 안돼
+	if (_ptMouse.y > _vvRECT[_tileY - 1][0].bottom)									return;								//맵 제일 아래쪽 안돼
+	if (_ptMouse.y < _vvRECT[0][0].top)												return;								//맵 제일 윗쪽 안돼
+	if (_isDrag)																	return;								//드래그중일때 안돼
+	if (!_isEnter)																	return;								//샘플타일창이 없을때도 안돼
+	if (PtInRect(&makeRECT(_prevButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 왼쪽버튼에 있을때 안돼
+	if (PtInRect(&makeRECT(_nextButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 오른쪽버튼에 있을때 안돼
+	if (PtInRect(&makeRECT(_rendomButton.rc), makePOINT_NoCamera(_ptMouse)))		return;								//마우스가 랜덤버튼에 있을때 안돼
+	if (PtInRect(&makeRECT(_floorButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 바닥그리기에 있을때 안돼
+	if (PtInRect(&makeRECT(_eraseButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 지우개버튼에 있을때 안돼
+	if (PtInRect(&makeRECT(_sampleWindow.rc), makePOINT_NoCamera(_ptMouse)))		return;								//마우스가 샘플타일창에 있을때 안돼
+
+	if (_isEnter)
+	{
+		if (KEYMANAGER->isStayKeyDown(VK_SHIFT))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (UINT i = 0; i < _tileY; i++)
+				{
+					for (UINT j = 0; j < _tileX; j++)
+					{
+						if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
+						{
+							_savePointX = j;
+							_savePointY = i;
+						}
+					}
+				}
+			}
+
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+			{
+				int savePointX2;
+				int savePointY2;
+
+				for (UINT i = 0; i < _tileY; i++)
+				{
+					for (UINT j = 0; j < _tileX; j++)
+					{
+						if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
+						{
+							savePointX2 = j;
+							savePointY2 = i;
+						}
+					}
+				}
+				savePointX2++;
+				savePointY2++;
+
+				if (savePointX2 < _savePointX) return;
+				if (savePointY2 < _savePointY) return;
+
+				for (int i = _savePointY; i < savePointY2; i++)
+				{
+					for (int j = _savePointX; j < savePointX2; j++)
+					{
+						drawobject(i, j);
+					}
+				}
+			}
+		}
+	}
+}
+
+void mapTool::drawobject(int i, int j)
+{
+	parentObj* tempObj = new parentObj;
+	tempObj->init("", -1, -1, OBJECT_TYPE_NONE);
+
+	parentObj* obj = new parentObj;
+
+	if (_eraseButton.curFrameY == 0)
+	{
+		switch (_selectObj.getObjType())
+		{
+		case OBJECT_TYPE_FLOOR:
+		{
+			obj = new parentObj;
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			_vvTile[i][j]->floor = obj;
+			_vvTile[i][j]->floorName = _selectObj.getImgName();
+			_vvTile[i][j]->type_floor = _selectObj.getObjType();
+			_vvTile[i][j]->floorPosX = j;
+			_vvTile[i][j]->floorPosY = i;
+
+			break;
+		}
+		case OBJECT_TYPE_WALL:
+		{
+			obj = new parentObj;
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			_vvTile[i][j]->wall = obj;
+			_vvTile[i][j]->item = nullptr;
+			_vvTile[i][j]->enemy = nullptr;
+			_vvTile[i][j]->trap = nullptr;
+			_vvTile[i][j]->objName = _selectObj.getImgName();
+			_vvTile[i][j]->type_obj = _selectObj.getObjType();
+			_vvTile[i][j]->objPosX = j;
+			_vvTile[i][j]->objPosY = i;
+
+			break;
+		}
+		case OBJECT_TYPE_ENEMY:
+		{
+			obj = new parentObj;
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			_vvTile[i][j]->wall = nullptr;
+			_vvTile[i][j]->item = nullptr;
+			_vvTile[i][j]->enemy = obj;
+			_vvTile[i][j]->trap = nullptr;
+			_vvTile[i][j]->objName = _selectObj.getImgName();
+			_vvTile[i][j]->type_obj = _selectObj.getObjType();
+			_vvTile[i][j]->objPosX = j;
+			_vvTile[i][j]->objPosY = i;
+
+			break;
+		}
+		case OBJECT_TYPE_TRAP:
+		{
+			obj = new parentObj;
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			_vvTile[i][j]->wall = nullptr;
+			_vvTile[i][j]->item = nullptr;
+			_vvTile[i][j]->enemy = nullptr;
+			_vvTile[i][j]->trap = obj;
+			_vvTile[i][j]->objName = _selectObj.getImgName();
+			_vvTile[i][j]->type_obj = _selectObj.getObjType();
+			_vvTile[i][j]->objPosX = j;
+			_vvTile[i][j]->objPosY = i;
+
+			break;
+		}
+		case OBJECT_TYPE_ITEM:
+		{
+			obj = new parentObj;
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			_vvTile[i][j]->wall = nullptr;
+			_vvTile[i][j]->item = obj;
+			_vvTile[i][j]->enemy = nullptr;
+			_vvTile[i][j]->trap = nullptr;
+			_vvTile[i][j]->objName = _selectObj.getImgName();
+			_vvTile[i][j]->type_obj = _selectObj.getObjType();
+			_vvTile[i][j]->objPosX = j;
+			_vvTile[i][j]->objPosY = i;
+
+			break;
+		}
+		case OBJECT_TYPE_ETC:
+		{
+			obj = new parentObj;
+			obj->init(_selectObj.getImgName(), _selectObj.getIdxX(), _selectObj.getidxY(), _selectObj.getObjType());
+
+			if (obj->getImgName() == IMAGE_NAME[IMAGE_NAME_ETC_01])
+			{
+				if (_vvTile[i][j]->type_obj == OBJECT_TYPE_WALL)
+				{
+					_vvTile[i][j]->isTorch = true;
+				}
+			}
+
+			break;
+		}
+		}
+	}
+	else if (_eraseButton.curFrameY == 1)
+	{
+		switch (_selectObj.getObjType())
+		{
+		case OBJECT_TYPE_FLOOR:
+		{
+			_vvTile[i][j]->floor = nullptr;
+			_vvTile[i][j]->floorName = "";
+			_vvTile[i][j]->type_floor = OBJECT_TYPE_NONE;
+			_vvTile[i][j]->floorPosX = -1;
+			_vvTile[i][j]->floorPosY = -1;
+
+			break;
+		}
+		default:
+		{
+			_vvTile[i][j]->wall = nullptr;
+			_vvTile[i][j]->item = nullptr;
+			_vvTile[i][j]->enemy = nullptr;
+			_vvTile[i][j]->trap = nullptr;
+			_vvTile[i][j]->objName = "";
+			_vvTile[i][j]->type_obj = OBJECT_TYPE_NONE;
+			_vvTile[i][j]->objPosX = -1;
+			_vvTile[i][j]->objPosY = -1;
+
+			break;
+		}
+		}
+	}
+}
+
+void mapTool::mapSizeChange()
+{
+}
+
+void mapTool::loadSetTile()
+{
+}
+
+void mapTool::eraseTile()
+{
+}
+
+void mapTool::mapSave(int mapNum)
+{
+}
+
+void mapTool::mapLoad()
+{
+}
+
+void mapTool::initMapLoad()
+{
+	for (int i = _tileY - 1; i >= 0; i--)
+	{
+		for (int j = _tileX - 1; j >= 0; j--)
+		{
+			if (_vvTile[i][j])
+			{
+				SAFE_DELETE(_vvTile[i][j]);
+				_vvTile[i].pop_back();
+			}
+		}
+		_vvTile.pop_back();
+	}
+	_vvTile.clear();
+
+	HANDLE file;
+	DWORD read;
+	char mapSize[128] = { 0, };
+
+	file = CreateFile(_mSizeMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	ReadFile(file, mapSize, 128, &read, NULL);
+	CloseHandle(file);
+
+	string mapX, mapY;
+	mapX.clear();
+	mapY.clear();
+	bool x = true;
+	for (int i = 0; i < strlen(mapSize); ++i)
+	{
+		if (mapSize[i] == '/')
+		{
+			x = false;
+			continue;
+		}
+		if (mapSize[i] == NULL)
+			break;
+		if (x)
+		{
+			mapX += mapSize[i];
 		}
 		else
-			_isDrag = false;																															//아니면 드래그오프
-		_curPoint.x = _ptMouse.x;																														//클릭한 순간의 좌표 기억
-		_curPoint.y = _ptMouse.y;																														//클릭한 순간의 좌표 기억
-	}
-
-	void mapTool::setTile()
-	{
-		//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
-		for (UINT i = 0; i < _tileY; i++)
 		{
-			//처음에는 vTile과 vRECT에 초기화한 값들을 넣어주고
-			//그담에 이중벡터인 vvTile과 vvRECT에 넣어준다.
-
-			vector<tagTile*> vTile;
-			vector<D2D1_RECT_F> vRECT;
-			for (UINT j = 0; j < _tileX; j++)
-			{
-				tagTile* tempTile = new tagTile;
-				D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
-				parentObj* floor = new parentObj;
-
-				if ((j % 2 == 1 && i % 2 == 0) || (j % 2 == 0 && i % 2 == 1))						//y->홀 x->짝 / y->짝 x->홀 일때
-				{
-					tempTile->floorName = "floor_01";
-					tempTile->terrain_frameX = 1;
-					tempTile->terrain_frameY = 0;
-					tempTile->type_floor = OBJECT_TYPE_FLOOR;
-					tempTile->floorPosX = j;
-					tempTile->floorPosY = i;
-					tempTile->floor = floor;
-				}
-				else if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1))					//y->짝 x->짝 / y->홀 x->홀 일때
-				{
-					tempTile->floorName = "floor_01";
-					tempTile->terrain_frameX = 0;
-					tempTile->terrain_frameY = 0;
-					tempTile->type_floor = OBJECT_TYPE_FLOOR;
-					tempTile->floorPosX = j;
-					tempTile->floorPosY = i;
-					tempTile->floor = floor;
-				}
-				tempTile->wall = nullptr;
-				tempTile->item = nullptr;
-				tempTile->enemy = nullptr;
-				tempTile->player = nullptr;
-				tempTile->objETC = nullptr;
-				tempTile->objName = "";
-				tempTile->objPosX = j;
-				tempTile->objPosY = i;
-				tempTile->type_obj = OBJECT_TYPE_NONE;
-
-				tempTile->object_frameX = NULL;
-				tempTile->object_frameY = NULL;
-				tempTile->isTorch = false;
-
-				*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
-							  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
-
-				vTile.push_back(tempTile);
-				vRECT.push_back(*tempRECT);
-			}
-			_vvTile.push_back(vTile);
-			_vvRECT.push_back(vRECT);
-		}
-
-		{
-			parentObj object;
-
-			for (int i = 0; i < 8; i++)
-			{
-				object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_FLOOR);
-				_vObj.push_back(object);
-			}
-
-			for (int i = 8; i < 20; i++)
-			{
-				object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_WALL);
-				_vObj.push_back(object);
-			}
-
-			object.init(IMAGE_NAME[IMAGE_NAME_CHEST], 0, 0, OBJECT_TYPE_ITEM);
-			_vObj.push_back(object);
-
-			//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_01], 0, 0, OBJECT_TYPE_ETC);
-			//_vObj.push_back(object);
-
-			//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_02], 0, 0, OBJECT_TYPE_ETC);
-			//_vObj.push_back(object);
-
-			//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_03], 0, 0, OBJECT_TYPE_ETC);
-			//_vObj.push_back(object);
-
-			//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_04], 0, 0, OBJECT_TYPE_ETC);
-			//_vObj.push_back(object);
-
-			//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_05], 0, 0, OBJECT_TYPE_ETC);
-			//_vObj.push_back(object);
-
-			//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_06], 0, 0, OBJECT_TYPE_ETC);
-			//_vObj.push_back(object);
-
-			object.init(IMAGE_NAME[IMAGE_NAME_ETC_01], 0, 0, OBJECT_TYPE_ETC);
-			_vObj.push_back(object);
-
-			for (const string& elem : ENEMY_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ENEMY);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : ARMOR_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : SHOVEL_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : TORCH_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : WEAPON_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : HEADWEAR_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : FOOTWEAR_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : CONSUMABLE_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : HEART_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : COIN_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
-
-			for (const string& elem : BOMB_NAME)
-			{
-				object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
-				_vObj.push_back(object);
-			}
+			mapY += mapSize[i];
 		}
 	}
 
-	void mapTool::drawTile()
+	_tileX = stoi(mapX);
+	_tileY = stoi(mapY);
+	_vvTile.resize(_tileY);
+
+	for (int i = 0; i < _tileY; ++i)
 	{
+		_vvTile[i].resize(_tileX);
 	}
 
-	void mapTool::drawTile_terrain()
-	{
-	}
+	tagTile* tile = (tagTile*)malloc(sizeof(tagTile) * _tileX * _tileY);
+	ZeroMemory(tile, sizeof(tagTile) * (_tileX * _tileY));
 
-	void mapTool::drawTile_object_01()
-	{
-	}
+	HANDLE file2;
+	DWORD read2;
 
-	void mapTool::drawTile_object_02()
-	{
-	}
+	file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	void mapTool::mapSizeChange()
-	{
-	}
+	ReadFile(file2, tile, sizeof(tagTile) * _tileX * _tileY, &read2, NULL);
 
-	void mapTool::loadSetTile()
-	{
-	}
+	CloseHandle(file2);
 
-	void mapTool::eraseTile()
+	for (int i = 0; i < _tileY; ++i)
 	{
-	}
-
-	void mapTool::mapSave(int mapNum)
-	{
-	}
-
-	void mapTool::mapLoad()
-	{
-	}
-
-	void mapTool::initMapLoad()
-	{
-		for (int i = _tileY - 1; i >= 0; i--)
+		for (int j = 0; j < _tileX; ++j)
 		{
-			for (int j = _tileX - 1; j >= 0; j--)
+			_vvTile[i][j] = new tagTile;
+			_vvTile[i][j]->setTile();
+		}
+	}
+}
+
+void mapTool::initMapName()
+{
+	_mSizeMapNames.insert(make_pair(MAP_NAME_TEST, "map/testMapSize.map"));
+	_mDataMapNames.insert(make_pair(MAP_NAME_TEST, "map/testMapData.map"));
+	_mSizeMapNames.insert(make_pair(MAP_NAME_LOBBY, "map/lobbyMapSize.map"));
+	_mDataMapNames.insert(make_pair(MAP_NAME_LOBBY, "map/lobbyMapData.map"));
+	_mSizeMapNames.insert(make_pair(MAP_NAME_TUTORIAL, "map/tutorialMapSize.map"));
+	_mDataMapNames.insert(make_pair(MAP_NAME_TUTORIAL, "map/tutorialMapData.map"));
+	_mSizeMapNames.insert(make_pair(MAP_NAME_ZONE1, "map/zone1MapSize.map"));
+	_mDataMapNames.insert(make_pair(MAP_NAME_ZONE1, "map/zone1MapData.map"));
+	_mSizeMapNames.insert(make_pair(MAP_NAME_ZONE2, "map/zone2MapSize.map"));
+	_mDataMapNames.insert(make_pair(MAP_NAME_ZONE2, "map/zone2MapData.map"));
+	_mSizeMapNames.insert(make_pair(MAP_NAME_BOSS, "map/bossMapSize.map"));
+	_mDataMapNames.insert(make_pair(MAP_NAME_BOSS, "map/bossMapData.map"));
+}
+
+void mapTool::drawMap()
+{
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvTile[i][j]->floor != NULL)
 			{
-				if (_vvTile[i][j])
+				if (_vvTile[i][j]->floor->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->floorName != "")
 				{
-					SAFE_DELETE(_vvTile[i][j]);
-					_vvTile[i].pop_back();
+					_vvTile[i][j]->floor->render();
 				}
 			}
-			_vvTile.pop_back();
-		}
-		_vvTile.clear();
-
-		HANDLE file;
-		DWORD read;
-		char mapSize[128] = { 0, };
-
-		file = CreateFile(_mSizeMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-		ReadFile(file, mapSize, 128, &read, NULL);
-		CloseHandle(file);
-
-		string mapX, mapY;
-		mapX.clear();
-		mapY.clear();
-		bool x = true;
-		for (int i = 0; i < strlen(mapSize); ++i)
-		{
-			if (mapSize[i] == '/')
-			{
-				x = false;
-				continue;
-			}
-			if (mapSize[i] == NULL)
-				break;
-			if (x)
-			{
-				mapX += mapSize[i];
-			}
-			else
-			{
-				mapY += mapSize[i];
-			}
-		}
-
-		_tileX = stoi(mapX);
-		_tileY = stoi(mapY);
-		_vvTile.resize(_tileY);
-
-		for (int i = 0; i < _tileY; ++i)
-		{
-			_vvTile[i].resize(_tileX);
-		}
-
-		tagTile* tile = (tagTile*)malloc(sizeof(tagTile) * _tileX * _tileY);
-		ZeroMemory(tile, sizeof(tagTile) * (_tileX * _tileY));
-
-		HANDLE file2;
-		DWORD read2;
-
-		file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-		ReadFile(file2, tile, sizeof(tagTile) * _tileX * _tileY, &read2, NULL);
-
-		CloseHandle(file2);
-
-		for (int i = 0; i < _tileY; ++i)
-		{
-			for (int j = 0; j < _tileX; ++j)
-			{
-				_vvTile[i][j] = new tagTile;
-				_vvTile[i][j]->setTile();
-			}
 		}
 	}
 
-	void mapTool::initMapName()
+}
+
+void mapTool::drawUI()
+{
+	WCHAR str[128];
+
+	//현재 맵이름 
+	swprintf_s(str, L"%S", MAP_NAME_INFO[_curMapNum].c_str());
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + 767, CAMERA->getPosY() + _button[MAPTOOL_BUTTON_NAME].rc.top + 30, 20, RGB(255, 0, 0));
+	swprintf_s(str, L"%S", MAP_NAME_INFO[_curMapNum].c_str());
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + 765, CAMERA->getPosY() + _button[MAPTOOL_BUTTON_NAME].rc.top + 30, 20, RGB(0, 255, 255));
+
+	//버튼출력
+	for (int i = 0; i < MAPTOOL_BUTTON_COUNT; i++)
 	{
-		_mSizeMapNames.insert(make_pair(MAP_NAME_TEST, "map/testMapSize.map"));
-		_mDataMapNames.insert(make_pair(MAP_NAME_TEST, "map/testMapData.map"));
-		_mSizeMapNames.insert(make_pair(MAP_NAME_LOBBY, "map/lobbyMapSize.map"));
-		_mDataMapNames.insert(make_pair(MAP_NAME_LOBBY, "map/lobbyMapData.map"));
-		_mSizeMapNames.insert(make_pair(MAP_NAME_TUTORIAL, "map/tutorialMapSize.map"));
-		_mDataMapNames.insert(make_pair(MAP_NAME_TUTORIAL, "map/tutorialMapData.map"));
-		_mSizeMapNames.insert(make_pair(MAP_NAME_ZONE1, "map/zone1MapSize.map"));
-		_mDataMapNames.insert(make_pair(MAP_NAME_ZONE1, "map/zone1MapData.map"));
-		_mSizeMapNames.insert(make_pair(MAP_NAME_ZONE2, "map/zone2MapSize.map"));
-		_mDataMapNames.insert(make_pair(MAP_NAME_ZONE2, "map/zone2MapData.map"));
-		_mSizeMapNames.insert(make_pair(MAP_NAME_BOSS, "map/bossMapSize.map"));
-		_mDataMapNames.insert(make_pair(MAP_NAME_BOSS, "map/bossMapData.map"));
+		if (i == MAPTOOL_BUTTON_PREV || i == MAPTOOL_BUTTON_NEXT)
+			_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left, CAMERA->getPosY() + _button[i].rc.top - 30, 0, _button[i].curFrameY);
+		else if (i >= MAPTOOL_BUTTON_SIZE_WIDTH_UP && i <= MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN)
+			_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left - 5, CAMERA->getPosY() + _button[i].rc.top + 2, 0, _button[i].curFrameY);
+		else
+			_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left + 10, CAMERA->getPosY() + _button[i].rc.top, 0, _button[i].curFrameY);
 	}
 
-	void mapTool::drawMap()
+	//맵크기
+	swprintf_s(str, L"던전크기");
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 + 2, CAMERA->getPosY() + 12, 30, RGB(255, 0, 0));
+	swprintf_s(str, L"던전크기");
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2, CAMERA->getPosY() + 10, 30, RGB(0, 255, 255));
+
+	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 23, CAMERA->getPosY() + 41, 15, RGB(255, 0, 0));
+	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 24, CAMERA->getPosY() + 40, 15, RGB(0, 255, 255));
+}
+
+void mapTool::drawSample(int num)
+{
+	if (_isOnTheImg)
 	{
-		parentObj tempObj;
-
-		tempObj.init("", -1, -1, OBJECT_TYPE_NONE);
-
-		if (_ptMouse.x - CAMERA->getPosX() > WINSIZEX - TOTAL_SAMPLE_SIZE + TILE_SIZE)	return;								//샘플타일쪽 그리면 안돼
-		if (_ptMouse.x > _vvRECT[0][_tileX - 1].right)									return;								//맵 제일 오른쪽 안돼
-		if (_ptMouse.x < _vvRECT[0][0].left)											return;								//맵 제일 왼쪽 안돼
-		if (_ptMouse.y > _vvRECT[_tileY - 1][0].bottom)									return;								//맵 제일 아래쪽 안돼
-		if (_ptMouse.y < _vvRECT[0][0].top)												return;								//맵 제일 윗쪽 안돼
-		if (_isDrag)																	return;								//드래그중일때 안돼
-		if (!_isEnter)																	return;								//샘플타일창이 없을때도 안돼
-		if (PtInRect(&makeRECT(_prevButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 왼쪽버튼에 있을때 안돼
-		if (PtInRect(&makeRECT(_nextButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 오른쪽버튼에 있을때 안돼
-		if (PtInRect(&makeRECT(_rendomButton.rc), makePOINT_NoCamera(_ptMouse)))		return;								//마우스가 랜덤버튼에 있을때 안돼
-		if (PtInRect(&makeRECT(_floorButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 바닥그리기에 있을때 안돼
-		if (PtInRect(&makeRECT(_eraseButton.rc), makePOINT_NoCamera(_ptMouse)))			return;								//마우스가 지우개버튼에 있을때 안돼
-		if (PtInRect(&makeRECT(_sampleWindow.rc), makePOINT_NoCamera(_ptMouse)))		return;								//마우스가 샘플타일창에 있을때 안돼
-
-		if (_isEnter)
+		_sampleWindow.img->render(CAMERA->getPosX() + _sampleWindow.rc.left, CAMERA->getPosY() + _sampleWindow.rc.top, 0.8f);
+		_eraseButton.img->frameRender(CAMERA->getPosX() + _eraseButton.rc.left, CAMERA->getPosY() + _eraseButton.rc.top, 0, _eraseButton.curFrameY);
+		if (_curButtonNum == MAPTOOL_BUTTON_ITEM || _curButtonNum == MAPTOOL_BUTTON_ENEMY)
 		{
-			if (KEYMANAGER->isStayKeyDown(VK_SHIFT))
+			_nextButton.img->frameRender(CAMERA->getPosX() + _nextButton.rc.left, CAMERA->getPosY() + _nextButton.rc.top, 0, _nextButton.curFrameY);
+			_prevButton.img->frameRender(CAMERA->getPosX() + _prevButton.rc.left, CAMERA->getPosY() + _prevButton.rc.top, 0, _prevButton.curFrameY);
+		}
+		else if (_curButtonNum == MAPTOOL_BUTTON_WALL)
+		{
+			_rendomButton.img->frameRender(CAMERA->getPosX() + _rendomButton.rc.left, CAMERA->getPosY() + _rendomButton.rc.top, 0, _rendomButton.curFrameY);
+		}
+		else if (_curButtonNum == MAPTOOL_BUTTON_FLOOR)
+		{
+			_floorButton.img->frameRender(CAMERA->getPosX() + _floorButton.rc.left, CAMERA->getPosY() + _floorButton.rc.top, 0, _floorButton.curFrameY);
+		}
+	}
+
+	int itemCount = 0;
+	int count = 0;
+	int width, height;
+	D2D1_RECT_F rc = {};
+	int size = _vObj.size();
+	for (int i = 0; i < size; i++)
+	{
+		D2DMANAGER->drawRectangle(RGB(0, 255, 255), _vObj[i].getRC().left,
+			_vObj[i].getRC().top,
+			_vObj[i].getRC().right,
+			_vObj[i].getRC().bottom);
+	}
+
+	D2DMANAGER->drawRectangle(RGB(0, 255, 255), _sampleWindow.rc);
+
+	if (_isOnTheImg)
+	{
+		if (_curButtonNum == MAPTOOL_BUTTON_ENEMY)
+		{
+			for (int i = 0; i < size; i++)
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				if (_curImgNum == 0)
 				{
-					for (UINT i = 0; i < _tileY; i++)
+					if (_vObj[i].getObjType() != num) continue;
+					if (_vObj[i].getImg() == nullptr) continue;
+
+					if (count < 13)
 					{
-						for (UINT j = 0; j < _tileX; j++)
-						{
-							if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
-							{
-								_savePointX = j;
-								_savePointY = i;
-							}
-						}
-					}
-				}
-
-				if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
-				{
-					int savePointX2;
-					int savePointY2;
-
-					for (UINT i = 0; i < _tileY; i++)
-					{
-						for (UINT j = 0; j < _tileX; j++)
-						{
-							if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
-							{
-								savePointX2 = j;
-								savePointY2 = i;
-							}
-						}
-					}
-					savePointX2++;
-					savePointY2++;
-
-					if (savePointX2 < _savePointX) return;
-					if (savePointY2 < _savePointY) return;
-
-					for (int i = _savePointY; i < savePointY2; i++)
-					{
-						for (int j = _savePointX; j < savePointX2; j++)
-						{
-							parentObj* tempObj = new parentObj;
-							tempObj->init("", -1, -1, OBJECT_TYPE_NONE);
-
-							
-						}
-
-					}
-
-				}
-
-
-			}
-
-
-
-
-		}
-	}
-
-	void mapTool::drawUI()
-	{
-		WCHAR str[128];
-
-		//현재 맵이름 
-		swprintf_s(str, L"%S", MAP_NAME_INFO[_curMapNum].c_str());
-		D2DMANAGER->drawText(str, CAMERA->getPosX() + 767, CAMERA->getPosY() + _button[MAPTOOL_BUTTON_NAME].rc.top + 30, 20, RGB(255, 0, 0));
-		swprintf_s(str, L"%S", MAP_NAME_INFO[_curMapNum].c_str());
-		D2DMANAGER->drawText(str, CAMERA->getPosX() + 765, CAMERA->getPosY() + _button[MAPTOOL_BUTTON_NAME].rc.top + 30, 20, RGB(0, 255, 255));
-
-		//버튼출력
-		for (int i = 0; i < MAPTOOL_BUTTON_COUNT; i++)
-		{
-			if (i == MAPTOOL_BUTTON_PREV || i == MAPTOOL_BUTTON_NEXT)
-				_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left, CAMERA->getPosY() + _button[i].rc.top - 30, 0, _button[i].curFrameY);
-			else if (i >= MAPTOOL_BUTTON_SIZE_WIDTH_UP && i <= MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN)
-				_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left - 5, CAMERA->getPosY() + _button[i].rc.top + 2, 0, _button[i].curFrameY);
-			else
-				_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left + 10, CAMERA->getPosY() + _button[i].rc.top, 0, _button[i].curFrameY);
-		}
-
-		//맵크기
-		swprintf_s(str, L"던전크기");
-		D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 + 2, CAMERA->getPosY() + 12, 30, RGB(255, 0, 0));
-		swprintf_s(str, L"던전크기");
-		D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2, CAMERA->getPosY() + 10, 30, RGB(0, 255, 255));
-
-		swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
-		D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 23, CAMERA->getPosY() + 41, 15, RGB(255, 0, 0));
-		swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
-		D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 24, CAMERA->getPosY() + 40, 15, RGB(0, 255, 255));
-	}
-
-	void mapTool::drawSample(int num)
-	{
-		if (_isOnTheImg)
-		{
-			_sampleWindow.img->render(CAMERA->getPosX() + _sampleWindow.rc.left, CAMERA->getPosY() + _sampleWindow.rc.top, 0.8f);
-			_eraseButton.img->frameRender(CAMERA->getPosX() + _eraseButton.rc.left, CAMERA->getPosY() + _eraseButton.rc.top, 0, _eraseButton.curFrameY);
-			if (_curButtonNum == MAPTOOL_BUTTON_ITEM || _curButtonNum == MAPTOOL_BUTTON_ENEMY)
-			{
-				_nextButton.img->frameRender(CAMERA->getPosX() + _nextButton.rc.left, CAMERA->getPosY() + _nextButton.rc.top, 0, _nextButton.curFrameY);
-				_prevButton.img->frameRender(CAMERA->getPosX() + _prevButton.rc.left, CAMERA->getPosY() + _prevButton.rc.top, 0, _prevButton.curFrameY);
-			}
-			else if (_curButtonNum == MAPTOOL_BUTTON_WALL)
-			{
-				_rendomButton.img->frameRender(CAMERA->getPosX() + _rendomButton.rc.left, CAMERA->getPosY() + _rendomButton.rc.top, 0, _rendomButton.curFrameY);
-			}
-			else if (_curButtonNum == MAPTOOL_BUTTON_FLOOR)
-			{
-				_floorButton.img->frameRender(CAMERA->getPosX() + _floorButton.rc.left, CAMERA->getPosY() + _floorButton.rc.top, 0, _floorButton.curFrameY);
-			}
-		}
-
-		int itemCount = 0;
-		int count = 0;
-		int width, height;
-		D2D1_RECT_F rc = {};
-		int size = _vObj.size();
-		for (int i = 0; i < size; i++)
-		{
-			D2DMANAGER->drawRectangle(RGB(0, 255, 255), _vObj[i].getRC().left,
-				_vObj[i].getRC().top,
-				_vObj[i].getRC().right,
-				_vObj[i].getRC().bottom);
-		}
-
-		D2DMANAGER->drawRectangle(RGB(0,255,255),_sampleWindow.rc);
-
-		if (_isOnTheImg)
-		{
-			if (_curButtonNum == MAPTOOL_BUTTON_ENEMY)
-			{
-				for (int i = 0; i < size; i++)
-				{
-					if (_curImgNum == 0)
-					{
-						if (_vObj[i].getObjType() != num) continue;
-						if (_vObj[i].getImg() == nullptr) continue;
-
-						if (count < 13)
-						{
-							int x = count % 6;
-							int y = count / 6;
-							string imgName = _vObj[i].getImgName();
-							width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-							height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-							rc = { _sampleWindow.rc.left + (60 * x) + 20, 
-									_sampleWindow.rc.top + (80 * y) + 70,  
-									_sampleWindow.rc.left + (60 * x) + 20 + width,
-									_sampleWindow.rc.top + (80 * y) + 70 + height };
-
-							_vObj[i].setRC(rc);
-							count++;
-
-							IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-							itemCount++;
-						}
-					}
-					else if (_curImgNum == 1)
-					{
-						if (_vObj[i].getObjType() != num) continue;
-						if (_vObj[i].getImg() == nullptr) continue;
-
-						count++;
-						if (count <= 13) continue;
-
-						int x = (count - 14) % 4;
-						int y = (count - 14) / 4;
+						int x = count % 6;
+						int y = count / 6;
 						string imgName = _vObj[i].getImgName();
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-						if (count == 23)
-							rc = { _sampleWindow.rc.left + (90 * x) + 20, 
-									_sampleWindow.rc.top + (110 * y) + 70,  
-									_sampleWindow.rc.left + (90 * x) + 20 + width,
-									_sampleWindow.rc.top + (110 * y) + 70 + height };
-						else
-							rc = { _sampleWindow.rc.left + (90 * x) + 20, 
-									_sampleWindow.rc.top + (100 * y) + 70,  
-									_sampleWindow.rc.left + (90 * x) + 20 + width,
-									_sampleWindow.rc.top + (100 * y) + 70 + height };
+						rc = { _sampleWindow.rc.left + (60 * x) + 20,
+								_sampleWindow.rc.top + (80 * y) + 70,
+								_sampleWindow.rc.left + (60 * x) + 20 + width,
+								_sampleWindow.rc.top + (80 * y) + 70 + height };
+
+						_vObj[i].setRC(rc);
+						count++;
+
+						IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+						itemCount++;
+					}
+				}
+				else if (_curImgNum == 1)
+				{
+					if (_vObj[i].getObjType() != num) continue;
+					if (_vObj[i].getImg() == nullptr) continue;
+
+					count++;
+					if (count <= 13) continue;
+
+					int x = (count - 14) % 4;
+					int y = (count - 14) / 4;
+					string imgName = _vObj[i].getImgName();
+					width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+					height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+					if (count == 23)
+						rc = { _sampleWindow.rc.left + (90 * x) + 20,
+								_sampleWindow.rc.top + (110 * y) + 70,
+								_sampleWindow.rc.left + (90 * x) + 20 + width,
+								_sampleWindow.rc.top + (110 * y) + 70 + height };
+					else
+						rc = { _sampleWindow.rc.left + (90 * x) + 20,
+								_sampleWindow.rc.top + (100 * y) + 70,
+								_sampleWindow.rc.left + (90 * x) + 20 + width,
+								_sampleWindow.rc.top + (100 * y) + 70 + height };
+
+					_vObj[i].setRC(rc);
+
+
+					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+					itemCount++;
+				}
+			}
+		}
+		else if (_curButtonNum == MAPTOOL_BUTTON_ITEM)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (_curImgNum == 0)
+				{
+					if (count < 24)
+					{
+						if (_vObj[i].getObjType() != num) continue;
+						if (_vObj[i].getImg() == nullptr) continue;
+
+						int x = count % 6;
+						int y = count / 6;
+						string imgName = _vObj[i].getImgName();
+						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+						rc = { _sampleWindow.rc.left + (60 * x) + 20,
+								_sampleWindow.rc.top + (80 * y) + 70,
+								_sampleWindow.rc.left + (60 * x) + 20 + width,
+								_sampleWindow.rc.top + (80 * y) + 70 + height };
+
+						_vObj[i].setRC(rc);
+						count++;
+
+						IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+						itemCount++;
+					}
+				}
+				else if (_curImgNum == 1)
+				{
+					if (_vObj[i].getObjType() != num) continue;
+					if (_vObj[i].getImg() == nullptr) continue;
+
+					count++;
+					if (count <= 24) continue;
+					if (count >= 24 && count <= 48)
+					{
+
+						int x = (count - 25) % 6;
+						int y = (count - 25) / 6;
+						string imgName = _vObj[i].getImgName();
+						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+						rc = { _sampleWindow.rc.left + (60 * x) + 20,
+								_sampleWindow.rc.top + (80 * y) + 70,
+								(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
+								(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 
+						IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+						itemCount++;
+					}
+				}
+				else if (_curImgNum == 2)
+				{
+
+					if (_vObj[i].getObjType() != num) continue;
+					if (_vObj[i].getImg() == nullptr) continue;
+
+					count++;
+					if (count <= 48) continue;
+					if (count >= 48 && count <= 72)
+					{
+
+						int x = (count - 49) % 6;
+						int y = (count - 49) / 6;
+						string imgName = _vObj[i].getImgName();
+						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+						rc = { _sampleWindow.rc.left + (60 * x) + 20,
+								_sampleWindow.rc.top + (80 * y) + 70,
+								(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
+								(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+
+						_vObj[i].setRC(rc);
+
+						IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+						itemCount++;
+					}
+				}
+				else if (_curImgNum == 3)
+				{
+
+					if (_vObj[i].getObjType() != num) continue;
+					if (_vObj[i].getImg() == nullptr) continue;
+
+					count++;
+					if (count <= 72) continue;
+					if (count >= 72 && count <= 96)
+					{
+
+						int x = (count - 73) % 6;
+						int y = (count - 73) / 6;
+						string imgName = _vObj[i].getImgName();
+						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+						rc = { _sampleWindow.rc.left + (60 * x) + 20,
+								_sampleWindow.rc.top + (80 * y) + 70,
+								(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
+								(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+
+						_vObj[i].setRC(rc);
+
+						IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+						itemCount++;
+					}
+				}
+				else if (_curImgNum == 4)
+				{
+
+					if (_vObj[i].getObjType() != num) continue;
+					if (_vObj[i].getImg() == nullptr) continue;
+
+					count++;
+					if (count <= 96) continue;
+					if (count >= 96 && count <= 120)
+					{
+
+						int x = (count - 97) % 6;
+						int y = (count - 97) / 6;
+						string imgName = _vObj[i].getImgName();
+						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+						if (count == 117)
+							rc = { _sampleWindow.rc.left + (55 * x) + 20,
+									_sampleWindow.rc.top + (82 * y) + 70,
+									(float)_sampleWindow.rc.left + (55 * x) + 20 + width,
+									(float)_sampleWindow.rc.top + (82 * y) + 70 + height };
+						else
+							rc = { _sampleWindow.rc.left + (60 * x) + 20,
+									_sampleWindow.rc.top + (80 * y) + 70,
+									(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
+									(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+
+						_vObj[i].setRC(rc);
 
 						IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
@@ -1012,208 +1236,86 @@ void mapTool::pickSampleTile()
 					}
 				}
 			}
-			else if (_curButtonNum == MAPTOOL_BUTTON_ITEM)
+		}
+		else if (_curButtonNum == MAPTOOL_BUTTON_WALL)
+		{
+			for (int i = 0; i < size; i++)
 			{
-				for (int i = 0; i < size; i++)
-				{
-					if (_curImgNum == 0)
-					{
-						if (count < 24)
-						{
-							if (_vObj[i].getObjType() != num) continue;
-							if (_vObj[i].getImg() == nullptr) continue;
+				if (_vObj[i].getObjType() != num) continue;
+				if (_vObj[i].getImg() == nullptr) continue;
 
-							int x = count % 6;
-							int y = count / 6;
-							string imgName = _vObj[i].getImgName();
-							width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-							height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-							rc = { _sampleWindow.rc.left + (60 * x) + 20, 
-									_sampleWindow.rc.top + (80 * y) + 70,  
-									_sampleWindow.rc.left + (60 * x) + 20 + width,
-									_sampleWindow.rc.top + (80 * y) + 70 + height };
+				int x = count % 6;
+				int y = count / 6;
+				string imgName = _vObj[i].getImgName();
+				width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+				height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+				rc = { _sampleWindow.rc.left + (60 * x) + 20,
+					   _sampleWindow.rc.top + (110 * y) + 70,
+					   (float)_sampleWindow.rc.left + (60 * x) + 20 + width,
+					   (float)_sampleWindow.rc.top + (110 * y) + 70 + height };
 
-							_vObj[i].setRC(rc);
-							count++;
+				_vObj[i].setRC(rc);
+				count++;
 
-							IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
-							itemCount++;
-						}
-					}
-					else if (_curImgNum == 1)
-					{
-						if (_vObj[i].getObjType() != num) continue;
-						if (_vObj[i].getImg() == nullptr) continue;
-
-						count++;
-						if (count <= 24) continue;
-						if (count >= 24 && count <= 48)
-						{
-
-							int x = (count - 25) % 6;
-							int y = (count - 25) / 6;
-							string imgName = _vObj[i].getImgName();
-							width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-							height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-							rc = { _sampleWindow.rc.left + (60 * x) + 20, 
-									_sampleWindow.rc.top + (80 * y) + 70,  
-									(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-									(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
-
-							_vObj[i].setRC(rc);
-
-							IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-							itemCount++;
-						}
-					}
-					else if (_curImgNum == 2)
-					{
-
-						if (_vObj[i].getObjType() != num) continue;
-						if (_vObj[i].getImg() == nullptr) continue;
-
-						count++;
-						if (count <= 48) continue;
-						if (count >= 48 && count <= 72)
-						{
-
-							int x = (count - 49) % 6;
-							int y = (count - 49) / 6;
-							string imgName = _vObj[i].getImgName();
-							width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-							height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-							rc = { _sampleWindow.rc.left + (60 * x) + 20, 
-									_sampleWindow.rc.top + (80 * y) + 70, 
-									(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-									(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
-
-							_vObj[i].setRC(rc);
-
-							IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-							itemCount++;
-						}
-					}
-					else if (_curImgNum == 3)
-					{
-
-						if (_vObj[i].getObjType() != num) continue;
-						if (_vObj[i].getImg() == nullptr) continue;
-
-						count++;
-						if (count <= 72) continue;
-						if (count >= 72 && count <= 96)
-						{
-
-							int x = (count - 73) % 6;
-							int y = (count - 73) / 6;
-							string imgName = _vObj[i].getImgName();
-							width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-							height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-							rc = { _sampleWindow.rc.left + (60 * x) + 20, 
-									_sampleWindow.rc.top + (80 * y) + 70,  
-									(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-									(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
-
-							_vObj[i].setRC(rc);
-
-							IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-							itemCount++;
-						}
-					}
-					else if (_curImgNum == 4)
-					{
-
-						if (_vObj[i].getObjType() != num) continue;
-						if (_vObj[i].getImg() == nullptr) continue;
-
-						count++;
-						if (count <= 96) continue;
-						if (count >= 96 && count <= 120)
-						{
-
-							int x = (count - 97) % 6;
-							int y = (count - 97) / 6;
-							string imgName = _vObj[i].getImgName();
-							width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-							height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-							if (count == 117)
-								rc = { _sampleWindow.rc.left + (55 * x) + 20, 
-										_sampleWindow.rc.top + (82 * y) + 70,  
-										(float)_sampleWindow.rc.left + (55 * x) + 20 + width, 
-										(float)_sampleWindow.rc.top + (82 * y) + 70 + height };
-							else
-								rc = { _sampleWindow.rc.left + (60 * x) + 20, 
-										_sampleWindow.rc.top + (80 * y) + 70,  
-										(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-										(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
-
-							_vObj[i].setRC(rc);
-
-							IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-							itemCount++;
-						}
-					}
-				}
-			}
-			else if (_curButtonNum == MAPTOOL_BUTTON_ETC)
-			{
-				for (int i = 0; i < size; i++)
-				{
-					if (_vObj[i].getObjType() != num) continue;
-					if (_vObj[i].getImg() == nullptr) continue;
-
-					int x = count % 5;
-					int y = count / 5;
-					string imgName = _vObj[i].getImgName();
-					width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-					height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-					rc = {	_sampleWindow.rc.left + (50 * x) + 20, 
-							_sampleWindow.rc.top + (70 * y) + 70,  
-							_sampleWindow.rc.left + (50 * x) + 20+ width,
-							_sampleWindow.rc.top + (70 * y) + 70 + height };
-
-					_vObj[i].setRC(rc);
-					count++;
-
-					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-					itemCount++;
-				}
-			}
-			else
-			{
-				for (int i = 0; i < size; i++)
-				{
-					if (_vObj[i].getObjType() != num) continue;
-					if (_vObj[i].getImg() == nullptr) continue;
-
-					int x = count % 6;
-					int y = count / 6;
-					string imgName = _vObj[i].getImgName();
-					width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-					height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-					rc = { _sampleWindow.rc.left + (60 * x) + 20,
-						   _sampleWindow.rc.top + (70 * y) + 70,
-						   (float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-						   (float)_sampleWindow.rc.top + (70 * y) + 70 + height };
-
-					_vObj[i].setRC(rc);
-					count++;
-
-					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
-
-					itemCount++;
-				}
+				itemCount++;
 			}
 		}
-		/*if (_isEnter)
+		else if (_curButtonNum == MAPTOOL_BUTTON_ETC)
 		{
-			if (_isTileClick)
-				IMAGEMANAGER->findImage(_selectObj.getImgName())->frameRender(_ptMouse.x, _ptMouse.y, _ptMouse.x + _selectObj.getImg()->GetFrameWidth(), _ptMouse.y + _selectObj.getImg()->GetFrameHeight(), 0.5f);
-		}*/
+		for (int i = 0; i < size; i++)
+		{
+			if (_vObj[i].getObjType() != num) continue;
+			if (_vObj[i].getImg() == nullptr) continue;
+
+			int x = count % 5;
+			int y = count / 5;
+			string imgName = _vObj[i].getImgName();
+			width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+			height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+			rc = { _sampleWindow.rc.left + (50 * x) + 20,
+					_sampleWindow.rc.top + (70 * y) + 70,
+					_sampleWindow.rc.left + (50 * x) + 20 + width,
+					_sampleWindow.rc.top + (70 * y) + 70 + height };
+
+			_vObj[i].setRC(rc);
+			count++;
+
+			IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+			itemCount++;
+		}
+		}
+		else
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (_vObj[i].getObjType() != num) continue;
+				if (_vObj[i].getImg() == nullptr) continue;
+
+				int x = count % 6;
+				int y = count / 6;
+				string imgName = _vObj[i].getImgName();
+				width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+				height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+				rc = { _sampleWindow.rc.left + (60 * x) + 20,
+					   _sampleWindow.rc.top + (70 * y) + 70,
+					   (float)_sampleWindow.rc.left + (60 * x) + 20 + width,
+					   (float)_sampleWindow.rc.top + (70 * y) + 70 + height };
+
+				_vObj[i].setRC(rc);
+				count++;
+
+				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+
+				itemCount++;
+			}
+		}
 	}
+	/*if (_isEnter)
+	{
+		if (_isTileClick)
+			IMAGEMANAGER->findImage(_selectObj.getImgName())->frameRender(_ptMouse.x, _ptMouse.y, _ptMouse.x + _selectObj.getImg()->GetFrameWidth(), _ptMouse.y + _selectObj.getImg()->GetFrameHeight(), 0.5f);
+	}*/
+}

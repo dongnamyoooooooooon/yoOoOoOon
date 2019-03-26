@@ -79,8 +79,6 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_SHRINE_05], L"image/mapTool/shrine_05.png", 288, 288, 2, 2);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_SHRINE_06], L"image/mapTool/shrine_06.png", 288, 288, 2, 2);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_ETC_01], L"image/mapTool/etc_01.png", 192, 48, 4, 1);
-	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_ETC_02], L"image/mapTool/etc_02.png", 144, 96, 1, 1);
-	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_ETC_03], L"image/mapTool/door.png", 192, 192, 4, 2);
 
 	//Àû
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON], L"image/enemy/skeleton.png", 384, 100, 8, 2);

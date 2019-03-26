@@ -89,8 +89,6 @@ enum IMAGE_NAME_INFO
 	IMAGE_NAME_SHRINE_05,
 	IMAGE_NAME_SHRINE_06,
 	IMAGE_NAME_ETC_01,
-	IMAGE_NAME_ETC_02,
-	IMAGE_NAME_ETC_03,
 
 
 	IMAGE_NAME_END,
@@ -106,7 +104,7 @@ static string IMAGE_NAME[IMAGE_NAME_COUNT] = { "none", "floor_01","floor_02","fl
 											"enemy_dragon_green", "enemy_slime_green", "enemy_slime_blue", "enemy_shopkeeper", "enemy_zombie",
 											"enemy_minitaur", "enemy_coralriff_drums", "enemy_coralriff_head", "enemy_coralriff_horns", "enemy_coralriff_keytar",
 											"enemy_coralriff_strings", "chest_01" ,"trap_01","shrine_01","shrine_02" ,"shrine_03","shrine_04","shrine_05",
-											"shrine_06","ETC_01","ETC_02"
+											"shrine_06","torch_01"
 };
 
 
@@ -121,6 +119,7 @@ public:
 		floor(nullptr),
 		wall(nullptr),
 		objETC(nullptr),
+		trap(nullptr),
 		item(nullptr),
 		enemy(nullptr),
 		player(nullptr),
@@ -145,6 +144,7 @@ public:
 	parentObj* floor;
 	parentObj* wall;
 	parentObj* item;
+	parentObj* trap;
 	parentObj* enemy;
 	parentObj* player;
 	parentObj* objETC;
@@ -175,6 +175,7 @@ public:
 		enemy = nullptr;
 		player = nullptr;
 		objETC = nullptr;
+		trap = nullptr;
 		parentObj* temp;
 
 		if (type_floor == OBJECT_TYPE_FLOOR)
@@ -199,6 +200,13 @@ public:
 					temp = new parentObj;
 					temp->init(objName, objPosX, objPosY, type_obj);
 					item = temp;
+					break;
+				}
+				case OBJECT_TYPE_TRAP:
+				{
+					temp = new parentObj;
+					temp->init(objName, objPosX, objPosY, type_obj);
+					trap = temp;
 					break;
 				}
 				case OBJECT_TYPE_ENEMY:

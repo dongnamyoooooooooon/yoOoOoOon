@@ -188,9 +188,7 @@ public:
 	// ================================
 	void setTile();					//타일세팅
 	void drawTile();				//선택한 타일 그리기
-	void drawTile_terrain();		//지형
-	void drawTile_object_01();		//오브젝트
-	void drawTile_object_02();		//횃불
+	void drawobject(int i, int j);
 	void mapSizeChange();			//맵사이즈 변경
 	void loadSetTile();
 	void eraseTile();

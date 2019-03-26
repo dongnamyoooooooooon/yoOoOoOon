@@ -73,5 +73,11 @@ public:
 	image* getImg() { return _img; }
 	void setImg(image* img) { _img = img; }
 
+	int getIdxX() { return _idxX; }
+	void setIdxX(int idxX) { _idxX = idxX; }
+
+	int getidxY() { return _idxY; }
+	void setIdY(int idxY) { _idxY = idxY; }
+
 };
 
