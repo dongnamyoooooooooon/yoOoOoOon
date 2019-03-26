@@ -5,11 +5,11 @@ enum OBJECT_TYPE
 {
 	OBJECT_TYPE_FLOOR,
 	OBJECT_TYPE_WALL,
-	OBJECT_TYPE_CHEST,
-	OBJECT_TYPE_ITEM,
 	OBJECT_TYPE_ENEMY,
-	OBJECT_TYPE_PLAYER,
+	OBJECT_TYPE_TRAP,
+	OBJECT_TYPE_ITEM,
 	OBJECT_TYPE_ETC,
+	OBJECT_TYPE_PLAYER,
 
 	OBJECT_TYPE_NONE,
 	
@@ -64,6 +64,14 @@ public:
 	OBJECT_TYPE getObjType() { return _objType; }
 	void setObjType(OBJECT_TYPE type) { _objType = type; }
 
+	string getImgName() { return _imgName; }
+	void setImgName(string name) { _imgName = name; }
+
+	D2D1_RECT_F getRC() { return _rc; }
+	void setRC(D2D1_RECT_F rc) { _rc = rc; }
+
+	image* getImg() { return _img; }
+	void setImg(image* img) { _img = img; }
 
 };
 

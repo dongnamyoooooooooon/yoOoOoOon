@@ -80,7 +80,7 @@ void d2dManager::render()
 void d2dManager::beginDraw()
 {
 	_renderTarget->BeginDraw();
-	_renderTarget->Clear(ColorF(ColorF::White));
+	_renderTarget->Clear(ColorF(ColorF::Black));
 }
 
 void d2dManager::endDraw()

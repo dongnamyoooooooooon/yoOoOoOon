@@ -55,6 +55,8 @@ enum IMAGE_NAME_INFO
 	IMAGE_NAME_WALL_08,
 	IMAGE_NAME_WALL_09,
 	IMAGE_NAME_WALL_10,
+	IMAGE_NAME_DOOR_01,
+	IMAGE_NAME_DOOR_02,
 	IMAGE_NAME_ENEMY_SKELETON,
 	IMAGE_NAME_ENEMY_SKELETON_YELLOW,
 	IMAGE_NAME_ENEMY_SKELETON_BLACK,
@@ -62,22 +64,22 @@ enum IMAGE_NAME_INFO
 	IMAGE_NAME_ENEMY_SKELETON_MAGE_YELLOW,
 	IMAGE_NAME_ENEMY_SKELETON_MAGE_BLACK,
 	IMAGE_NAME_ENEMY_ARMADILLO,
-	IMAGE_NAME_ENEMY_BANSHEE,
-	IMAGE_NAME_ENEMY_BAT,
-	IMAGE_NAME_ENEMY_BAT_RED,
-	IMAGE_NAME_ENEMY_BAT_MINIBOSS,
-	IMAGE_NAME_ENEMY_CLONE,
-	IMAGE_NAME_ENEMY_DRAGON_GREEN,
 	IMAGE_NAME_ENEMY_SLIME_GREEN,
 	IMAGE_NAME_ENEMY_SLIME_BLUE,
-	IMAGE_NAME_ENEMY_SHOPKEEPER,
 	IMAGE_NAME_ENEMY_ZOMBIE,
+	IMAGE_NAME_ENEMY_BAT,
+	IMAGE_NAME_ENEMY_BAT_RED,
+	IMAGE_NAME_ENEMY_CLONE,
+	IMAGE_NAME_ENEMY_BAT_MINIBOSS,
+	IMAGE_NAME_ENEMY_BANSHEE,
+	IMAGE_NAME_ENEMY_DRAGON_GREEN,
 	IMAGE_NAME_ENEMY_MINOTAUR,
 	IMAGE_NAME_ENEMY_CORALRIFF_DRUMS,
 	IMAGE_NAME_ENEMY_CORALRIFF_HEAD,
 	IMAGE_NAME_ENEMY_CORALRIFF_HORNS,
 	IMAGE_NAME_ENEMY_CORALRIFF_KEYTAR,
 	IMAGE_NAME_ENEMY_CORALRIFF_STRINGS,
+	IMAGE_NAME_ENEMY_SHOPKEEPER,
 	IMAGE_NAME_CHEST,
 	IMAGE_NAME_TRAP,
 	IMAGE_NAME_SHRINE_01,
@@ -95,18 +97,16 @@ enum IMAGE_NAME_INFO
 	IMAGE_NAME_COUNT = IMAGE_NAME_END
 };
 
-static string IMAGE_NAME[IMAGE_NAME_COUNT] = { "none",
-											"floor_01","floor_02","floor_03","floor_04","floor_05",
+static string IMAGE_NAME[IMAGE_NAME_COUNT] = { "none", "floor_01","floor_02","floor_03","floor_04","floor_05",
 											"stairs_01","stairs_02",
-											"wall_01","wall_02","wall_03","wall_04","wall_05","wall_06","wall_07","wall_08","wall_09","wall_10"		
-,"enemy_skeleton", "enemy_skeleton_yellow",
-"enemy_skeleton_black", "enemy_skeleton_mage_white", "enemy_skeleton_mage_yellow", "enemy_skeleton_black",
-"enemy_armadillo", "enemy_banshee", "enemy_bat", "enemy_bat_red", "enemy_bat_miniboss", "enemy_clone",
-"enemy_dragon_green", "enemy_slime_green", "enemy_slime_blue", "enemy_shopkeeper", "enemy_zombie",
-"enemy_minitaur", "enemy_coralriff_drums", "enemy_coralriff_head", "enemy_coralriff_horns", "enemy_coralriff_keytar",
-"enemy_coralriff_strings",
-"chest_01" ,"trap_01"		,"shrine_01"	,"shrine_02" ,"shrine_03"	,"shrine_04"	,"shrine_05"
-,"shrine_06"	,"ETC_01"		,"ETC_02" ,"ETC_03"
+											"wall_01","wall_02","wall_03","wall_04","wall_05","wall_06","wall_07","wall_08","wall_09","wall_10",
+											"door_01","door_02", "enemy_skeleton", "enemy_skeleton_yellow",
+											"enemy_skeleton_black", "enemy_skeleton_mage_white", "enemy_skeleton_mage_yellow", "enemy_skeleton_black",
+											"enemy_armadillo", "enemy_banshee", "enemy_bat", "enemy_bat_red", "enemy_bat_miniboss", "enemy_clone",
+											"enemy_dragon_green", "enemy_slime_green", "enemy_slime_blue", "enemy_shopkeeper", "enemy_zombie",
+											"enemy_minitaur", "enemy_coralriff_drums", "enemy_coralriff_head", "enemy_coralriff_horns", "enemy_coralriff_keytar",
+											"enemy_coralriff_strings", "chest_01" ,"trap_01","shrine_01","shrine_02" ,"shrine_03","shrine_04","shrine_05",
+											"shrine_06","ETC_01","ETC_02"
 };
 
 

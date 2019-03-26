@@ -23,10 +23,10 @@ HRESULT playGround::init()
 	//맵툴버튼
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_FLOOR], L"image/button/mapTool_floor.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_WALL], L"image/button/mapTool_wall.png", 100, 90, 1, 3);
-	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_CHEST], L"image/button/mapTool_chest.png", 100, 90, 1, 3);
+	//IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_CHEST], L"image/button/mapTool_chest.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_ENEMY], L"image/button/mapTool_enemy.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_TRAP], L"image/button/mapTool_trap.png", 100, 90, 1, 3);
-	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_SHRINE], L"image/button/mapTool_hrine.png", 100, 90, 1, 3);
+	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_ITEM], L"image/button/mapTool_item.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_ETC], L"image/button/mapTool_container.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_NAME], L"image/button/mapTool_name.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_PREV], L"image/button/mapTool_left_button.png", 30, 60, 1, 2);
@@ -68,6 +68,8 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_08], L"image/mapTool/wall_catacomb_cracked.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_09], L"image/mapTool/wall_stone_cracked_01.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_10], L"image/mapTool/wall_stone_cracked_02.png", TILE_SIZE, WALLHEIGHT, 1, 1);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_DOOR_01], L"image/mapTool/door_front.png", TILE_SIZE, WALLHEIGHT, 1, 1);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_DOOR_02], L"image/mapTool/door_side.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_CHEST], L"image/mapTool/chest.png", 288, 48, 6, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_TRAP], L"image/mapTool/trap_01.png", 288, 288, 6, 6);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_SHRINE_01], L"image/mapTool/shrine_01.png", 288, 288, 2, 2);
@@ -84,11 +86,11 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON], L"image/enemy/skeleton.png", 384, 100, 8, 2);
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_YELLOW], L"image/enemy/skeleton_yellow.png", 432, 100, 9, 2);
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_BLACK], L"image/enemy/skeleton_black.png", 432, 100, 9, 2);
-	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_WHITE], L"image/enemy/skeleton_mage_white.png", 336, 108, 8, 2);
-	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_YELLOW], L"image/enemy/skeleton_mage_yellow.png", 336, 108, 8, 2);
-	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_BLACK], L"image/enemy/skeleton_mage_black.png", 336, 108, 8, 2);
+	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_WHITE], L"image/enemy/skeleton_mage_white.png", 336, 108, 7, 2);
+	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_YELLOW], L"image/enemy/skeleton_mage_yellow.png", 336, 108, 7, 2);
+	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_BLACK], L"image/enemy/skeleton_mage_black.png", 336, 108, 7, 2);
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_ARMADILLO], L"image/enemy/armadillo.png", 528, 96, 11, 2);
-	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_BANSHEE], L"image/enemy/banshee.png", 384, 100, 8, 2);
+	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_BANSHEE], L"image/enemy/banshee.png", 544, 156, 8, 2);
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_BAT], L"image/enemy/bat.png", 192, 96, 4, 2);
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_BAT_RED], L"image/enemy/bat_red.png", 192, 96, 4, 2);
 	IMAGEMANAGER->addFrameImage(ENEMY_NAME[ENEMY_TYPE_BAT_MINIBOSS], L"image/enemy/bat_miniboss.png", 288, 96, 4, 2);
@@ -273,7 +275,6 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage("player_body", L"image/player/player_body.png", 192, 480, 4, 10);
 
 	//상점주인
-	IMAGEMANAGER->addFrameImage("enemy_shopkeeper", L"image/enemy/shopkeeper.png", 752, 152, 8, 2);
 	IMAGEMANAGER->addImage("musical_note", L"image/musical_note.png", 6, 6);
 
 	//UI

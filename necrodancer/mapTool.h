@@ -25,10 +25,9 @@ enum MAPTOOL_BUTTON
 {
 	MAPTOOL_BUTTON_FLOOR,
 	MAPTOOL_BUTTON_WALL,
-	MAPTOOL_BUTTON_CHEST,
 	MAPTOOL_BUTTON_ENEMY,
 	MAPTOOL_BUTTON_TRAP,
-	MAPTOOL_BUTTON_SHRINE,
+	MAPTOOL_BUTTON_ITEM,
 	MAPTOOL_BUTTON_ETC,
 	MAPTOOL_BUTTON_NAME,
 	MAPTOOL_BUTTON_PREV,
@@ -49,7 +48,7 @@ enum MAPTOOL_BUTTON
 };
 
 //버튼이름
-static string BUTTON_NAME[MAPTOOL_BUTTON_COUNT] = { "button_floor",			"button_wall",			"button_chest",			"button_enemy",
+static string BUTTON_NAME[MAPTOOL_BUTTON_COUNT] = { "button_floor",			"button_wall",			"button_enemy",
 													"button_trap",			"button_shrine",		"button_container",		"button_name",
 													"button_name_prev",		"button_name_next",		"button_save",			"button_load",
 													"button_play",			"button_lobby",			"button_size",			"button_size_x_up",
@@ -212,9 +211,9 @@ public:
 	// ================================
 	//			 R E N D E R
 	// ================================
-	void drawMap();					//맵출력
-	void drawUI();					//맵툴UI관련
-	void drawSample();				//샘플타일
+	void drawMap();						//맵출력
+	void drawUI();						//맵툴UI관련
+	void drawSample(int num);				//샘플타일
 
 private:
 	// ================================
