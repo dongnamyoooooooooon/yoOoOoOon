@@ -37,3 +37,8 @@ void parentObj::render()
 {
 	_img->frameRender(_rc.left, _rc.top, 0, 0);
 }
+
+void parentObj::render(float x, float y)
+{
+	_img->frameRender(x, y, 0, 0);
+}

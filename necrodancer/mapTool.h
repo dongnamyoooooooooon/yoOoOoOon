@@ -118,6 +118,8 @@ private:
 	vector<parentObj>			_vObj;
 	vector<parentObj>::iterator _viObj;
 
+	parentObj					_selectObj;
+
 	//샘플배경이동용 포인트
 	POINT						_curPoint;
 
@@ -153,7 +155,6 @@ private:
 
 	//테슷흐용
 	bool						_isTest;
-	parentObj					_selectObj;
 	int							_choiceNum;
 
 public:
@@ -167,8 +168,8 @@ public:
 
 
 	// ================================
-//				버 튼
-// ================================
+	//				버 튼
+	// ================================
 	void initButton();				//버튼 초기설정
 	void choiceButton();			//버튼 선택
 	void activeButton(int num);		//버튼 눌렀을때 설정
@@ -192,6 +193,7 @@ public:
 	void mapSizeChange();			//맵사이즈 변경
 	void loadSetTile();
 	void eraseTile();
+	void createRECT();
 
 
 	// ================================

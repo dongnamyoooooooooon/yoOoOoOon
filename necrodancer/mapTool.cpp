@@ -26,7 +26,7 @@ HRESULT mapTool::init()
 	_vvRECT.clear();
 	_vObj.clear();
 
-	SOUNDMANAGER->play("mapTool");
+	//SOUNDMANAGER->play("mapTool");
 
 	_selectObj.init("", 0, 0, OBJECT_TYPE_NONE);
 
@@ -147,6 +147,13 @@ void mapTool::choiceButton()
 		_rendomButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 60,	_sampleWindow.rc.right + 60, _sampleWindow.rc.top + 90 };
 		_floorButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 60,	_sampleWindow.rc.right + 70, _sampleWindow.rc.top + 90 };
 		_eraseButton.rc = { _sampleWindow.rc.right, _sampleWindow.rc.top + 90,	_sampleWindow.rc.right + 40, _sampleWindow.rc.top + 120 };
+		int size = _vObj.size();
+		D2D1_RECT_F rc;
+		for (int i = 0; i < size; i++)
+		{
+			rc = { 0,0,0,0 };
+			_vObj[i].setRC(rc);
+		}
 
 		//아래방향키 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
@@ -337,16 +344,6 @@ void mapTool::additionOption()
 			}
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) _nextButton.curFrameY = 0;																	//클릭아니면 프레임 변경
 		}
-
-		else if (PtInRect(&makeRECT(_eraseButton.rc), makePOINT_NoCamera(_ptMouse)))															//'지우기'에 마우스가 있고
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))																							//좌클릭하면
-			{
-				if (_eraseButton.curFrameY == 0) _eraseButton.curFrameY = 1;																//프레임이 0이면 1로
-				else if (_eraseButton.curFrameY == 1) _eraseButton.curFrameY = 0;																//프레임이 1이면 0으로
-
-			}
-		}
 	}
 	if (_curButtonNum == MAPTOOL_BUTTON_WALL)																								//현재버튼이 '벽놓기'면
 	{
@@ -369,6 +366,16 @@ void mapTool::additionOption()
 				else if (_floorButton.curFrameY == 1) _floorButton.curFrameY = 2;															//프레임이 1이면 2으로
 				else if (_floorButton.curFrameY == 2) _floorButton.curFrameY = 0;															//프레임이 2이면 0으로
 			}
+		}
+	}
+
+	if (PtInRect(&makeRECT(_eraseButton.rc), makePOINT_NoCamera(_ptMouse)))															//'지우기'에 마우스가 있고
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))																							//좌클릭하면
+		{
+			if (_eraseButton.curFrameY == 0) _eraseButton.curFrameY = 1;																//프레임이 0이면 1로
+			else if (_eraseButton.curFrameY == 1) _eraseButton.curFrameY = 0;																//프레임이 1이면 0으로
+
 		}
 	}
 }
@@ -516,7 +523,7 @@ void mapTool::setTile()
 	{
 		parentObj object;
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_FLOOR);
 			_vObj.push_back(object);
@@ -529,6 +536,12 @@ void mapTool::setTile()
 		}
 
 		object.init(IMAGE_NAME[IMAGE_NAME_CHEST], 0, 0, OBJECT_TYPE_ITEM);
+		_vObj.push_back(object);
+
+		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_01], 0, 0, OBJECT_TYPE_ETC);
+		_vObj.push_back(object);
+
+		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_02], 0, 0, OBJECT_TYPE_ETC);
 		_vObj.push_back(object);
 
 		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_01], 0, 0, OBJECT_TYPE_ETC);
@@ -690,6 +703,60 @@ void mapTool::drawTile()
 				}
 			}
 		}
+		else if (KEYMANAGER->isStayKeyDown(VK_CONTROL))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < _tileY; i++)
+				{
+					for (int j = 0; j < _tileX; j++)
+					{
+						if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
+						{
+							_saveTile.floor = _vvTile[i][j]->floor;
+							_saveTile.floorName = _vvTile[i][j]->floorName;
+							_saveTile.floorPosX = _vvTile[i][j]->floorPosX;
+							_saveTile.floorPosY = _vvTile[i][j]->floorPosY;
+							_saveTile.type_floor = _vvTile[i][j]->type_floor;
+							{
+								drawobject(i, j);
+							}
+						}
+					}
+				}
+			}
+
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+			{
+				for (int i = 0; i < _tileY; i++)
+				{
+					for (int j = 0; j < _tileX; j++)
+					{
+						if (_saveTile.floorName == _vvTile[i][j]->floorName &&
+							_saveTile.type_floor == _vvTile[i][j]->type_floor)
+						{
+							drawobject(i, j);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < _tileY; i++)
+				{
+					for (int j = 0; j < _tileX; j++)
+					{
+						if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
+						{
+							drawobject(i, j);
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -836,6 +903,11 @@ void mapTool::eraseTile()
 {
 }
 
+void mapTool::createRECT()
+{
+
+}
+
 void mapTool::mapSave(int mapNum)
 {
 }
@@ -944,13 +1016,171 @@ void mapTool::drawMap()
 	{
 		for (int j = 0; j < _tileX; j++)
 		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+
+			D2DMANAGER->drawRectangle(RGB(0,255,255),_vvRECT[i][j].left, _vvRECT[i][j].top, _vvRECT[i][j].right, _vvRECT[i][j].bottom);
 			if (_vvTile[i][j]->floor != NULL)
 			{
 				if (_vvTile[i][j]->floor->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->floorName != "")
 				{
-					_vvTile[i][j]->floor->render();
+					_vvTile[i][j]->floor->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
 				}
 			}
+		}
+	}
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->wall != NULL)
+			{
+				if (_vvTile[i][j]->wall->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				{
+					_vvTile[i][j]->wall->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+				}
+				if (_vvTile[i][j]->isTorch)
+					IMAGEMANAGER->frameRender(IMAGE_NAME[IMAGE_NAME_ETC_01], _vvRECT[i][j].left, _vvRECT[i][j].top - 46, 0, 0);
+			}
+		}
+	}
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->enemy != NULL)
+			{
+				if (_vvTile[i][j]->enemy->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				{
+
+					int correctX;
+					int correctY;
+					string imgName = _vvTile[i][j]->objName;
+
+					if(	imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON]			  || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_YELLOW] 
+					||	imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_BLACK]	  || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_WHITE]
+					||	imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_YELLOW]|| imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_BLACK])
+					{
+						correctX = 0;
+						correctY = 26;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_ARMADILLO])
+					{
+						correctX = -2;
+						correctY = 26;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN] || imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN]
+						||	 imgName == ENEMY_NAME[ENEMY_TYPE_ZOMBIE] || imgName == ENEMY_NAME[ENEMY_TYPE_CLONE])
+					{
+						correctX = 0;
+						correctY = 26;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BAT] || imgName == ENEMY_NAME[ENEMY_TYPE_BAT_RED])
+					{
+						correctX = 0;
+						correctY = 26;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BAT_MINIBOSS])
+					{
+						correctX = 10;
+						correctY = 26;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BANSHEE])
+					{
+						correctX = 12;
+						correctY = 52;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_DRAGON_GREEN])
+					{
+						correctX = 28;
+						correctY = 72;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_MINOTAUR])
+					{
+						correctX = 24;
+						correctY = 72;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_DRUMS])
+					{
+						correctX = 10;
+						correctY = 72;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_HEAD])
+					{
+						correctX = 16;
+						correctY = 84;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_HORNS])
+					{
+						correctX = 16;
+						correctY = 76;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_KEYTAR])
+					{
+						correctX = 6;
+						correctY = 72;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_STRINGS])
+					{
+						correctX = 30;
+						correctY = 72;
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SHOPKEEPER])
+					{
+						correctX = 22;
+						correctY = 40;
+					}
+
+					_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - correctX, _vvRECT[i][j].top - correctY);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->item != NULL)
+			{
+				if (_vvTile[i][j]->item->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				{
+					_vvTile[i][j]->item->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+
+			if (_vvTile[i][j]->trap != NULL)
+			{
+				if (_vvTile[i][j]->trap->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				{
+					_vvTile[i][j]->trap->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
+				}
+			}
+			
+
+
 		}
 	}
 
@@ -1023,14 +1253,14 @@ void mapTool::drawSample(int num)
 			_vObj[i].getRC().bottom);
 	}
 
-	D2DMANAGER->drawRectangle(RGB(0, 255, 255), _sampleWindow.rc);
-
 	if (_isOnTheImg)
 	{
 		if (_curButtonNum == MAPTOOL_BUTTON_ENEMY)
 		{
 			for (int i = 0; i < size; i++)
 			{
+				rc = { 0,0,0,0 };
+				_vObj[i].setRC(rc);
 				if (_curImgNum == 0)
 				{
 					if (_vObj[i].getObjType() != num) continue;
@@ -1058,6 +1288,8 @@ void mapTool::drawSample(int num)
 				}
 				else if (_curImgNum == 1)
 				{
+					rc = { 0,0,0,0 };
+					_vObj[i].setRC(rc);
 					if (_vObj[i].getObjType() != num) continue;
 					if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1070,18 +1302,27 @@ void mapTool::drawSample(int num)
 					width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 					height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
 					if (count == 23)
-						rc = { _sampleWindow.rc.left + (90 * x) + 20,
+						rc = { _sampleWindow.rc.left + (90 * x) + 10,
 								_sampleWindow.rc.top + (110 * y) + 70,
-								_sampleWindow.rc.left + (90 * x) + 20 + width,
+								_sampleWindow.rc.left + (90 * x) + 10 + width,
 								_sampleWindow.rc.top + (110 * y) + 70 + height };
+					else if(count == 16)
+						rc = { _sampleWindow.rc.left + (80 * x) + 10,
+								_sampleWindow.rc.top + (110 * y) + 70,
+								_sampleWindow.rc.left + (80 * x) + 10 + width,
+								_sampleWindow.rc.top + (110 * y) + 70 + height };
+					else if (count == 22)
+						rc = { _sampleWindow.rc.left + (80 * x) + 10,
+								_sampleWindow.rc.top + (105 * y) + 70,
+								_sampleWindow.rc.left + (80 * x) + 10 + width,
+								_sampleWindow.rc.top + (105 * y) + 70 + height };
 					else
-						rc = { _sampleWindow.rc.left + (90 * x) + 20,
+						rc = { _sampleWindow.rc.left + (90 * x) + 10,
 								_sampleWindow.rc.top + (100 * y) + 70,
-								_sampleWindow.rc.left + (90 * x) + 20 + width,
+								_sampleWindow.rc.left + (90 * x) + 10 + width,
 								_sampleWindow.rc.top + (100 * y) + 70 + height };
 
 					_vObj[i].setRC(rc);
-
 
 					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
@@ -1093,10 +1334,14 @@ void mapTool::drawSample(int num)
 		{
 			for (int i = 0; i < size; i++)
 			{
+				rc = { 0,0,0,0 };
+				_vObj[i].setRC(rc);
 				if (_curImgNum == 0)
 				{
 					if (count < 24)
 					{
+						rc = { 0,0,0,0 };
+						_vObj[i].setRC(rc);
 						if (_vObj[i].getObjType() != num) continue;
 						if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1120,6 +1365,8 @@ void mapTool::drawSample(int num)
 				}
 				else if (_curImgNum == 1)
 				{
+					rc = { 0,0,0,0 };
+					_vObj[i].setRC(rc);
 					if (_vObj[i].getObjType() != num) continue;
 					if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1147,7 +1394,8 @@ void mapTool::drawSample(int num)
 				}
 				else if (_curImgNum == 2)
 				{
-
+					rc = { 0,0,0,0 };
+					_vObj[i].setRC(rc);
 					if (_vObj[i].getObjType() != num) continue;
 					if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1175,7 +1423,8 @@ void mapTool::drawSample(int num)
 				}
 				else if (_curImgNum == 3)
 				{
-
+					rc = { 0,0,0,0 };
+					_vObj[i].setRC(rc);
 					if (_vObj[i].getObjType() != num) continue;
 					if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1203,7 +1452,8 @@ void mapTool::drawSample(int num)
 				}
 				else if (_curImgNum == 4)
 				{
-
+					rc = { 0,0,0,0 };
+					_vObj[i].setRC(rc);
 					if (_vObj[i].getObjType() != num) continue;
 					if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1241,6 +1491,8 @@ void mapTool::drawSample(int num)
 		{
 			for (int i = 0; i < size; i++)
 			{
+				rc = { 0,0,0,0 };
+				_vObj[i].setRC(rc);
 				if (_vObj[i].getObjType() != num) continue;
 				if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1264,33 +1516,37 @@ void mapTool::drawSample(int num)
 		}
 		else if (_curButtonNum == MAPTOOL_BUTTON_ETC)
 		{
-		for (int i = 0; i < size; i++)
-		{
-			if (_vObj[i].getObjType() != num) continue;
-			if (_vObj[i].getImg() == nullptr) continue;
+			for (int i = 0; i < size; i++)
+			{
+				rc = { 0,0,0,0 };
+				_vObj[i].setRC(rc);
+				if (_vObj[i].getObjType() != num) continue;
+				if (_vObj[i].getImg() == nullptr) continue;
 
-			int x = count % 5;
-			int y = count / 5;
-			string imgName = _vObj[i].getImgName();
-			width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
-			height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-			rc = { _sampleWindow.rc.left + (50 * x) + 20,
-					_sampleWindow.rc.top + (70 * y) + 70,
-					_sampleWindow.rc.left + (50 * x) + 20 + width,
-					_sampleWindow.rc.top + (70 * y) + 70 + height };
+				int x = count % 5;
+				int y = count / 5;
+				string imgName = _vObj[i].getImgName();
+				width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
+				height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
+				rc = { _sampleWindow.rc.left + (50 * x) + 20,
+						_sampleWindow.rc.top + (70 * y) + 70,
+						_sampleWindow.rc.left + (50 * x) + 20 + width,
+						_sampleWindow.rc.top + (70 * y) + 70 + height };
 
-			_vObj[i].setRC(rc);
-			count++;
+				_vObj[i].setRC(rc);
+				count++;
 
-			IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
-			itemCount++;
-		}
+				itemCount++;
+			}
 		}
 		else
 		{
 			for (int i = 0; i < size; i++)
 			{
+				rc = { 0,0,0,0 };
+				_vObj[i].setRC(rc);
 				if (_vObj[i].getObjType() != num) continue;
 				if (_vObj[i].getImg() == nullptr) continue;
 
@@ -1299,10 +1555,10 @@ void mapTool::drawSample(int num)
 				string imgName = _vObj[i].getImgName();
 				width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 				height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-				rc = { _sampleWindow.rc.left + (60 * x) + 20,
-					   _sampleWindow.rc.top + (70 * y) + 70,
-					   (float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-					   (float)_sampleWindow.rc.top + (70 * y) + 70 + height };
+				rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+					   CAMERA->getPosY() + _sampleWindow.rc.top + (70 * y) + 70,
+					   (float)CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+					   (float)CAMERA->getPosY() + _sampleWindow.rc.top + (70 * y) + 70 + height };
 
 				_vObj[i].setRC(rc);
 				count++;
@@ -1313,9 +1569,4 @@ void mapTool::drawSample(int num)
 			}
 		}
 	}
-	/*if (_isEnter)
-	{
-		if (_isTileClick)
-			IMAGEMANAGER->findImage(_selectObj.getImgName())->frameRender(_ptMouse.x, _ptMouse.y, _ptMouse.x + _selectObj.getImg()->GetFrameWidth(), _ptMouse.y + _selectObj.getImg()->GetFrameHeight(), 0.5f);
-	}*/
 }
