@@ -147,6 +147,7 @@ private:
 	bool						_isOnTheImg;		//샘플이미지있니?
 	bool						_isDrag;			//창 움직이고 있니?
 	bool						_isClick;			//버튼 눌렀니?
+	bool						_isSave;
 
 	//세이브파일 스트링벡터
 	map<MAP_NAME, string>		_mSizeMapNames;		//맵사이즈
@@ -192,8 +193,6 @@ public:
 	void drawobject(int i, int j);
 	void mapSizeChange();			//맵사이즈 변경
 	void loadSetTile();
-	void eraseTile();
-	void createRECT();
 
 
 	// ================================

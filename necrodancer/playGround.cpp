@@ -68,10 +68,14 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_08], L"image/mapTool/wall_catacomb_cracked.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_09], L"image/mapTool/wall_stone_cracked_01.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_10], L"image/mapTool/wall_stone_cracked_02.png", TILE_SIZE, WALLHEIGHT, 1, 1);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_11], L"image/mapTool/wall_end_of_world.png", TILE_SIZE*8, WALLHEIGHT, 8, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_DOOR_01], L"image/mapTool/door_front.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_DOOR_02], L"image/mapTool/door_side.png", TILE_SIZE, WALLHEIGHT, 1, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_CHEST], L"image/mapTool/chest.png", 288, 48, 6, 1);
-	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_TRAP], L"image/mapTool/trap_01.png", 288, 288, 6, 6);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_TRAP_BOUNCE], L"image/mapTool/trap_bounce.png", 56, 192, 2, 6);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_TRAP_SLOWDOWN], L"image/mapTool/trap_slowdown.png", 56, 64, 2, 2);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_TRAP_SPEEDUP], L"image/mapTool/trap_speedup.png", 56, 64, 2, 2);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_TRAP_SPIKE], L"image/mapTool/trap_spike.png", 68, 240, 1, 6);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_SHRINE_01], L"image/mapTool/shrine_01.png", 288, 288, 2, 2);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_SHRINE_02], L"image/mapTool/shrine_02.png", 288, 288, 2, 2);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_SHRINE_03], L"image/mapTool/shrine_03.png", 288, 288, 2, 2);

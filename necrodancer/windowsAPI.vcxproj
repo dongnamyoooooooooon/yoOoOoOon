@@ -166,6 +166,7 @@
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="objectManager.h" />
     <ClInclude Include="parentObj.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="randomFunction.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
+    <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="parentObj.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="sceneManager.cpp" />

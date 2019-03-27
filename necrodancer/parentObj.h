@@ -1,20 +1,8 @@
 #pragma once
 #include "gameNode.h"
+#include "itemInfomation.h"
 
-enum OBJECT_TYPE
-{
-	OBJECT_TYPE_FLOOR,
-	OBJECT_TYPE_WALL,
-	OBJECT_TYPE_ENEMY,
-	OBJECT_TYPE_TRAP,
-	OBJECT_TYPE_ITEM,
-	OBJECT_TYPE_ETC,
-	OBJECT_TYPE_PLAYER,
 
-	OBJECT_TYPE_NONE,
-	
-	OBJECT_TYPE_COUNT = OBJECT_TYPE_NONE
-};
 
 
 class parentObj : public gameNode
@@ -25,6 +13,10 @@ protected:
 	OBJECT_TYPE		_objType;		//오브젝트타입
 	POINTF			_pos;			//실제위치
 	D2D1_RECT_F		_rc;			//렉트
+
+	UINT			_imgKey ;
+	UINT			_itemType ;
+	UINT			_itemSubType ;
 
 	
 	int				_frameX;
@@ -48,11 +40,19 @@ public:
 	parentObj();
 	~parentObj();
 
-	virtual HRESULT init(string imgName, int idx_X, int idx_Y, OBJECT_TYPE type);
+	virtual HRESULT init(string imgName, int idx_X, int idx_Y, OBJECT_TYPE type, UINT key);
+	virtual HRESULT init(string imgName, int idx_X, int idx_Y, OBJECT_TYPE type, UINT key, ITEM_TYPE itemtype);
 	virtual void release();
 	virtual void update();
 	virtual void render();
-	virtual void render(float x, float y);
+	virtual void render(float x, float y, int frameX = 0);
+
+	tagTilePack makeSave();
+	
+	void makeLoad(tagTilePack* pack);
+
+	/*string makeSaveInfo();
+	void loadSaveInfo(string* data);*/
 
 	
 	//=======================================
@@ -79,6 +79,12 @@ public:
 
 	int getidxY() { return _idxY; }
 	void setIdY(int idxY) { _idxY = idxY; }
+
+	UINT getImgKey() { return _imgKey; }
+	void setImgKey(UINT key) { _imgKey = key; }
+
+	UINT getItemType() {return _itemType;}
+	void setItemType(UINT type) { _itemType = type; }
 
 };
 

@@ -28,7 +28,7 @@ HRESULT mapTool::init()
 
 	//SOUNDMANAGER->play("mapTool");
 
-	_selectObj.init("", 0, 0, OBJECT_TYPE_NONE);
+	_selectObj.init("", 0, 0, OBJECT_TYPE_NONE, 0);
 
 	//==================================================
 
@@ -47,7 +47,7 @@ HRESULT mapTool::init()
 	initMapName();									//맵이름 초기설정
 	setTile();										//타일 초기설정
 
-	initMapLoad();
+	//initMapLoad();
 
 
 	return S_OK;
@@ -59,6 +59,9 @@ void mapTool::release()
 
 void mapTool::update()
 {
+	OBJECTMANAGER->setTileX(_tileX);
+	OBJECTMANAGER->setTileY(_tileY);
+
 	CAMERA->mapToolMove();								//카메라이동
 	choiceButton();										//버튼선택
 
@@ -68,8 +71,6 @@ void mapTool::update()
 		dragSampleTile();								//샘플타일창 이동
 		additionOption();								//부가옵션
 		drawTile();										//선택한 타일 그리기
-
-		if (_eraseButton.curFrameY == 1) eraseTile();	//타일지우기
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))	this->mapSave(_curMapNum);
@@ -96,9 +97,9 @@ void mapTool::initButton()
 		if (i < MAPTOOL_BUTTON_PREV)					// i < 8		
 			_button[i].rc = { (float)WINSIZEX - 240, (float)40 + (30 * i),		(float)WINSIZEX - 80,	(float)70 + (30 * i) };
 		else if (i == MAPTOOL_BUTTON_PREV)				// i == 8  (왼쪽버튼)
-			_button[i].rc = { (float)WINSIZEX - 240, (float)280,				(float)WINSIZEX - 210,	(float)310 };
+			_button[i].rc = { (float)WINSIZEX - 240, (float)250,				(float)WINSIZEX - 210,	(float)280 };
 		else if (i == MAPTOOL_BUTTON_NEXT)				// i == 9  (오른쪽버튼)
-			_button[i].rc = { (float)WINSIZEX - 30,	 (float)280,				(float)WINSIZEX,		(float)310 };
+			_button[i].rc = { (float)WINSIZEX - 30,	 (float)250,				(float)WINSIZEX,		(float)280 };
 		else if (i == MAPTOOL_BUTTON_SIZE_WIDTH_UP)		// i == 15 (가로사이즈 증가)
 			_button[i].rc = { (float)WINSIZEX - 210, (float)490,				(float)WINSIZEX - 170,	(float)510 };
 		else if (i == MAPTOOL_BUTTON_SIZE_WIDTH_DOWN)	// i == 16 (가로사이즈 감소)
@@ -406,31 +407,6 @@ void mapTool::pickSampleTile()
 			count++;
 			itemCount++;
 		}
-		//if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))																//우클릭할경우
-		//{
-		//	_isTileClick = true;																				//타일클릭은 트루
-
-		//	//샘플드래그용
-		//	_saveSampleX = indX;																				//마우스를 누른 순간의 좌표를 저장한다.
-		//	_saveSampleY = indY;																				//마우스를 누른 순간의 좌표를 저장한다.
-
-		//	if ((indX >= 0 && indX < SAMPLETILE) && (indY >= 0 && indY < SAMPLETILE))							//인덱스가 범위안에 있을때
-		//	{
-		//		_curPickTile.curX = indX;																		//현재선택한타일에 인덱스값 들어간다.
-		//		_curPickTile.curY = indY;																		//현재선택한타일에 인덱스값 들어간다.
-		//	}
-		//	else																								//그게아니면
-		//		_isTileClick = false;																			//타일클릭은 풜쓰
-		//}
-
-		////샘플드래그용
-		//if (KEYMANAGER->isOnceKeyUp(VK_RBUTTON))																//우클릭을 뗐을때
-		//{
-		//	_drawSampleX = indX + 1;																			//드래그X는 인덱스 + 1
-		//	if (_drawSampleX <= _saveSampleX) _drawSampleX = 1;													//그냥 선택했을때를 위해 예외처리
-		//	_drawSampleY = indY + 1;																			//드래그Y는 인덱스 + 1
-		//	if (_drawSampleY <= _saveSampleY) _drawSampleY = 1;													//그냥 선택했을때를 위해 예외처리
-		//}
 	}
 }
 
@@ -474,27 +450,6 @@ void mapTool::setTile()
 			tagTile* tempTile = new tagTile;
 			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
 			parentObj* floor = new parentObj;
-
-			if ((j % 2 == 1 && i % 2 == 0) || (j % 2 == 0 && i % 2 == 1))						//y->홀 x->짝 / y->짝 x->홀 일때
-			{
-				tempTile->floorName = "floor_01";
-				tempTile->terrain_frameX = 1;
-				tempTile->terrain_frameY = 0;
-				tempTile->type_floor = OBJECT_TYPE_FLOOR;
-				tempTile->floorPosX = j;
-				tempTile->floorPosY = i;
-				tempTile->floor = floor;
-			}
-			else if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1))					//y->짝 x->짝 / y->홀 x->홀 일때
-			{
-				tempTile->floorName = "floor_01";
-				tempTile->terrain_frameX = 0;
-				tempTile->terrain_frameY = 0;
-				tempTile->type_floor = OBJECT_TYPE_FLOOR;
-				tempTile->floorPosX = j;
-				tempTile->floorPosY = i;
-				tempTile->floor = floor;
-			}
 			tempTile->wall = nullptr;
 			tempTile->item = nullptr;
 			tempTile->enemy = nullptr;
@@ -525,109 +480,103 @@ void mapTool::setTile()
 
 		for (int i = 0; i < 6; i++)
 		{
-			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_FLOOR);
+			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_FLOOR, i);
 			_vObj.push_back(object);
 		}
 
-		for (int i = 8; i < 20; i++)
+		for (int i = 8; i < 21; i++)
 		{
-			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_WALL);
+			object.init(IMAGE_NAME[i], 0, 0, OBJECT_TYPE_WALL, i);
 			_vObj.push_back(object);
 		}
 
-		object.init(IMAGE_NAME[IMAGE_NAME_CHEST], 0, 0, OBJECT_TYPE_ITEM);
+		object.init(IMAGE_NAME[IMAGE_NAME_CHEST], 0, 0, OBJECT_TYPE_ITEM, IMAGE_NAME_CHEST);
 		_vObj.push_back(object);
 
-		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_01], 0, 0, OBJECT_TYPE_ETC);
+		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_01], 0, 0, OBJECT_TYPE_ETC, IMAGE_NAME_STAIRS_01);
 		_vObj.push_back(object);
 
-		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_02], 0, 0, OBJECT_TYPE_ETC);
+		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_02], 0, 0, OBJECT_TYPE_ETC, IMAGE_NAME_STAIRS_02);
 		_vObj.push_back(object);
 
-		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_01], 0, 0, OBJECT_TYPE_ETC);
-		//_vObj.push_back(object);
-
-		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_02], 0, 0, OBJECT_TYPE_ETC);
-		//_vObj.push_back(object);
-
-		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_03], 0, 0, OBJECT_TYPE_ETC);
-		//_vObj.push_back(object);
-
-		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_04], 0, 0, OBJECT_TYPE_ETC);
-		//_vObj.push_back(object);
-
-		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_05], 0, 0, OBJECT_TYPE_ETC);
-		//_vObj.push_back(object);
-
-		//object.init(IMAGE_NAME[IMAGE_NAME_SHRINE_06], 0, 0, OBJECT_TYPE_ETC);
-		//_vObj.push_back(object);
-
-		object.init(IMAGE_NAME[IMAGE_NAME_ETC_01], 0, 0, OBJECT_TYPE_ETC);
+		object.init(IMAGE_NAME[IMAGE_NAME_TRAP_BOUNCE], 0, 0, OBJECT_TYPE_TRAP, IMAGE_NAME_TRAP_BOUNCE);
 		_vObj.push_back(object);
 
-		for (const string& elem : ENEMY_NAME)
+		object.init(IMAGE_NAME[IMAGE_NAME_TRAP_SLOWDOWN], 0, 0, OBJECT_TYPE_TRAP, IMAGE_NAME_TRAP_SLOWDOWN);
+		_vObj.push_back(object);
+
+		object.init(IMAGE_NAME[IMAGE_NAME_TRAP_SPEEDUP], 0, 0, OBJECT_TYPE_TRAP, IMAGE_NAME_TRAP_SPEEDUP);
+		_vObj.push_back(object);
+
+		object.init(IMAGE_NAME[IMAGE_NAME_TRAP_SPIKE], 0, 0, OBJECT_TYPE_TRAP, IMAGE_NAME_TRAP_SPIKE);
+		_vObj.push_back(object);
+
+		object.init(IMAGE_NAME[IMAGE_NAME_ETC_01], 0, 0, OBJECT_TYPE_ETC, IMAGE_NAME_ETC_01);
+		_vObj.push_back(object);
+
+		for (int i = 21; i < 44; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ENEMY);
+			object.init(IMAGE_NAME[i], -1, -1, OBJECT_TYPE_ENEMY, i);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : ARMOR_NAME)
+		for (int i = 0; i < ITEM_ARMOR_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(ARMOR_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_ARMOR);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : SHOVEL_NAME)
+		for (int i = 0; i < ITEM_SHOVEL_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(SHOVEL_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_SHOVEL);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : TORCH_NAME)
+		for (int i = 0; i < ITEM_TORCH_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(TORCH_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_TORCH);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : WEAPON_NAME)
+		for (int i = 0; i < ITEM_WEAPON_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(WEAPON_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_WEAPON);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : HEADWEAR_NAME)
+		for (int i = 0; i < ITEM_HEADWEAR_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(HEADWEAR_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_HEADWEAR);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : FOOTWEAR_NAME)
+		for (int i = 0; i < ITEM_FOOTWEAR_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(FOOTWEAR_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_FOOTWEAR);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : CONSUMABLE_NAME)
+		for (int i = 0; i < ITEM_CONSUMABLE_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(CONSUMABLE_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_CONSUMABLE);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : HEART_NAME)
+		for (int i = 0; i < ITEM_HEART_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(HEART_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_HEART);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : COIN_NAME)
+		for (int i = 0; i < ITEM_COIN_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(COIN_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_COIN);
 			_vObj.push_back(object);
 		}
 
-		for (const string& elem : BOMB_NAME)
+		for (int i = 0; i < ITEM_BOMB_COUNT; i++)
 		{
-			object.init(elem, -1, -1, OBJECT_TYPE_ITEM);
+			object.init(BOMB_NAME[i], -1, -1, OBJECT_TYPE_ITEM, i, ITEM_TYPE_BOMB);
 			_vObj.push_back(object);
 		}
 	}
@@ -637,7 +586,7 @@ void mapTool::drawTile()
 {
 	parentObj tempObj;
 
-	tempObj.init("", -1, -1, OBJECT_TYPE_NONE);
+	tempObj.init("", -1, -1, OBJECT_TYPE_NONE, 0);
 
 	if (_ptMouse.x - CAMERA->getPosX() > WINSIZEX - TOTAL_SAMPLE_SIZE + TILE_SIZE)	return;								//샘플타일쪽 그리면 안돼
 	if (_ptMouse.x > _vvRECT[0][_tileX - 1].right)									return;								//맵 제일 오른쪽 안돼
@@ -763,7 +712,7 @@ void mapTool::drawTile()
 void mapTool::drawobject(int i, int j)
 {
 	parentObj* tempObj = new parentObj;
-	tempObj->init("", -1, -1, OBJECT_TYPE_NONE);
+	tempObj->init("", -1, -1, OBJECT_TYPE_NONE, 0);
 
 	parentObj* obj = new parentObj;
 
@@ -774,19 +723,20 @@ void mapTool::drawobject(int i, int j)
 		case OBJECT_TYPE_FLOOR:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType(), _selectObj.getImgKey());
 			_vvTile[i][j]->floor = obj;
 			_vvTile[i][j]->floorName = _selectObj.getImgName();
 			_vvTile[i][j]->type_floor = _selectObj.getObjType();
 			_vvTile[i][j]->floorPosX = j;
 			_vvTile[i][j]->floorPosY = i;
+			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 
 			break;
 		}
 		case OBJECT_TYPE_WALL:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType(), _selectObj.getImgKey());
 			_vvTile[i][j]->wall = obj;
 			_vvTile[i][j]->item = nullptr;
 			_vvTile[i][j]->enemy = nullptr;
@@ -795,13 +745,15 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->type_obj = _selectObj.getObjType();
 			_vvTile[i][j]->objPosX = j;
 			_vvTile[i][j]->objPosY = i;
+			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
+			_vvTile[i][j]->terrain_frameX = RND->getInt(15);
 
 			break;
 		}
 		case OBJECT_TYPE_ENEMY:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType(), _selectObj.getImgKey());
 			_vvTile[i][j]->wall = nullptr;
 			_vvTile[i][j]->item = nullptr;
 			_vvTile[i][j]->enemy = obj;
@@ -810,13 +762,14 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->type_obj = _selectObj.getObjType();
 			_vvTile[i][j]->objPosX = j;
 			_vvTile[i][j]->objPosY = i;
+			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 
 			break;
 		}
 		case OBJECT_TYPE_TRAP:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType(), _selectObj.getImgKey());
 			_vvTile[i][j]->wall = nullptr;
 			_vvTile[i][j]->item = nullptr;
 			_vvTile[i][j]->enemy = nullptr;
@@ -825,13 +778,14 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->type_obj = _selectObj.getObjType();
 			_vvTile[i][j]->objPosX = j;
 			_vvTile[i][j]->objPosY = i;
+			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 
 			break;
 		}
 		case OBJECT_TYPE_ITEM:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType());
+			obj->init(_selectObj.getImgName(), j, i, _selectObj.getObjType(), _selectObj.getImgKey(), (ITEM_TYPE)_selectObj.getItemType());
 			_vvTile[i][j]->wall = nullptr;
 			_vvTile[i][j]->item = obj;
 			_vvTile[i][j]->enemy = nullptr;
@@ -840,13 +794,14 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->type_obj = _selectObj.getObjType();
 			_vvTile[i][j]->objPosX = j;
 			_vvTile[i][j]->objPosY = i;
+			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 
 			break;
 		}
 		case OBJECT_TYPE_ETC:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), _selectObj.getIdxX(), _selectObj.getidxY(), _selectObj.getObjType());
+			obj->init(_selectObj.getImgName(), _selectObj.getIdxX(), _selectObj.getidxY(), _selectObj.getObjType(), _selectObj.getImgKey());
 
 			if (obj->getImgName() == IMAGE_NAME[IMAGE_NAME_ETC_01])
 			{
@@ -854,6 +809,19 @@ void mapTool::drawobject(int i, int j)
 				{
 					_vvTile[i][j]->isTorch = true;
 				}
+			}
+			else if (obj->getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_01] || obj->getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_02])
+			{
+				_vvTile[i][j]->objETC = obj;
+				_vvTile[i][j]->wall = nullptr;
+				_vvTile[i][j]->item = nullptr;
+				_vvTile[i][j]->enemy = nullptr;
+				_vvTile[i][j]->trap = nullptr;
+				_vvTile[i][j]->objName = _selectObj.getImgName();
+				_vvTile[i][j]->type_obj = _selectObj.getObjType();
+				_vvTile[i][j]->objPosX = j;
+				_vvTile[i][j]->objPosY = i;
+				_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 			}
 
 			break;
@@ -893,27 +861,275 @@ void mapTool::drawobject(int i, int j)
 
 void mapTool::mapSizeChange()
 {
+	// 가로사이즈 감소
+	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_WIDTH_DOWN].rc), makePOINT_NoCamera(_ptMouse)) && _tileX > 1)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_button[MAPTOOL_BUTTON_SIZE_WIDTH_DOWN].curFrameY = 1;
+			for (int i = _tileY - 1; i >= 0; i--)
+			{
+				tagTile* target = _vvTile[i].back();
+				_vvTile[i].pop_back();
+
+				D2D1_RECT_F targetRC = _vvRECT[i].back();
+				_vvRECT[i].pop_back();
+				SAFE_DELETE(target);
+			}
+			_tileX--;
+		}
+	}
+
+	// 가로사이즈 증가
+	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_WIDTH_UP].rc), makePOINT_NoCamera(_ptMouse)) && _tileX <= 100)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_button[MAPTOOL_BUTTON_SIZE_WIDTH_UP].curFrameY = 1;
+			for (int i = 0; i < _tileY; i++)
+			{
+				tagTile* tempTile = new tagTile;
+				parentObj* floor = new parentObj;
+				tempTile->wall = nullptr;
+				tempTile->item = nullptr;
+				tempTile->enemy = nullptr;
+				tempTile->player = nullptr;
+				tempTile->objETC = nullptr;
+				tempTile->trap = nullptr;
+				tempTile->objName = "";
+				tempTile->type_obj = OBJECT_TYPE_NONE;
+
+				tempTile->object_frameX = NULL;
+				tempTile->object_frameY = NULL;
+				tempTile->isTorch = false;
+
+				D2D1_RECT_F tempRECT = { (float)_vvRECT[i].back().left + TILE_SIZE		,(float)_vvRECT[i].back().top
+										,(float)_vvRECT[i].back().right + TILE_SIZE		,(float)_vvRECT[i].back().bottom };
+
+				_vvTile[i].push_back(tempTile);
+				_vvRECT[i].push_back(tempRECT);
+			}
+			++_tileX;
+		}
+	}
+	// 세로사이즈 감소
+	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN].rc), makePOINT_NoCamera(_ptMouse)))
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && _tileY > 1)
+		{
+			_button[MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN].curFrameY = 1;
+			for (int i = _tileX - 1; i >= 0; i--)
+			{
+				tagTile* tile = _vvTile.back()[i];
+				_vvTile.back().pop_back();
+				_vvRECT.back().pop_back();
+
+				delete tile;
+				tile = nullptr;
+			}
+			_vvTile.pop_back();
+			_vvRECT.pop_back();
+			_tileY--;
+		}
+	}
+
+	// 세로사이즈 증가
+	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_HEIGHT_UP].rc), makePOINT_NoCamera(_ptMouse)) && _tileY <= 100)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_button[MAPTOOL_BUTTON_SIZE_HEIGHT_UP].curFrameY = 1;
+			vector<tagTile*> vTile;
+			vector<D2D1_RECT_F> vRECT;
+			vTile.clear();
+			vRECT.clear();
+			for (int i = 0; i < _tileX; i++)
+			{
+				tagTile* tempTile = new tagTile;
+				parentObj* floor = new parentObj;
+				tempTile->wall = nullptr;
+				tempTile->item = nullptr;
+				tempTile->enemy = nullptr;
+				tempTile->player = nullptr;
+				tempTile->objETC = nullptr;
+				tempTile->trap = nullptr;
+				tempTile->objName = "";
+				tempTile->type_obj = OBJECT_TYPE_NONE;
+
+				tempTile->object_frameX = NULL;
+				tempTile->object_frameY = NULL;
+				tempTile->isTorch = false;
+
+				D2D1_RECT_F tempRECT = { (float)_vvRECT.back()[i].left		,(float)_vvRECT.back()[i].top + TILE_SIZE
+										,(float)_vvRECT.back()[i].right		,(float)_vvRECT.back()[i].bottom + TILE_SIZE };
+
+				vTile.push_back(tempTile);
+				vRECT.push_back(tempRECT);
+			}
+			_vvTile.push_back(vTile);
+			_vvRECT.push_back(vRECT);
+
+			_tileY++;
+		}
+	}
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+	{
+		for (int i = MAPTOOL_BUTTON_SIZE_WIDTH_UP; i <= MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN; i++)
+		{
+			_button[i].curFrameY = 0;
+		}
+	}
+
 }
 
 void mapTool::loadSetTile()
 {
-}
+	//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
+	for (UINT i = 0; i < _tileY; i++)
+	{
+		//처음에는 vTile과 vRECT에 초기화한 값들을 넣어주고
+		//그담에 이중벡터인 vvTile과 vvRECT에 넣어준다.
 
-void mapTool::eraseTile()
-{
-}
+		vector<tagTile*> vTile;
+		vector<D2D1_RECT_F> vRECT;
+		for (UINT j = 0; j < _tileX; j++)
+		{
+			tagTile* tempTile = new tagTile;
+			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
+			parentObj* floor = new parentObj;
+			tempTile->wall = nullptr;
+			tempTile->item = nullptr;
+			tempTile->enemy = nullptr;
+			tempTile->player = nullptr;
+			tempTile->objETC = nullptr;
+			tempTile->trap = nullptr;
+			tempTile->objName = "";
+			tempTile->objPosX = j;
+			tempTile->objPosY = i;
+			tempTile->type_obj = OBJECT_TYPE_NONE;
 
-void mapTool::createRECT()
-{
+			tempTile->object_frameX = NULL;
+			tempTile->object_frameY = NULL;
+			tempTile->isTorch = false;
 
+			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
+						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
+
+			vTile.push_back(tempTile);
+			vRECT.push_back(*tempRECT);
+		}
+		_vvTile.push_back(vTile);
+		_vvRECT.push_back(vRECT);
+	}
 }
 
 void mapTool::mapSave(int mapNum)
 {
+	//맵사이즈 저장
+	HANDLE file;
+	DWORD write;
+
+	char mapSize[128];
+	sprintf_s(mapSize, "%d/%d", _tileX, _tileY);
+
+	file = CreateFile(_mSizeMapNames[(MAP_NAME)mapNum].c_str(), GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	WriteFile(file, mapSize, strlen(mapSize), &write, NULL);
+
+	CloseHandle(file);
+
+	tagPack* pack = new tagPack[_tileX * _tileY];
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			pack[i + j * _tileX] = _vvTile[i][j]->makeSave();
+		}
+	}
+
+	HANDLE file2;
+	DWORD write2;
+
+	file2 = CreateFile(_mDataMapNames[(MAP_NAME)mapNum].c_str(), GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	WriteFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &write2, NULL);
+
+	CloseHandle(file2);
 }
 
 void mapTool::mapLoad()
 {
+	for (int i = _tileY - 1; i >= 0; i--)
+	{
+		for (int j = _tileX - 1; j >= 0; j--)
+		{
+			if (_vvTile[i][j])
+			{
+				//SAFE_DELETE(_vvTile[i][j]);
+				_vvTile[i].pop_back();
+			}
+		}
+		_vvTile.pop_back();
+	}
+	_vvTile.clear();
+
+
+	HANDLE file;
+	DWORD read;
+	char mapSize[128] = { 0, };
+
+	file = CreateFile(_mSizeMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	ReadFile(file, mapSize, 128, &read, NULL);
+	CloseHandle(file);
+
+	string mapX, mapY;
+	mapX.clear();
+	mapY.clear();
+	bool x = true;
+	for (int i = 0; i < strlen(mapSize); ++i)
+	{
+		if (mapSize[i] == '/')
+		{
+			x = false;
+			continue;
+		}
+		if (mapSize[i] == NULL)
+			break;
+		if (x)
+		{
+			mapX += mapSize[i];
+		}
+		else
+		{
+			mapY += mapSize[i];
+		}
+	}
+
+	_tileX = stoi(mapX);
+	_tileY = stoi(mapY);
+	_vvTile.resize(_tileY);
+
+	for (int i = 0; i < _tileY; ++i)
+	{
+		_vvTile[i].resize(_tileX);
+	}
+
+	tagPack* pack = new tagPack[_tileX * _tileY];
+
+	HANDLE file2;
+	DWORD read2;
+
+	file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
+	CloseHandle(file2);
+
+	for (int i = 0; i < _tileY; ++i)
+	{
+		for (int j = 0; j < _tileX; ++j)
+		{
+			_vvTile[i][j] = new tagTile;
+			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
+		}
+	}
 }
 
 void mapTool::initMapLoad()
@@ -973,6 +1189,7 @@ void mapTool::initMapLoad()
 	}
 
 	tagTile* tile = (tagTile*)malloc(sizeof(tagTile) * _tileX * _tileY);
+	//tagTile* tile = new tagTile[_tileX * _tileY];
 	ZeroMemory(tile, sizeof(tagTile) * (_tileX * _tileY));
 
 	HANDLE file2;
@@ -989,7 +1206,15 @@ void mapTool::initMapLoad()
 		for (int j = 0; j < _tileX; ++j)
 		{
 			_vvTile[i][j] = new tagTile;
-			_vvTile[i][j]->setTile();
+			_vvTile[i][j]->floor = tile[j + i * _tileX].floor;
+			_vvTile[i][j]->enemy = tile[j + i * _tileX].enemy;
+			_vvTile[i][j]->wall = tile[j + i * _tileX].wall;
+			_vvTile[i][j]->objETC = tile[j + i * _tileX].objETC;
+			_vvTile[i][j]->trap = tile[j + i * _tileX].trap;
+			_vvTile[i][j]->item = tile[j + i * _tileX].item;
+			_vvTile[i][j]->player = tile[j + i * _tileX].player;
+
+			_vvTile[i][j] = &tile[j + i * _tileX];
 		}
 	}
 }
@@ -1038,114 +1263,19 @@ void mapTool::drawMap()
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
 
-			if (_vvTile[i][j]->wall != NULL)
+			if (_vvTile[i][j]->objETC != NULL)
 			{
-				if (_vvTile[i][j]->wall->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				if (_vvTile[i][j]->objETC->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
 				{
-					_vvTile[i][j]->wall->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
-				}
-				if (_vvTile[i][j]->isTorch)
-					IMAGEMANAGER->frameRender(IMAGE_NAME[IMAGE_NAME_ETC_01], _vvRECT[i][j].left, _vvRECT[i][j].top - 46, 0, 0);
-			}
-		}
-	}
-
-	for (int i = 0; i < _tileY; i++)
-	{
-		for (int j = 0; j < _tileX; j++)
-		{
-			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
-			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
-
-			if (_vvTile[i][j]->enemy != NULL)
-			{
-				if (_vvTile[i][j]->enemy->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
-				{
-
-					int correctX;
-					int correctY;
-					string imgName = _vvTile[i][j]->objName;
-
-					if(	imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON]			  || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_YELLOW] 
-					||	imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_BLACK]	  || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_WHITE]
-					||	imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_YELLOW]|| imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_BLACK])
-					{
-						correctX = 0;
-						correctY = 26;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_ARMADILLO])
-					{
-						correctX = -2;
-						correctY = 26;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN] || imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN]
-						||	 imgName == ENEMY_NAME[ENEMY_TYPE_ZOMBIE] || imgName == ENEMY_NAME[ENEMY_TYPE_CLONE])
-					{
-						correctX = 0;
-						correctY = 26;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BAT] || imgName == ENEMY_NAME[ENEMY_TYPE_BAT_RED])
-					{
-						correctX = 0;
-						correctY = 26;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BAT_MINIBOSS])
-					{
-						correctX = 10;
-						correctY = 26;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BANSHEE])
-					{
-						correctX = 12;
-						correctY = 52;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_DRAGON_GREEN])
-					{
-						correctX = 28;
-						correctY = 72;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_MINOTAUR])
-					{
-						correctX = 24;
-						correctY = 72;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_DRUMS])
-					{
-						correctX = 10;
-						correctY = 72;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_HEAD])
-					{
-						correctX = 16;
-						correctY = 84;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_HORNS])
-					{
-						correctX = 16;
-						correctY = 76;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_KEYTAR])
-					{
-						correctX = 6;
-						correctY = 72;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_STRINGS])
-					{
-						correctX = 30;
-						correctY = 72;
-					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SHOPKEEPER])
-					{
-						correctX = 22;
-						correctY = 40;
-					}
-
-					_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - correctX, _vvRECT[i][j].top - correctY);
+					_vvTile[i][j]->objETC->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
 				}
 			}
 		}
+
 	}
 
+
+	
 	for (int i = 0; i < _tileY; i++)
 	{
 		for (int j = 0; j < _tileX; j++)
@@ -1175,14 +1305,114 @@ void mapTool::drawMap()
 			{
 				if (_vvTile[i][j]->trap->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
 				{
-					_vvTile[i][j]->trap->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
+					_vvTile[i][j]->trap->render(_vvRECT[i][j].left + 12, _vvRECT[i][j].top + 10);
 				}
 			}
-			
-
-
 		}
 	}
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->wall != NULL)
+			{
+				if (_vvTile[i][j]->wall->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				{
+					if (_curButtonNum == MAPTOOL_BUTTON_WALL && _rendomButton.curFrameY == 1)
+						_vvTile[i][j]->wall->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 28, _vvTile[i][j]->terrain_frameX);
+					else
+						_vvTile[i][j]->wall->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 28);
+				}
+				if (_vvTile[i][j]->isTorch)
+					IMAGEMANAGER->frameRender(IMAGE_NAME[IMAGE_NAME_ETC_01], _vvRECT[i][j].left, _vvRECT[i][j].top - 46, 0, 0);
+			}
+		}
+	}
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->enemy != NULL)
+			{
+				if (_vvTile[i][j]->enemy->getObjType() != OBJECT_TYPE_NONE)
+				{
+
+					int correctX;
+					int correctY;
+					string imgName = _vvTile[i][j]->objName;
+
+					if (imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON] || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_YELLOW]
+						|| imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_BLACK] || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_WHITE]
+						|| imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_YELLOW] || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_MAGE_BLACK])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_ARMADILLO])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left + 2, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN] || imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN]
+						|| imgName == ENEMY_NAME[ENEMY_TYPE_ZOMBIE] || imgName == ENEMY_NAME[ENEMY_TYPE_CLONE])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BAT] || imgName == ENEMY_NAME[ENEMY_TYPE_BAT_RED])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BAT_MINIBOSS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 10, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_BANSHEE])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 12, _vvRECT[i][j].top - 52);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_DRAGON_GREEN])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 27, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_MINOTAUR])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 24, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_DRUMS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 10, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_HEAD])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 16, _vvRECT[i][j].top - 84);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_HORNS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 16, _vvRECT[i][j].top - 76);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_KEYTAR])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 6, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_CORALRIFF_STRINGS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 30, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SHOPKEEPER])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 22, _vvRECT[i][j].top - 40);
+					}
+				}
+			}
+		}
+	}
+
 
 }
 
@@ -1200,7 +1430,7 @@ void mapTool::drawUI()
 	for (int i = 0; i < MAPTOOL_BUTTON_COUNT; i++)
 	{
 		if (i == MAPTOOL_BUTTON_PREV || i == MAPTOOL_BUTTON_NEXT)
-			_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left, CAMERA->getPosY() + _button[i].rc.top - 30, 0, _button[i].curFrameY);
+			_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left, CAMERA->getPosY() + _button[i].rc.top, 0, _button[i].curFrameY);
 		else if (i >= MAPTOOL_BUTTON_SIZE_WIDTH_UP && i <= MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN)
 			_button[i].img->frameRender(CAMERA->getPosX() + _button[i].rc.left - 5, CAMERA->getPosY() + _button[i].rc.top + 2, 0, _button[i].curFrameY);
 		else
@@ -1273,10 +1503,10 @@ void mapTool::drawSample(int num)
 						string imgName = _vObj[i].getImgName();
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-						rc = { _sampleWindow.rc.left + (60 * x) + 20,
-								_sampleWindow.rc.top + (80 * y) + 70,
-								_sampleWindow.rc.left + (60 * x) + 20 + width,
-								_sampleWindow.rc.top + (80 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70,
+								CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 						count++;
@@ -1302,25 +1532,25 @@ void mapTool::drawSample(int num)
 					width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 					height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
 					if (count == 23)
-						rc = { _sampleWindow.rc.left + (90 * x) + 10,
-								_sampleWindow.rc.top + (110 * y) + 70,
-								_sampleWindow.rc.left + (90 * x) + 10 + width,
-								_sampleWindow.rc.top + (110 * y) + 70 + height };
-					else if(count == 16)
-						rc = { _sampleWindow.rc.left + (80 * x) + 10,
-								_sampleWindow.rc.top + (110 * y) + 70,
-								_sampleWindow.rc.left + (80 * x) + 10 + width,
-								_sampleWindow.rc.top + (110 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (90 * x) + 10,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (110 * y) + 70,
+								CAMERA->getPosX() + _sampleWindow.rc.left + (90 * x) + 10 + width,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (110 * y) + 70 + height };
+					else if (count == 16)
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (80 * x) + 10,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (110 * y) + 70,
+								CAMERA->getPosX() + _sampleWindow.rc.left + (80 * x) + 10 + width,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (110 * y) + 70 + height };
 					else if (count == 22)
-						rc = { _sampleWindow.rc.left + (80 * x) + 10,
-								_sampleWindow.rc.top + (105 * y) + 70,
-								_sampleWindow.rc.left + (80 * x) + 10 + width,
-								_sampleWindow.rc.top + (105 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (80 * x) + 10,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (105 * y) + 70,
+								CAMERA->getPosX() + _sampleWindow.rc.left + (80 * x) + 10 + width,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (105 * y) + 70 + height };
 					else
-						rc = { _sampleWindow.rc.left + (90 * x) + 10,
-								_sampleWindow.rc.top + (100 * y) + 70,
-								_sampleWindow.rc.left + (90 * x) + 10 + width,
-								_sampleWindow.rc.top + (100 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (90 * x) + 10,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (100 * y) + 70,
+								CAMERA->getPosX() + _sampleWindow.rc.left + (90 * x) + 10 + width,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (100 * y) + 70 + height };
 
 					_vObj[i].setRC(rc);
 
@@ -1350,10 +1580,10 @@ void mapTool::drawSample(int num)
 						string imgName = _vObj[i].getImgName();
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-						rc = { _sampleWindow.rc.left + (60 * x) + 20,
-								_sampleWindow.rc.top + (80 * y) + 70,
-								_sampleWindow.rc.left + (60 * x) + 20 + width,
-								_sampleWindow.rc.top + (80 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70,
+								CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 						count++;
@@ -1380,10 +1610,10 @@ void mapTool::drawSample(int num)
 						string imgName = _vObj[i].getImgName();
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-						rc = { _sampleWindow.rc.left + (60 * x) + 20,
-								_sampleWindow.rc.top + (80 * y) + 70,
-								(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-								(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70,
+								(float)CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+								(float)CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 
@@ -1409,10 +1639,10 @@ void mapTool::drawSample(int num)
 						string imgName = _vObj[i].getImgName();
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-						rc = { _sampleWindow.rc.left + (60 * x) + 20,
-								_sampleWindow.rc.top + (80 * y) + 70,
-								(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-								(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70,
+								(float)CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+								(float)CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 
@@ -1438,10 +1668,10 @@ void mapTool::drawSample(int num)
 						string imgName = _vObj[i].getImgName();
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-						rc = { _sampleWindow.rc.left + (60 * x) + 20,
-								_sampleWindow.rc.top + (80 * y) + 70,
-								(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-								(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+						rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+								CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70,
+								(float)CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+								(float)CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 
@@ -1468,15 +1698,15 @@ void mapTool::drawSample(int num)
 						width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 						height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
 						if (count == 117)
-							rc = { _sampleWindow.rc.left + (55 * x) + 20,
-									_sampleWindow.rc.top + (82 * y) + 70,
-									(float)_sampleWindow.rc.left + (55 * x) + 20 + width,
-									(float)_sampleWindow.rc.top + (82 * y) + 70 + height };
+							rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (55 * x) + 20,
+									CAMERA->getPosY() + _sampleWindow.rc.top + (82 * y) + 70,
+									(float)CAMERA->getPosX() + _sampleWindow.rc.left + (55 * x) + 20 + width,
+									(float)CAMERA->getPosY() + _sampleWindow.rc.top + (82 * y) + 70 + height };
 						else
-							rc = { _sampleWindow.rc.left + (60 * x) + 20,
-									_sampleWindow.rc.top + (80 * y) + 70,
-									(float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-									(float)_sampleWindow.rc.top + (80 * y) + 70 + height };
+							rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+									CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70,
+									(float)CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+									(float)CAMERA->getPosY() + _sampleWindow.rc.top + (80 * y) + 70 + height };
 
 						_vObj[i].setRC(rc);
 
@@ -1501,15 +1731,15 @@ void mapTool::drawSample(int num)
 				string imgName = _vObj[i].getImgName();
 				width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 				height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-				rc = { _sampleWindow.rc.left + (60 * x) + 20,
-					   _sampleWindow.rc.top + (110 * y) + 70,
-					   (float)_sampleWindow.rc.left + (60 * x) + 20 + width,
-					   (float)_sampleWindow.rc.top + (110 * y) + 70 + height };
+				rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20,
+					   CAMERA->getPosY() + _sampleWindow.rc.top + (110 * y) + 70,
+					   (float)CAMERA->getPosX() + _sampleWindow.rc.left + (60 * x) + 20 + width,
+					   (float)CAMERA->getPosY() + _sampleWindow.rc.top + (110 * y) + 70 + height };
 
 				_vObj[i].setRC(rc);
 				count++;
 
-				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
 				itemCount++;
 			}
@@ -1528,10 +1758,10 @@ void mapTool::drawSample(int num)
 				string imgName = _vObj[i].getImgName();
 				width = IMAGEMANAGER->findImage(imgName)->GetFrameWidth();
 				height = IMAGEMANAGER->findImage(imgName)->GetFrameHeight();
-				rc = { _sampleWindow.rc.left + (50 * x) + 20,
-						_sampleWindow.rc.top + (70 * y) + 70,
-						_sampleWindow.rc.left + (50 * x) + 20 + width,
-						_sampleWindow.rc.top + (70 * y) + 70 + height };
+				rc = { CAMERA->getPosX() + _sampleWindow.rc.left + (50 * x) + 20,
+						CAMERA->getPosY() + _sampleWindow.rc.top + (70 * y) + 70,
+						CAMERA->getPosX() + _sampleWindow.rc.left + (50 * x) + 20 + width,
+						CAMERA->getPosY() + _sampleWindow.rc.top + (70 * y) + 70 + height };
 
 				_vObj[i].setRC(rc);
 				count++;
@@ -1563,7 +1793,7 @@ void mapTool::drawSample(int num)
 				_vObj[i].setRC(rc);
 				count++;
 
-				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
 				itemCount++;
 			}

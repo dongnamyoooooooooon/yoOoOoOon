@@ -64,6 +64,9 @@
     <Filter Include="PlayGround\item">
       <UniqueIdentifier>{bf02c4ba-61fe-4f18-bab4-efce04f37434}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\enemy">
+      <UniqueIdentifier>{be6f1b1c-c55b-408b-9225-61734795bffe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -163,7 +166,10 @@
       <Filter>PlayGround\item</Filter>
     </ClInclude>
     <ClInclude Include="enemyInfomation.h">
-      <Filter>PlayGround</Filter>
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +249,9 @@
       <Filter>PlayGround\mapTool</Filter>
     </ClCompile>
     <ClCompile Include="mapToolScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

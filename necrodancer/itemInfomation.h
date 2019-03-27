@@ -1,5 +1,5 @@
 #pragma once
-#include "parentObj.h"
+
 
 /*
 					아이템 인포메이쎤
@@ -359,4 +359,176 @@ struct tagInvenInfo
 	ITEM_TORCH		torch;
 	ITEM_CONSUMABLE	item;
 	ITEM_BOMB		bomb;
+};
+
+// ==============================================
+//					 속     성
+// ==============================================
+
+enum ATTRIBUTE
+{
+	TILE_FLOOR_ZONE1,
+	TILE_FLOOR_ZONE2,
+	TILE_FLOOR_BOSS,
+	TILE_FLOOR_SHOP,
+	TILE_FLOOR_WATER,
+	TILE_WALL_01,
+	TILE_WALL_02,
+	TILE_WALL_03,
+	TILE_WALL_04,
+	TILE_CHEST,
+	TILE_TRAP,
+	TILE_STAIRS,
+	TILE_DOOR,
+	TILE_SHRINE,
+
+};
+
+enum IMAGE_NAME_INFO
+{
+	IMAGE_NAME_NONE,
+	IMAGE_NAME_FLOOR_01,
+	IMAGE_NAME_FLOOR_02,
+	IMAGE_NAME_FLOOR_03,
+	IMAGE_NAME_FLOOR_04,
+	IMAGE_NAME_FLOOR_05,
+	IMAGE_NAME_STAIRS_01,
+	IMAGE_NAME_STAIRS_02,
+	IMAGE_NAME_WALL_01,
+	IMAGE_NAME_WALL_02,
+	IMAGE_NAME_WALL_03,
+	IMAGE_NAME_WALL_04,
+	IMAGE_NAME_WALL_05,
+	IMAGE_NAME_WALL_06,
+	IMAGE_NAME_WALL_07,
+	IMAGE_NAME_WALL_08,
+	IMAGE_NAME_WALL_09,
+	IMAGE_NAME_WALL_10,
+	IMAGE_NAME_WALL_11,
+	IMAGE_NAME_DOOR_01,
+	IMAGE_NAME_DOOR_02,
+	IMAGE_NAME_ENEMY_SKELETON,
+	IMAGE_NAME_ENEMY_SKELETON_YELLOW,
+	IMAGE_NAME_ENEMY_SKELETON_BLACK,
+	IMAGE_NAME_ENEMY_SKELETON_MAGE_WHITE,
+	IMAGE_NAME_ENEMY_SKELETON_MAGE_YELLOW,
+	IMAGE_NAME_ENEMY_SKELETON_MAGE_BLACK,
+	IMAGE_NAME_ENEMY_ARMADILLO,
+	IMAGE_NAME_ENEMY_SLIME_GREEN,
+	IMAGE_NAME_ENEMY_SLIME_BLUE,
+	IMAGE_NAME_ENEMY_ZOMBIE,
+	IMAGE_NAME_ENEMY_BAT,
+	IMAGE_NAME_ENEMY_BAT_RED,
+	IMAGE_NAME_ENEMY_CLONE,
+	IMAGE_NAME_ENEMY_BAT_MINIBOSS,
+	IMAGE_NAME_ENEMY_BANSHEE,
+	IMAGE_NAME_ENEMY_DRAGON_GREEN,
+	IMAGE_NAME_ENEMY_MINOTAUR,
+	IMAGE_NAME_ENEMY_CORALRIFF_DRUMS,
+	IMAGE_NAME_ENEMY_CORALRIFF_HEAD,
+	IMAGE_NAME_ENEMY_CORALRIFF_HORNS,
+	IMAGE_NAME_ENEMY_CORALRIFF_KEYTAR,
+	IMAGE_NAME_ENEMY_CORALRIFF_STRINGS,
+	IMAGE_NAME_ENEMY_SHOPKEEPER,
+	IMAGE_NAME_CHEST,
+	IMAGE_NAME_TRAP_BOUNCE,
+	IMAGE_NAME_TRAP_SLOWDOWN,
+	IMAGE_NAME_TRAP_SPEEDUP,
+	IMAGE_NAME_TRAP_SPIKE,
+	IMAGE_NAME_SHRINE_01,
+	IMAGE_NAME_SHRINE_02,
+	IMAGE_NAME_SHRINE_03,
+	IMAGE_NAME_SHRINE_04,
+	IMAGE_NAME_SHRINE_05,
+	IMAGE_NAME_SHRINE_06,
+	IMAGE_NAME_ETC_01,
+
+
+	IMAGE_NAME_END,
+	IMAGE_NAME_COUNT = IMAGE_NAME_END
+};
+
+enum OBJECT_TYPE
+{
+	OBJECT_TYPE_FLOOR,
+	OBJECT_TYPE_WALL,
+	OBJECT_TYPE_ENEMY,
+	OBJECT_TYPE_TRAP,
+	OBJECT_TYPE_ITEM,
+	OBJECT_TYPE_ETC,
+	OBJECT_TYPE_PLAYER,
+
+	OBJECT_TYPE_NONE,
+
+	OBJECT_TYPE_COUNT = OBJECT_TYPE_NONE
+};
+
+static string IMAGE_NAME[IMAGE_NAME_COUNT] = { "none","floor_01","floor_02","floor_03","floor_04","floor_05","stairs_01","stairs_02",
+											"wall_01","wall_02","wall_03","wall_04","wall_05","wall_06","wall_07","wall_08","wall_09","wall_10","wall_11",
+											"door_01","door_02","enemy_skeleton","enemy_skeleton_yellow","enemy_skeleton_black",
+											"enemy_skeleton_mage_white","enemy_skeleton_mage_yellow","enemy_skeleton_mage_black",
+											"enemy_armadillo","enemy_slime_green","enemy_slime_blue","enemy_zombie",
+											"enemy_bat","enemy_bat_red","enemy_clone","enemy_bat_miniboss","enemy_banshee",
+											"enemy_dragon_green","enemy_minitaur","enemy_coralriff_drums","enemy_coralriff_head","enemy_coralriff_horns","enemy_coralriff_keytar",
+											"enemy_coralriff_strings","enemy_shopkeeper",
+											"chest_01" ,"trap_bounce","trap_slowdown","trap_speedup","trap_spike","shrine_01","shrine_02" ,"shrine_03","shrine_04","shrine_05",
+											"shrine_06","torch_01"
+};
+
+
+struct tagTilePack
+{
+	int	frameX;
+	int frameY;
+	int appValue;
+	int idxX;
+	int idxY;
+
+	int imgName;
+	int itemType;
+	int itemSubType;
+
+
+	float posX;
+	float posY;
+
+	OBJECT_TYPE objType;
+	D2D1_RECT_F rc;
+
+	bool isTorch;
+};
+
+typedef struct tagPack
+{
+	int floorName;
+	int floorPosX;
+	int floorPosY;
+	OBJECT_TYPE type_floor;
+
+	int objName;
+	int objPosX;
+	int objPosY;
+	OBJECT_TYPE type_obj;
+	ITEM_TYPE itemType;
+	UINT imgKey;
+
+
+	bool isTorch = false;
+
+	//밑에 있는 것들은 첫 초기화는 0 / none으로 초기화
+	UINT	terrain_frameX;										//타일프레임 X
+	UINT	terrain_frameY;										//타일프레임 Y
+	UINT	object_frameX;										//오브젝트프레임 X
+	UINT	object_frameY;										//오브젝트프레임 Y
+
+	tagTilePack	floor;
+	tagTilePack wall;
+	tagTilePack objETC;
+	tagTilePack trap;
+	tagTilePack item;
+	tagTilePack enemy;
+	tagTilePack player;
+
+	
+
 };
