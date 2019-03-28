@@ -11,12 +11,17 @@ protected:
 	image*			_img;			//이미지					
 	string			_imgName;		//이미지키값
 	OBJECT_TYPE		_objType;		//오브젝트타입
-	POINTF			_pos;			//실제위치
+	ITEM_TYPE		_itemKind;		//아이템종류
+
+	POINTF			_pos;			//실제위치(안쓴다)
 	D2D1_RECT_F		_rc;			//렉트
 
 	UINT			_imgKey;
 	UINT			_itemType;
 	UINT			_itemSubType;
+
+	int				_posX;
+	int				_posY;
 
 	
 	int				_frameX;
@@ -32,7 +37,7 @@ protected:
 	bool			_isSight;		//플레이어 시야 안에 있는지?
 	bool			_isSaw;			//플레이어에게 보여졌는지?
 	
-
+	bool			_isItemInven;
 
 
 
@@ -47,9 +52,15 @@ public:
 	virtual void render();
 	virtual void render(float x, float y, int frameX = 0);
 
+	//세이브로드용
 	tagTilePack makeSave();
-	
 	void makeLoad(tagTilePack* pack);
+
+	//아이템
+	virtual bool useItem(int idxX, int idxY, int dir) { return false; }
+	virtual void setXY(int x, int y) { this->_posX = x; this->_posY = y; }
+	virtual void setIsItemInven(bool check) { _isItemInven = check; }
+	virtual void setItemInven(int x, int y) {};	//바닥에서 인벤으로
 
 	/*string makeSaveInfo();
 	void loadSaveInfo(string* data);*/
@@ -78,7 +89,7 @@ public:
 	void setIdxX(int idxX) { _idxX = idxX; }
 
 	int getIdxY() { return _idxY; }
-	void setIdY(int idxY) { _idxY = idxY; }
+	void setIdxY(int idxY) { _idxY = idxY; }
 
 	UINT getImgKey() { return _imgKey; }
 	void setImgKey(UINT key) { _imgKey = key; }
@@ -88,6 +99,9 @@ public:
 
 	POINTF getPos() { return _pos; }
 	void setPos(POINTF pos) { _pos = pos; }
+
+	ITEM_TYPE getItemKind() { return _itemKind; }
+	void setItemKind(ITEM_TYPE type) { _itemKind = type; }
 
 
 };

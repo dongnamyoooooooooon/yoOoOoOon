@@ -1,10 +1,11 @@
 #pragma once
 #include "singletonBase.h"
 #include "gameNode.h"
+#include "parentObj.h"
 #include <algorithm>
 
-class parentObj;
 
+class parentObj;
 class objectManager : public singletonBase<objectManager>, public gameNode
 {
 private:
@@ -60,9 +61,9 @@ public:
 	objectManager();
 	~objectManager();
 
-	void Release();
-	void Update();
-	void Render();
+	void release();
+	void update();
+	void render();
 
 
 	//오브젝트
@@ -94,6 +95,17 @@ public:
 
 	vector<parentObj*> getVObj() { return _vObj; }
 	vector<parentObj*>::iterator getVIObj() { return _viObj; }
+
+
+	//타일
+	parentObj* getCheckObj(int x, int y) { return _vvObjTile[y][x]; }
+	void setTileIdx(parentObj* obj, UINT idxX, UINT idxY)
+	{
+		_vvObjTile[obj->getIdxY()][obj->getIdxX()] = nullptr;
+		obj->setIdxX(idxX);
+		obj->setIdxY(idxY);
+		_vvObjTile[idxY][idxX] = obj;
+	}
 
 
 };

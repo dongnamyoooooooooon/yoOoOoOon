@@ -186,6 +186,9 @@
     <ClInclude Include="Infomation.h">
       <Filter>PlayGround\dataInfo</Filter>
     </ClInclude>
+    <ClInclude Include="testMapScene.h">
+      <Filter>PlayGround\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -271,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="mapToolScene.cpp">
       <Filter>PlayGround\scene\mapToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="testMapScene.cpp">
+      <Filter>PlayGround\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

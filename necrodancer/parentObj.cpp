@@ -40,6 +40,7 @@ HRESULT parentObj::init(string imgName, int idx_X, int idx_Y, OBJECT_TYPE type, 
 	_objType = type;
 	_frameX = 0;
 	_frameY = 0;
+	_itemKind = itemtype;
 
 	switch (itemtype)
 	{
@@ -132,7 +133,8 @@ void parentObj::render()
 
 void parentObj::render(float x, float y, int frameX)
 {
-	_img->frameRender(x, y, frameX, 0);
+	if(IMAGE_NAME[_imgKey] != "none")
+		_img->frameRender(x, y, frameX, 0);
 }
 
 tagTilePack parentObj::makeSave()
@@ -144,6 +146,8 @@ tagTilePack parentObj::makeSave()
 	pack->appValue = _appValue;
 	pack->idxX = _idxX;
 	pack->idxY = _idxY;
+	pack->pos_X = _posX;
+	pack->pos_Y = _posY;
 	pack->imgName = _imgKey;
 	pack->posX = _pos.x;
 	pack->posY = _pos.y;
@@ -172,6 +176,8 @@ void parentObj::makeLoad(tagTilePack * pack)
 	_imgKey = (IMAGE_NAME_INFO)pack->imgName;
 	_pos.x = pack->posX;
 	_pos.y = pack->posY;
+	_posX = pack->pos_X;
+	_posY = pack->pos_Y;
 	_objType = pack->objType;
 	_rc = pack->rc;
 	_isTorch = pack->isTorch;

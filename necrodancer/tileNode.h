@@ -1,17 +1,6 @@
 #pragma once
 #include "Infomation.h"
 #include "parentObj.h"
-// ==============================================
-//					 설     정
-// ==============================================
-
-#define TILE_SIZE			52							//타일사이즈는 20
-#define SAMPLETILE			6							//샘플타일은 6
-#define TOTAL_SAMPLE_SIZE	TILE_SIZE * SAMPLETILE		//샘플 총 개수 = 타일사이즈 * 샘플개수
-#define WALLHEIGHT			104							//벽높이는 96
-
-
-
 
 // ==============================================
 //						타 일 
@@ -169,13 +158,13 @@ public:
 		pack->object_frameX = object_frameX;										//오브젝트프레임 X
 		pack->object_frameY = object_frameY;										//오브젝트프레임 Y
 
-		if (type_obj == OBJECT_TYPE_ITEM)
-			pack->itemType = itemType;
-		else
+		//if (type_obj == OBJECT_TYPE_ITEM)
 			pack->itemType = itemType;
 		
 		if (floor)
 			pack->floor = floor->makeSave();
+		else
+			pack->floor = {0, };
 		if (wall)
 			pack->wall = wall->makeSave();
 		if (objETC)

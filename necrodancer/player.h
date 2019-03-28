@@ -11,7 +11,7 @@
 
 enum PLAYER_STATE
 {
-	PLAYER_STATE_IDLE,
+	PLAYER_STATE_NONE,
 	PLAYER_STATE_JUMP_LEFT,
 	PLAYER_STATE_JUMP_RIGHT,
 	PLAYER_STATE_JUMP_UP,
@@ -20,9 +20,10 @@ enum PLAYER_STATE
 
 struct tagInven
 {
-	POINTF pos;
+	POINT pos;
 	string UIKey;
 	parentObj* object;
+	bool isUse;
 };
 
 struct tagPlayerStat
@@ -44,6 +45,8 @@ class player : public parentObj
 private:
 	UINT					_tileX;							//플레이어가 있는 타일X
 	UINT					_tileY;							//플레이어가 있는 타일Y
+	UINT					_tempX;
+	UINT					_tempY;
 	PLAYER_STATE			_playerState;					//플레이어 상태
 
 
@@ -51,14 +54,12 @@ private:
 	animation*				_playerBody_Ani;
 	bool					_isLeft;						//왼쪽보니?
 	bool					_isMove;						//움직이는지?
-	
-
 
 	D2D1_RECT_F				_rc;
-	float					_posX;							//플레이어위치
-	float					_posY;							//플레이어위치
+	int						_posX;							//플레이어위치
+	int						_posY;							//플레이어위치
 	float					_posZ;							//점프
-	float					_moveDistance;					//이동거리
+	int						_moveDistance;					//이동거리
 	float					_jumpPower;						//점프빠워
 	float					_gravity;						//중력
 	float					_speed;							//속도
@@ -70,6 +71,18 @@ private:
 	tagInven				_inven[9];						//인벤토리
 	tagPlayerStat			_playerStat;					//스탯
 
+	//플레이어 장착템
+	parentObj*			_playerShovel;
+	parentObj*			_playerWeapon;
+	parentObj*			_playerArmor;
+	parentObj*			_playerHeadWear;
+	parentObj*			_playerFootWear;
+	parentObj*			_playerTorch;
+	parentObj*			_playerBomb;
+	parentObj*			_playerItem;
+
+	parentObj*			_putObj = nullptr;
+
 public:
 	player();
 	~player();
@@ -80,11 +93,34 @@ public:
 	void render();
 
 
+	//=======================================
+	//			 키 애 니 메 이 션
+	//=======================================
 	void playerAniSetUp();
 	void playerAniStart_Head(string keyName);
 	void playerAniStart_Body(string keyName);
 	void drawBody();
 	void drawHead();
+
+	//=======================================
+	//					키
+	//=======================================
+	void keyUpdate();
+
+
+
+	//=======================================
+	//					U I
+	//=======================================
+	void initEquipUI();
+
+
+	//=======================================
+	//				  아 이 템
+	//=======================================
+	void putItem(parentObj* obj);
+	void addInven(parentObj* obj);
+	
 };
 
 

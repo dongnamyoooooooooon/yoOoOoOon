@@ -795,6 +795,7 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->objPosX = j;
 			_vvTile[i][j]->objPosY = i;
 			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
+			_vvTile[i][j]->itemType = _selectObj.getItemKind();
 
 			break;
 		}
@@ -1295,7 +1296,12 @@ void mapTool::drawMap()
 			{
 				if (_vvTile[i][j]->item->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
 				{
-					_vvTile[i][j]->item->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
+					string imgName = _vvTile[i][j]->objName;
+
+					if(imgName == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS] || imgName == WEAPON_NAME[ITEM_WEAPON_RIFLE])
+						_vvTile[i][j]->item->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 36);
+					else
+						_vvTile[i][j]->item->render(_vvRECT[i][j].left, _vvRECT[i][j].top);
 				}
 			}
 		}
@@ -1367,7 +1373,7 @@ void mapTool::drawMap()
 					{
 						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left + 2, _vvRECT[i][j].top - 26);
 					}
-					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN] || imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN]
+					else if (imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_GREEN] || imgName == ENEMY_NAME[ENEMY_TYPE_SLIME_BLUE]
 						|| imgName == ENEMY_NAME[ENEMY_TYPE_ZOMBIE] || imgName == ENEMY_NAME[ENEMY_TYPE_CLONE])
 					{
 						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);

@@ -15,10 +15,12 @@ HRESULT player::init(UINT idx_X, UINT idx_Y)
 {
 	_tileX = idx_X;
 	_tileY = idx_Y;
-	_posX = (float)_tileX * 48 + 24;
-	_posY = (float)_tileY * 48 + 24;
+	_idxX = idx_X;
+	_idxY = idx_Y;
+	_posX = _tileX * 52 + 26;
+	_posY = _tileY * 52 + 26;
 	_posZ = 0;
-	_playerState = PLAYER_STATE_IDLE;
+	_playerState = PLAYER_STATE_NONE;
 	_moveDistance = 0;
 	_jumpPower = 0;
 	_gravity = GRAVETY;
@@ -34,6 +36,14 @@ HRESULT player::init(UINT idx_X, UINT idx_Y)
 
 void player::release()
 {
+	SAFE_DELETE(_playerWeapon);
+	SAFE_DELETE(_playerArmor);
+	SAFE_DELETE(_playerShovel);
+	SAFE_DELETE(_playerTorch);
+	SAFE_DELETE(_playerBomb);
+	SAFE_DELETE(_playerItem);
+	SAFE_DELETE(_playerFootWear);
+	SAFE_DELETE(_playerHeadWear);
 }
 
 void player::update()
@@ -44,6 +54,8 @@ void player::update()
 
 void player::render()
 {
+	drawBody();
+	drawHead();
 }
 
 void player::playerAniSetUp()
@@ -109,15 +121,75 @@ void player::playerAniStart_Body(string keyName)
 
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 24, _posY - 36 + _posZ, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 24, _posY - 36 + _posZ, _playerBody_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX, _posY + _posZ, _playerBody_Ani);
+	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX, _posY + _posZ, _playerBody_Ani);
 }
 
 void player::drawHead()
 {
 
-	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 24, _posY - 36 + _posZ, _playerHead_Ani);
-	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 24, _posY - 36 + _posZ, _playerHead_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX, _posY + _posZ, _playerHead_Ani);
+	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX, _posY + _posZ, _playerHead_Ani);
+}
+
+void player::keyUpdate()
+{
+	parentObj* target;
+
+	if (KEYMANAGER->isOnceKeyDown('Q'))		//아이템
+	{
+		if (_isBeat)
+		{
+			if (_playerItem != NULL)
+			{
+				_playerItem->useItem(_idxX, _idxY, 0);
+				//사운드적용
+			}
+			_isBeat = false;
+		}
+	}
+
+	if (_playerState != PLAYER_STATE_NONE)
+	{
+		//움직임함수 설정
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	{
+		_isLeft = true;
+		if (_isBeat)
+		{
+			target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
+			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX - 1, _idxY, 4))
+			{
+				//사운드적용
+				//카메라흔들림적용
+			}
+			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
+			{
+				_tempX = _idxX;
+				_tempY = _idxY;
+				OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
+				
+				if(_putObj != NULL)
+				{ 
+					putItem(_putObj);
+					_putObj = nullptr;
+				}
+				_playerState = PLAYER_STATE_JUMP_LEFT;
+				_moveDistance = TILE_SIZE;
+				_jumpPower = 0;
+
+				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+				{
+					addInven(target);
+				}
+			}
+
+		}
+
+	}
+
 }
 
 void player::initEquipUI()
@@ -133,4 +205,260 @@ void player::initEquipUI()
 		_inven[i].object = nullptr;
 		_inven[i].isUse = false;
 	}
+}
+
+void player::putItem(parentObj * obj)
+{
+	obj->setXY(_posX, _posY - 20);
+	OBJECTMANAGER->setTileIdx(obj, _tempX, _tempY);
+	obj->setIsItemInven(false);
+}
+
+void player::addInven(parentObj * obj)
+{
+	if (obj->getObjType() != OBJECT_TYPE_NONE)
+	{
+		switch (obj->getItemKind())
+		{
+			case ITEM_TYPE_SHOVEL:
+			{
+				//사운드 적용
+				_putObj = _playerShovel;
+				_playerShovel = obj;
+				
+				//적용값
+				//_playerStat.shovelPower += obj
+
+				break;
+			}
+			case ITEM_TYPE_WEAPON:
+			{
+				//사운드 적용
+				_putObj = _playerWeapon;
+				_playerWeapon = obj;
+
+				//적용값
+				//_playerStat.attack += obj
+				break;
+			}
+			case ITEM_TYPE_TORCH:
+			{
+				//사운드 적용
+				_putObj = _playerTorch;
+				_playerTorch = obj;
+				break;
+			}
+			case ITEM_TYPE_ARMOR:
+			{
+				//사운드 적용
+				_putObj = _playerArmor;
+				_playerArmor = obj;
+				break;
+			}
+			case ITEM_TYPE_HEADWEAR:
+			{
+				//사운드 적용
+				_putObj = _playerShovel;
+				_playerShovel = obj;
+				break;
+			}
+			case ITEM_TYPE_FOOTWEAR:
+			{
+				//사운드 적용
+				_putObj = _playerFootWear;
+				_playerFootWear = obj;
+				break;
+			}
+			case ITEM_TYPE_CONSUMABLE:
+			{
+				//사운드 적용
+				_putObj = _playerItem;
+				_playerItem = obj;
+				break;
+			}
+			case ITEM_TYPE_HEART:
+			{
+				//사운드 적용
+				//하트증가시키자
+				//_playerStat.heart += 
+				OBJECTMANAGER->deleteObject(obj);
+				break;
+			}
+			case ITEM_TYPE_COIN:
+			{
+				//사운드 적용
+				//코인증가시키자
+				//_playerStat.coin += obj
+				OBJECTMANAGER->deleteObject(obj);
+				break;
+			}
+			case ITEM_TYPE_BOMB:
+			{
+				//사운드 적용
+				_putObj = _playerBomb;
+				_playerBomb = obj;
+				break;
+			}
+		}
+
+		for (int i = 0; i < 9; i++)
+		{
+			_inven[i] = { };
+			if (i < 6)
+				_inven[i].pos = { 20 + (i * 70) , 10 };
+			else
+				_inven[i].pos = { 20, 10 + ((i - 5) * 85) };
+		}
+
+		//플레이어 스탯 초기화
+		_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
+
+		if (_playerShovel != NULL)
+		{
+			_inven[0].isUse = true;
+			_inven[0].UIKey = "equipUI_shovel";
+			_inven[0].object = _playerShovel;
+			
+			if (_playerShovel == obj)
+				obj->setItemInven(_inven[0].pos.x + 8, _inven[0].pos.y + 13);
+		}
+		if (_playerWeapon != NULL)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_weapon";
+					_inven[i].object = _playerWeapon;
+
+					if (_playerWeapon == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+					break;
+				}
+			}
+		}
+		if (_playerArmor != NULL)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_armor";
+					_inven[i].object = _playerArmor;
+
+					if (_playerArmor == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+					break;
+				}
+			}
+		}
+		if (_playerHeadWear != NULL)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_headwear";
+					_inven[i].object = _playerHeadWear;
+
+					if (_playerHeadWear == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+					break;
+				}
+			}
+		}
+		if (_playerFootWear != NULL)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_footwear";
+					_inven[i].object = _playerFootWear;
+
+					if (_playerFootWear == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					
+					break;
+				}
+			}
+		}
+		if (_playerTorch != NULL)
+		{
+			for (int i = 0; i < 6; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_torch";
+					_inven[i].object = _playerTorch;
+
+					if (_playerTorch == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+					break;
+				}
+			}
+		}
+		if (_playerItem != NULL)
+		{
+			for (int i = 6; i < 9; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_item";
+					_inven[i].object = _playerItem;
+
+					if (_playerItem == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+					break;
+				}
+			}
+		}
+		if (_playerBomb != NULL)
+		{
+			for (int i = 6; i < 9; i++)
+			{
+				if (!_inven[i].isUse)
+				{
+					_inven[i].isUse = true;
+					_inven[i].UIKey = "equipUI_bomb";
+					_inven[i].object = _playerBomb;
+
+					if (_playerBomb == obj)
+						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+					break;
+				}
+			}
+		}
+	}
+}
+
+void player::drawItemHint()
+{
+	parentObj* tempObj;
+	tempObj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
+	if (tempObj != NULL && tempObj->getObjType() == OBJECT_TYPE_ITEM)
+		tempObj->drawHint();
+	tempObj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
+	if (tempObj != NULL && tempObj->getObjType() == OBJECT_TYPE_ITEM)
+		tempObj->drawHint();
+	tempObj = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
+	if (tempObj != NULL && tempObj->getObjType() == OBJECT_TYPE_ITEM)
+		tempObj->drawHint();
+	tempObj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
+	if (tempObj != NULL && tempObj->getObjType() == OBJECT_TYPE_ITEM)
+		tempObj->drawHint();
+
+
 }

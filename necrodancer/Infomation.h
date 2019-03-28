@@ -483,6 +483,8 @@ struct tagTilePack
 	int appValue;
 	int idxX;
 	int idxY;
+	int pos_X;
+	int pos_Y;
 
 	int imgName;
 	int itemType;

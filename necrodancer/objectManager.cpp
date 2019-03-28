@@ -11,15 +11,15 @@ objectManager::~objectManager()
 {
 }
 
-void objectManager::Release()
+void objectManager::release()
 {
 }
 
-void objectManager::Update()
+void objectManager::update()
 {
 }
 
-void objectManager::Render()
+void objectManager::render()
 {
 	objectSort_IndexX();
 	objectSort_IndexY();
@@ -59,25 +59,25 @@ void objectManager::Render()
 	}
 
 
-	//비트
-	//RECT rc;
-	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
-	{
-		if (_viBeat->beat < 1500)
-		{
-			_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, 1.0f);
-			_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, 1.0f);
-		}
-		else
-		{
-			_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, _viBeat->alpha);
-			_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, _viBeat->alpha);
-		}
-	}
-	if (_vBeat.begin()->left_RC.right <= WINSIZEX / 2)
-		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
-	else
-		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
+	////비트
+	////RECT rc;
+	//for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
+	//{
+	//	if (_viBeat->beat < 1500)
+	//	{
+	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, 1.0f);
+	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, 1.0f);
+	//	}
+	//	else
+	//	{
+	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, _viBeat->alpha);
+	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, _viBeat->alpha);
+	//	}
+	//}
+	//if (_vBeat.begin()->left_RC.right <= WINSIZEX / 2)
+	//	IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
+	//else
+	//	IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
 
 
 

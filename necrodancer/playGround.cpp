@@ -296,10 +296,10 @@ HRESULT playGround::init()
 
 	//UI(Àåºñ)
 	IMAGEMANAGER->addImage("equipUI_shovel", L"image/ui/ui_slot_1.png", 60, 66);
-	IMAGEMANAGER->addImage("equipUI_attack", L"image/ui/ui_slot_2.png", 60, 66);
-	IMAGEMANAGER->addImage("equipUI_body", L"image/ui/ui_slot_3.png", 60, 66);
-	IMAGEMANAGER->addImage("equipUI_head", L"image/ui/ui_slot_4.png", 60, 66);
-	IMAGEMANAGER->addImage("equipUI_feet", L"image/ui/ui_slot_5.png", 60, 66);
+	IMAGEMANAGER->addImage("equipUI_weapon", L"image/ui/ui_slot_2.png", 60, 66);
+	IMAGEMANAGER->addImage("equipUI_armor", L"image/ui/ui_slot_3.png", 60, 66);
+	IMAGEMANAGER->addImage("equipUI_headwear", L"image/ui/ui_slot_4.png", 60, 66);
+	IMAGEMANAGER->addImage("equipUI_footwear", L"image/ui/ui_slot_5.png", 60, 66);
 	IMAGEMANAGER->addImage("equipUI_torch", L"image/ui/ui_slot_6.png", 60, 66);
 	IMAGEMANAGER->addImage("equipUI_item", L"image/ui/ui_slot_action1.png", 60, 84);
 	IMAGEMANAGER->addImage("equipUI_bomb", L"image/ui/ui_slot_bomb.png", 60, 84);
@@ -335,6 +335,7 @@ HRESULT playGround::init()
 
 
 	SCENEMANAGER->addScene("¸ÊÅø", new mapToolScene);
+	SCENEMANAGER->addScene("Å×½ÁÈå", new testMapScene);
 
 	SCENEMANAGER->changeScene("¸ÊÅø");
 	
