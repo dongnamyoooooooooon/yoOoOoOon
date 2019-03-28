@@ -6,7 +6,14 @@
 class playGround : public gameNode
 {
 private:
-
+	//============
+	//   Ä¿¼­¿ë
+	//============
+	HCURSOR a;
+	HCURSOR b;
+	HCURSOR c;
+	HCURSOR d;
+	int _count;
 public:
 	playGround();
 	~playGround();
@@ -16,4 +23,6 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void initCursor();
+	void frameCursor();
 };

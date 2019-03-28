@@ -498,7 +498,7 @@ struct tagTilePack
 	bool isTorch;
 };
 
-typedef struct tagPack
+struct tagPack
 {
 	int floorName;
 	int floorPosX;

@@ -1,5 +1,5 @@
 #pragma once
-#include "itemInfomation.h"
+#include "Infomation.h"
 #include "parentObj.h"
 // ==============================================
 //					 ¼³     Á¤

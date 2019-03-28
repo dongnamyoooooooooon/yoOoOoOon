@@ -78,6 +78,9 @@ public:
 	//원래 크기 출력 - 그려줄 x좌표, y좌표, 투명도
 	void render(float destX, float destY, float alpha = 1.0f);
 
+	//흔들림방지용
+	void render2(float destX, float destY, float alpha = 1.0f);
+
 	//변형 크기 출력 - 그려줄 x좌표, y좌표, 출력할 너비, 출력할 높이, 투명도
 	void render(float destX, float destY, int showWidth, int showHeight, float alpha = 1.0f);
 
@@ -90,8 +93,15 @@ public:
 		int sourWidth, int sourHeight, float alpha = 1.0f);
 
 
+	void render2(float destX, float destY, int showWidth, int showHeight, float sourX, float sourY,
+		int sourWidth, int sourHeight, float alpha = 1.0f);
+
+
 	//원래 크기 프레임렌더 - 그려줄 x, y 좌표, 가로 방향 프레임 인덱스, 세로 방향 프레임 인덱스, 투명도
 	void frameRender(float destX, float destY, int currentFrameX, int currentFrameY, float alpha = 1.0f);
+
+	//흔들림방지용
+	void frameRender2(float destX, float destY, int currentFrameX, int currentFrameY, float alpha = 1.0f);
 
 
 	void frameRenderAngle(float destX, float destY, int currentFrameX, int currentFrameY, float angle, float alpha = 1.0f);
@@ -102,6 +112,8 @@ public:
 	//원래 크기로 잘라서 가져오기 프레임렌더 - 그려줄 x, y 좌표, 출력할 너비, 출력할 높이, 가로 방향 프레임 인덱스, 세로 방향 프레임 인덱스, 투명도
 	void frameRender(float destX, float destY, int sourX, int sourY, int sourWidth, int sourHeight, int currentFrameX, int currentFrameY, float alpha = 1.0f);
 
+	//흔들림방지용
+	void frameRender2(float destX, float destY, int showWidth, int showHeight, int currentFrameX, int currentFrameY, float alpha);
 
 	//좌우반전
 	void frameRenderReverseX(float destX, float destY, int currentFrameX, int currentFrameY, float alpha = 1.0f);
@@ -155,6 +167,7 @@ public:
 	//===================================================================
 private:
 	POINTFLOAT GetRenderPosition(float destX, float destY);
+	POINTFLOAT GetRenderPosition2(float destX, float destY);
 	bool IsRnderPositionInWindow(POINTFLOAT pf, float width, float height);
 };
 

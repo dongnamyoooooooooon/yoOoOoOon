@@ -44,6 +44,7 @@ HRESULT d2dManager::init()
 	
 	// 브러쉬 생성
 	_defaultBrush = createBrush(RGB(0, 0, 0));
+	_yellowBrush = createBrush(RGB(0, 255, 255));
 
 	//	기본 텍스트 포맷 생성
 	_writeFactory->CreateTextFormat(L"맑은고딕", NULL, DWRITE_FONT_WEIGHT_REGULAR,
@@ -155,7 +156,7 @@ void d2dManager::drawRectangle(COLORREF rgb, float left, float top, float right,
 	if ( !isRectFInRangeWindow(rcf) )
 		return;
 
-	_renderTarget->DrawRectangle(rcf, createBrush(rgb, 1), 1);
+	_renderTarget->DrawRectangle(rcf, _yellowBrush, 1);
 }
 
 void d2dManager::drawRectangle(float left, float top, float right, float bottom)

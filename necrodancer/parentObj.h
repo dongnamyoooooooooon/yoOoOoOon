@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-#include "itemInfomation.h"
+#include "infomation.h"
 
 
 
@@ -14,9 +14,9 @@ protected:
 	POINTF			_pos;			//실제위치
 	D2D1_RECT_F		_rc;			//렉트
 
-	UINT			_imgKey ;
-	UINT			_itemType ;
-	UINT			_itemSubType ;
+	UINT			_imgKey;
+	UINT			_itemType;
+	UINT			_itemSubType;
 
 	
 	int				_frameX;
@@ -77,7 +77,7 @@ public:
 	int getIdxX() { return _idxX; }
 	void setIdxX(int idxX) { _idxX = idxX; }
 
-	int getidxY() { return _idxY; }
+	int getIdxY() { return _idxY; }
 	void setIdY(int idxY) { _idxY = idxY; }
 
 	UINT getImgKey() { return _imgKey; }
@@ -85,6 +85,10 @@ public:
 
 	UINT getItemType() {return _itemType;}
 	void setItemType(UINT type) { _itemType = type; }
+
+	POINTF getPos() { return _pos; }
+	void setPos(POINTF pos) { _pos = pos; }
+
 
 };
 

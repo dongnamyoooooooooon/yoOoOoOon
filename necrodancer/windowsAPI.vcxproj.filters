@@ -67,6 +67,18 @@
     <Filter Include="PlayGround\enemy">
       <UniqueIdentifier>{be6f1b1c-c55b-408b-9225-61734795bffe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\player">
+      <UniqueIdentifier>{83c92bf7-f4be-492d-a500-a20b2c827feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\scene">
+      <UniqueIdentifier>{954e22e2-2df7-4a60-8996-24dc32a4bd83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\scene\mapToolScene">
+      <UniqueIdentifier>{bbd1b1b7-3090-41df-b28d-09c26751c54f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\dataInfo">
+      <UniqueIdentifier>{9dc1512b-9bef-4aca-8853-bdb163e18915}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -156,20 +168,23 @@
     <ClInclude Include="mapTool.h">
       <Filter>PlayGround\mapTool</Filter>
     </ClInclude>
-    <ClInclude Include="tileNode.h">
-      <Filter>PlayGround\mapTool</Filter>
-    </ClInclude>
-    <ClInclude Include="mapToolScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="itemInfomation.h">
-      <Filter>PlayGround\item</Filter>
-    </ClInclude>
     <ClInclude Include="enemyInfomation.h">
       <Filter>PlayGround\enemy</Filter>
     </ClInclude>
     <ClInclude Include="objectManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>2DFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>PlayGround\player</Filter>
+    </ClInclude>
+    <ClInclude Include="mapToolScene.h">
+      <Filter>PlayGround\scene\mapToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="tileNode.h">
+      <Filter>PlayGround\dataInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Infomation.h">
+      <Filter>PlayGround\dataInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,11 +263,14 @@
     <ClCompile Include="mapTool.cpp">
       <Filter>PlayGround\mapTool</Filter>
     </ClCompile>
-    <ClCompile Include="mapToolScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="objectManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>2DFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>PlayGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
+      <Filter>PlayGround\scene\mapToolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -155,6 +155,11 @@ void image::frameRender(float destX, float destY, int currentFrameX, int current
 	frameRender(destX, destY, _imageInfo->frameWidth, _imageInfo->frameHeight, currentFrameX, currentFrameY, alpha);
 }
 
+void image::frameRender2(float destX, float destY, int currentFrameX, int currentFrameY, float alpha)
+{
+	frameRender2(destX, destY, _imageInfo->frameWidth, _imageInfo->frameHeight, currentFrameX, currentFrameY, alpha);
+}
+
 void image::frameRenderAngle(float destX, float destY, int currentFrameX, int currentFrameY, float angle, float alpha)
 {
 	D2DMANAGER->_renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, Point2F(destX + _imageInfo->frameWidth / 2, destY + _imageInfo->frameHeight / 2)));
@@ -205,6 +210,29 @@ void image::frameRender(float destX, float destY, int sourX, int sourY, int sour
 			, dxArea2);
 	}
 }
+
+void image::frameRender2(float destX, float destY, int showWidth, int showHeight, int currentFrameX, int currentFrameY, float alpha)
+{
+	POINTFLOAT pf = GetRenderPosition2(destX, destY);
+
+	if (_imageInfo->bitmap != NULL)
+	{
+		if (!IsRnderPositionInWindow(pf, showWidth, showHeight))
+			return;
+
+		D2D1_RECT_F dxArea = RectF(pf.x, pf.y, pf.x + showWidth, pf.y + showHeight);
+		D2D1_RECT_F dxArea2 = RectF(currentFrameX * _imageInfo->frameWidth
+			, currentFrameY * _imageInfo->frameHeight
+			, (currentFrameX + 1) * _imageInfo->frameWidth
+			, (currentFrameY + 1) * _imageInfo->frameHeight);
+		D2DMANAGER->_renderTarget->DrawBitmap(_imageInfo->bitmap
+			, dxArea
+			, alpha
+			, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+			, dxArea2);
+	}
+}
+
 
 void image::frameRenderReverseX(float destX, float destY, int currentFrameX, int currentFrameY, float alpha)
 {
@@ -325,6 +353,12 @@ void image::aniRenderReverseX(int destX, int destY, animation * ani)
 POINTFLOAT image::GetRenderPosition(float destX, float destY)
 {
 	POINTFLOAT pf = { destX - (int)CAMERA->getPosX() , destY - (int)CAMERA->getPosY() };
+	return pf;
+}
+
+POINTFLOAT image::GetRenderPosition2(float destX, float destY)
+{
+	POINTFLOAT pf = { destX - CAMERA->getPosX() , destY - CAMERA->getPosY() };
 	return pf;
 }
 

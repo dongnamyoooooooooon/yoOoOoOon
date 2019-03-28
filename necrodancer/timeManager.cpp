@@ -43,11 +43,17 @@ void timeManager::render()
 		
 
 		swprintf_s(str, L"framePerSec(FPS) : %d", _timer->getFrameRate());
-		D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 12, 15, RGB(255, 0, 0));
 		swprintf_s(str, L"worldTime : %f", _timer->getWorldTime());
-		D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 20);
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 32, 15, RGB(255, 0, 0));
 		swprintf_s(str, L"elapsedTime : %f", _timer->getElapsedTime());
-		D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 40);
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 52, 15, RGB(255, 0, 0));
+		swprintf_s(str, L"framePerSec(FPS) : %d", _timer->getFrameRate());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 10, 15, RGB(0, 255, 255));
+		swprintf_s(str, L"worldTime : %f", _timer->getWorldTime());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 30, 15, RGB(0, 255, 255));
+		swprintf_s(str, L"elapsedTime : %f", _timer->getElapsedTime());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 50, 15, RGB(0, 255, 255));
 	}
 #else
 	//릴리즈 상태면

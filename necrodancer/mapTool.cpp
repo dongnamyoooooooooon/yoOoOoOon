@@ -79,7 +79,7 @@ void mapTool::update()
 
 void mapTool::render()
 {
-	WCHAR str[128];
+	//WCHAR str[128];
 
 	//배경
 	IMAGEMANAGER->findImage("maptoolbackground")->render(CAMERA->getPosX() + WINSIZEX - 240, CAMERA->getPosY() + 0, 0.8f);
@@ -387,7 +387,7 @@ void mapTool::pickSampleTile()
 	{
 		int itemCount = 0;
 		int count = 0;
-		int width, height;
+		//int width, height;
 		_viObj = _vObj.begin();
 
 		for (_viObj; _viObj != _vObj.end(); ++_viObj)
@@ -431,8 +431,8 @@ void mapTool::dragSampleTile()
 	}
 	else
 		_isDrag = false;																															//아니면 드래그오프
-	_curPoint.x = _ptMouse.x;																														//클릭한 순간의 좌표 기억
-	_curPoint.y = _ptMouse.y;																														//클릭한 순간의 좌표 기억
+	_curPoint.x = (LONG)_ptMouse.x;																														//클릭한 순간의 좌표 기억
+	_curPoint.y = (LONG)_ptMouse.y;																														//클릭한 순간의 좌표 기억
 }
 
 void mapTool::setTile()
@@ -493,10 +493,10 @@ void mapTool::setTile()
 		object.init(IMAGE_NAME[IMAGE_NAME_CHEST], 0, 0, OBJECT_TYPE_ITEM, IMAGE_NAME_CHEST);
 		_vObj.push_back(object);
 
-		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_01], 0, 0, OBJECT_TYPE_ETC, IMAGE_NAME_STAIRS_01);
+		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_01], 0, 0, OBJECT_TYPE_FLOOR, IMAGE_NAME_STAIRS_01);
 		_vObj.push_back(object);
 
-		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_02], 0, 0, OBJECT_TYPE_ETC, IMAGE_NAME_STAIRS_02);
+		object.init(IMAGE_NAME[IMAGE_NAME_STAIRS_02], 0, 0, OBJECT_TYPE_FLOOR, IMAGE_NAME_STAIRS_02);
 		_vObj.push_back(object);
 
 		object.init(IMAGE_NAME[IMAGE_NAME_TRAP_BOUNCE], 0, 0, OBJECT_TYPE_TRAP, IMAGE_NAME_TRAP_BOUNCE);
@@ -623,8 +623,8 @@ void mapTool::drawTile()
 
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 			{
-				int savePointX2;
-				int savePointY2;
+				UINT savePointX2;
+				UINT savePointY2;
 
 				for (UINT i = 0; i < _tileY; i++)
 				{
@@ -643,9 +643,9 @@ void mapTool::drawTile()
 				if (savePointX2 < _savePointX) return;
 				if (savePointY2 < _savePointY) return;
 
-				for (int i = _savePointY; i < savePointY2; i++)
+				for (UINT i = _savePointY; i < savePointY2; i++)
 				{
-					for (int j = _savePointX; j < savePointX2; j++)
+					for (UINT j = _savePointX; j < savePointX2; j++)
 					{
 						drawobject(i, j);
 					}
@@ -656,9 +656,9 @@ void mapTool::drawTile()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				for (int i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tileY; i++)
 				{
-					for (int j = 0; j < _tileX; j++)
+					for (UINT j = 0; j < _tileX; j++)
 					{
 						if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
 						{
@@ -677,9 +677,9 @@ void mapTool::drawTile()
 
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 			{
-				for (int i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tileY; i++)
 				{
-					for (int j = 0; j < _tileX; j++)
+					for (UINT j = 0; j < _tileX; j++)
 					{
 						if (_saveTile.floorName == _vvTile[i][j]->floorName &&
 							_saveTile.type_floor == _vvTile[i][j]->type_floor)
@@ -694,9 +694,9 @@ void mapTool::drawTile()
 		{
 			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				for (int i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tileY; i++)
 				{
-					for (int j = 0; j < _tileX; j++)
+					for (UINT j = 0; j < _tileX; j++)
 					{
 						if (PtInRect(&makeRECT(_vvRECT[i][j]), makePOINT(_ptMouse)))
 						{
@@ -801,7 +801,7 @@ void mapTool::drawobject(int i, int j)
 		case OBJECT_TYPE_ETC:
 		{
 			obj = new parentObj;
-			obj->init(_selectObj.getImgName(), _selectObj.getIdxX(), _selectObj.getidxY(), _selectObj.getObjType(), _selectObj.getImgKey());
+			obj->init(_selectObj.getImgName(), _selectObj.getIdxX(), _selectObj.getIdxY(), _selectObj.getObjType(), _selectObj.getImgKey());
 
 			if (obj->getImgName() == IMAGE_NAME[IMAGE_NAME_ETC_01])
 			{
@@ -886,7 +886,7 @@ void mapTool::mapSizeChange()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_button[MAPTOOL_BUTTON_SIZE_WIDTH_UP].curFrameY = 1;
-			for (int i = 0; i < _tileY; i++)
+			for (UINT i = 0; i < _tileY; i++)
 			{
 				tagTile* tempTile = new tagTile;
 				parentObj* floor = new parentObj;
@@ -943,7 +943,7 @@ void mapTool::mapSizeChange()
 			vector<D2D1_RECT_F> vRECT;
 			vTile.clear();
 			vRECT.clear();
-			for (int i = 0; i < _tileX; i++)
+			for (UINT i = 0; i < _tileX; i++)
 			{
 				tagTile* tempTile = new tagTile;
 				parentObj* floor = new parentObj;
@@ -1038,9 +1038,9 @@ void mapTool::mapSave(int mapNum)
 	CloseHandle(file);
 
 	tagPack* pack = new tagPack[_tileX * _tileY];
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			pack[i + j * _tileX] = _vvTile[i][j]->makeSave();
 		}
@@ -1063,11 +1063,13 @@ void mapTool::mapLoad()
 		{
 			if (_vvTile[i][j])
 			{
-				//SAFE_DELETE(_vvTile[i][j]);
+				SAFE_DELETE(_vvTile[i][j]);
 				_vvTile[i].pop_back();
 			}
+			_vvRECT[i].pop_back();
 		}
 		_vvTile.pop_back();
+		_vvRECT.pop_back();
 	}
 	_vvTile.clear();
 
@@ -1107,7 +1109,7 @@ void mapTool::mapLoad()
 	_tileY = stoi(mapY);
 	_vvTile.resize(_tileY);
 
-	for (int i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
 		_vvTile[i].resize(_tileX);
 	}
@@ -1122,13 +1124,19 @@ void mapTool::mapLoad()
 	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
 	CloseHandle(file2);
 
-	for (int i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
-		for (int j = 0; j < _tileX; ++j)
+		vector<D2D1_RECT_F> vRECT;
+		for (UINT j = 0; j < _tileX; ++j)
 		{
 			_vvTile[i][j] = new tagTile;
 			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
+			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
+			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
+						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
+			vRECT.push_back(*tempRECT);
 		}
+		_vvRECT.push_back(vRECT);
 	}
 }
 
@@ -1183,7 +1191,7 @@ void mapTool::initMapLoad()
 	_tileY = stoi(mapY);
 	_vvTile.resize(_tileY);
 
-	for (int i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
 		_vvTile[i].resize(_tileX);
 	}
@@ -1201,9 +1209,9 @@ void mapTool::initMapLoad()
 
 	CloseHandle(file2);
 
-	for (int i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
-		for (int j = 0; j < _tileX; ++j)
+		for (UINT j = 0; j < _tileX; ++j)
 		{
 			_vvTile[i][j] = new tagTile;
 			_vvTile[i][j]->floor = tile[j + i * _tileX].floor;
@@ -1237,9 +1245,9 @@ void mapTool::initMapName()
 
 void mapTool::drawMap()
 {
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
@@ -1256,9 +1264,9 @@ void mapTool::drawMap()
 		}
 	}
 
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
@@ -1276,9 +1284,9 @@ void mapTool::drawMap()
 
 
 	
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
@@ -1293,9 +1301,9 @@ void mapTool::drawMap()
 		}
 	}
 
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
@@ -1311,9 +1319,9 @@ void mapTool::drawMap()
 		}
 	}
 
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
@@ -1333,9 +1341,9 @@ void mapTool::drawMap()
 		}
 	}
 
-	for (int i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
-		for (int j = 0; j < _tileX; j++)
+		for (UINT j = 0; j < _tileX; j++)
 		{
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
@@ -1345,8 +1353,8 @@ void mapTool::drawMap()
 				if (_vvTile[i][j]->enemy->getObjType() != OBJECT_TYPE_NONE)
 				{
 
-					int correctX;
-					int correctY;
+					//int correctX;
+					//int correctY;
 					string imgName = _vvTile[i][j]->objName;
 
 					if (imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON] || imgName == ENEMY_NAME[ENEMY_TYPE_SKELETON_YELLOW]
@@ -1475,13 +1483,13 @@ void mapTool::drawSample(int num)
 	int width, height;
 	D2D1_RECT_F rc = {};
 	int size = _vObj.size();
-	for (int i = 0; i < size; i++)
-	{
-		D2DMANAGER->drawRectangle(RGB(0, 255, 255), _vObj[i].getRC().left,
-			_vObj[i].getRC().top,
-			_vObj[i].getRC().right,
-			_vObj[i].getRC().bottom);
-	}
+	//for (int i = 0; i < size; i++)
+	//{
+	//	D2DMANAGER->drawRectangle(RGB(0, 255, 255), _vObj[i].getRC().left,
+	//		_vObj[i].getRC().top,
+	//		_vObj[i].getRC().right,
+	//		_vObj[i].getRC().bottom);
+	//}
 
 	if (_isOnTheImg)
 	{

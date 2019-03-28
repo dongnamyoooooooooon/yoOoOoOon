@@ -12,6 +12,7 @@ public:
 	IDWriteTextFormat*			_defaultTextFormat;		//기본 텍스트 포맷
 	IDWriteTextFormat*			_customTextFormat;		//커스텀 텍스트 포맷
 	ID2D1SolidColorBrush*		_defaultBrush;			//기본 검정색 브러쉬
+	ID2D1SolidColorBrush*		_yellowBrush;			//기본 검정색 브러쉬
 
 	IDWriteFontCollection*		_collection;			//폰트들이 모여있는곳~ 커스텀폰트 쓸때 씀ㅋ
 	

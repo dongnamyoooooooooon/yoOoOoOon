@@ -55,8 +55,8 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_FLOOR_03], L"image/mapTool/floor_boss.png", 156, 104, 3, 2);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_FLOOR_04], L"image/mapTool/floor_shop.png", 156, 52, 3, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_FLOOR_05], L"image/mapTool/floor_water.png", 156, 52, 3, 1);
-	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_STAIRS_01], L"image/mapTool/floor_stairs_01.png", 48, 48, 1, 1);
-	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_STAIRS_02], L"image/mapTool/floor_stairs_02.png", 48, 48, 1, 1);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_STAIRS_01], L"image/mapTool/floor_stairs_01.png", TILE_SIZE, TILE_SIZE, 1, 1);
+	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_STAIRS_02], L"image/mapTool/floor_stairs_02.png", TILE_SIZE, TILE_SIZE, 1, 1);
 	//IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_STAIRS_01], L"image/mapTool/stairs.png", 288, 48, 6, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_01], L"image/mapTool/wall_zone1.png", TILE_SIZE * 16, WALLHEIGHT, 16, 1);
 	IMAGEMANAGER->addFrameImage(IMAGE_NAME[IMAGE_NAME_WALL_02], L"image/mapTool/wall_zone2.png", TILE_SIZE * 8, WALLHEIGHT, 8, 1);
@@ -338,7 +338,8 @@ HRESULT playGround::init()
 
 	SCENEMANAGER->changeScene("맵툴");
 	
-
+	//커서
+	initCursor();
 	
 	return S_OK;
 }
@@ -354,6 +355,9 @@ void playGround::update()
 	gameNode::update();
 
 	SCENEMANAGER->update();
+
+	//커서
+	frameCursor();
 
 }
 
@@ -375,15 +379,51 @@ void playGround::render()
 	//===========================================================================
 	//				##카메라 정보 마우스 정보 시간정보 출력	##===================
 	WCHAR str[128];
-	swprintf_s(str, L"cameraX : %d", CAMERA->getPosX());
-	D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 80);
-	swprintf_s(str, L"cameraY : %d", CAMERA->getPosY());
-	D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 100);
-	swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
-	D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 140);
-	swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
-	D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
-	TIMEMANAGER->render();
+	if (KEYMANAGER->isToggleKey(VK_F9))
+	{
+		swprintf_s(str, L"cameraX : %.0f", CAMERA->getPosX());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 82, 15, RGB(255, 0, 0));
+		swprintf_s(str, L"cameraY : %.0f", CAMERA->getPosY());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 102, 15, RGB(255, 0, 0));
+		swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 142, 15, RGB(255, 0, 0));
+		swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 12, CAMERA->getPosY() + 162, 15, RGB(255, 0, 0));
+
+		swprintf_s(str, L"cameraX : %.0f", CAMERA->getPosX());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 80, 15, RGB(0, 255, 255));
+		swprintf_s(str, L"cameraY : %.0f", CAMERA->getPosY());
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 100, 15, RGB(0, 255, 255));
+		swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 140, 15, RGB(0, 255, 255));
+		swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
+		D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 160, 15, RGB(0, 255, 255));
+		TIMEMANAGER->render();
+	}
 	// Draw 끝 - 이 코드가 빠지면 D2D 출력 X
 	D2DMANAGER->endDraw();
+}
+
+void playGround::initCursor()
+{
+	a = LoadCursorFromFile("a.cur");
+	b = LoadCursorFromFile("b.cur");
+	c = LoadCursorFromFile("c.cur");
+	d = LoadCursorFromFile("d.cur");
+	_count = 0;
+}
+
+void playGround::frameCursor()
+{
+	_count++;
+	if (_count % 40 > 20)
+	{
+		SetCursor(a);
+	}
+	else if (_count % 40 < 20)
+	{
+		SetCursor(c);
+		if (_count == 1000)
+			_count = 0;
+	}
 }

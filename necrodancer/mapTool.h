@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "tileNode.h"
-#include "itemInfomation.h"
+#include "infomation.h"
 #include "enemyInfomation.h"
 #include <vector>
 #include <assert.h>
@@ -212,7 +212,7 @@ public:
 	// ================================
 	void drawMap();						//甘免仿
 	void drawUI();						//甘砒UI包访
-	void drawSample(int num);				//基敲鸥老
+	void drawSample(int num);			//基敲鸥老
 
 private:
 	// ================================
