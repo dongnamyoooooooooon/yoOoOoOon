@@ -5,6 +5,8 @@
 #include "player.h"
 #include <algorithm>
 
+class floorZone_01;
+
 
 class parentObj;
 class objectManager : public singletonBase<objectManager>, public gameNode
@@ -64,6 +66,7 @@ public:
 	objectManager();
 	~objectManager();
 
+	HRESULT init();
 	void release();
 	void update();
 	void render();
@@ -109,6 +112,7 @@ public:
 
 	//타일
 	parentObj* getCheckObj(int x, int y) { return _vvObjTile[y][x]; }
+	parentObj* getCheckFloor(int x, int y) { return _vvFloorTile[y][x]; }
 	void setTileIdx(parentObj* obj, UINT idxX, UINT idxY)
 	{
 		_vvObjTile[obj->getIdxY()][obj->getIdxX()] = nullptr;
@@ -117,6 +121,9 @@ public:
 		_vvObjTile[idxY][idxX] = obj;
 	}
 
+	//시야
+	void initLight();
+	void initSight();
 
 };
 

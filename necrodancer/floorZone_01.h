@@ -22,6 +22,7 @@ public:
 	void render();
 
 	void checkFever(int idxX, int idxY);
+	void floorAni();
 
 	UINT getTileX() { return _tileX; }
 	UINT getTileY() { return _tileY; }

@@ -25,6 +25,8 @@ HRESULT testMapScene::init()
 	_iiMax = 0;
 	_jjMax = 0;
 
+
+
 	//OBJECTMANAGER->objectPush(*_player);
 
 	return S_OK;
@@ -52,14 +54,15 @@ void testMapScene::update()
 
 void testMapScene::render()
 {
-	for (; _ii < _iiMax; ++_ii)
-	{
-		for (; _jj < _jjMax; ++_jj)
-		{
-			_vvTile[_ii][_jj]->floor->render(_ii * TILE_SIZE, _jj * TILE_SIZE);
-			_player->render();
-		}
-	}
+	//for (int i = 0; i < _tileY; i++)
+	//{
+	//	for (int j = 0; j < _tileX; j++)
+	//	{
+	//		//_vvTile[i][j]->floor->render(i * TILE_SIZE, j * TILE_SIZE);
+	//		_player->render();
+	//	}
+	//}
+	OBJECTMANAGER->render();
 }
 
 void testMapScene::load(const char * size, const char * data)
@@ -123,6 +126,12 @@ void testMapScene::load(const char * size, const char * data)
 
 	tagPack* pack = new tagPack[_tileX * _tileY];
 
+
+	OBJECTMANAGER->setTileX(_tileX);
+	OBJECTMANAGER->setTileY(_tileY);
+
+	OBJECTMANAGER->init();
+
 	HANDLE file2;
 	DWORD read2;
 
@@ -138,7 +147,22 @@ void testMapScene::load(const char * size, const char * data)
 		{
 			_vvTile[i][j] = new tagTile;
 			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
-			
+
+			if (_vvTile[i][j]->type_floor == OBJECT_TYPE_FLOOR)
+				OBJECTMANAGER->objectPush(*_vvTile[i][j]->floor);
+		}
+	}
+
+	for (UINT i = 0; i < _tileY; ++i)
+	{
+		for (int j = 0; j < _tileX; ++j)
+		{
+			if (_vvTile[i][j]->type_obj == OBJECT_TYPE_PLAYER)
+			{
+				OBJECTMANAGER->objectPush(*_vvTile[i][j]->player);
+				_pos = { (LONG)j * TILE_SIZE, (LONG)i * TILE_SIZE };
+
+			}
 		}
 	}
 }

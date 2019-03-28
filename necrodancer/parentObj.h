@@ -26,7 +26,7 @@ protected:
 	UINT			_tileX;
 	UINT			_tileY;
 
-	
+	int				_appliedValue;
 	int				_frameX;
 	int				_frameY;
 	int				_count = 0;
@@ -115,6 +115,13 @@ public:
 
 	int getFrameY() { return _frameY; }
 	void setFrameY(int frameY) { _frameY = frameY; }
+
+	void setHasLight(bool check) { _hasLight = check; }
+	void setIsSight(bool check) { _isSight = check; }
+	void setIsSaw() { _isSaw = true; }
+	bool getIsSight() { return _isSight; }
+
+	int getAppliedValue() { return _appliedValue; }
 
 };
 

@@ -43,8 +43,6 @@ struct tagPlayerStat
 class player : public parentObj
 {
 private:
-	UINT					_tileX;							//플레이어가 있는 타일X
-	UINT					_tileY;							//플레이어가 있는 타일Y
 	UINT					_tempX;
 	UINT					_tempY;
 	PLAYER_STATE			_playerState;					//플레이어 상태
@@ -85,6 +83,20 @@ private:
 	parentObj*			_playerBomb;
 
 	parentObj*			_putObj = nullptr;
+	
+
+	//레이캐스트용
+	float				_playerX;
+	float				_playerY;
+	
+	float				_layValue;
+	float				_layMax;
+	float				_radius;
+	float				_angle;
+	
+	int					_subX;
+	int					_subY;
+	
 
 public:
 	player();
@@ -96,6 +108,7 @@ public:
 	void render();
 
 	void playerDead();	//플레이어 죽음
+	void layCast();
 
 
 	//=======================================
@@ -114,6 +127,7 @@ public:
 	void playerStateUpdate(bool check);
 	void horizonSet();
 	void verticalSet();
+	bool checkMove();
 
 
 

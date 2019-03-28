@@ -60,12 +60,16 @@ void player::update()
 	KEYANIMANAGER->update(_playerBody);
 
 	keyUpdate();
+
+	//layCast();
 }
 
 void player::render()
 {
 	drawBody();
 	drawHead();
+	IMAGEMANAGER->findImage("player_shadow")->render(_posX - 26, _posY - 26, 0.2f);
+
 	drawEquipUI();
 }
 
@@ -74,6 +78,129 @@ void player::playerDead()
 	_playerStat.isLive = false;
 	//사운드설정
 	OBJECTMANAGER->setIsPlayerAlive();
+}
+
+void player::layCast()
+{
+	OBJECTMANAGER->initLight();
+
+	float	bright = 0;
+	int		tempVal = 0;
+	float	sightMax = 6.0f;
+	float	currentSight = 0.0f;
+
+	_playerX = (float)_idxX * TILE_SIZE;
+	_playerY = (float)_idxY * TILE_SIZE;
+
+	_layValue = 0;
+	_layMax = (float)_playerStat.torchLight - 0.25;
+
+	_radius = 0;
+	_angle = (12.0f * PI) / 180.0f;
+
+	if (_playerTorch != NULL)
+	{
+		_layMax += (float)_playerTorch->getAppliedValue();
+		tempVal = _playerTorch->getAppliedValue();
+	}
+
+	while (_radius < 2 * PI)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_F5))
+		{
+			D2DMANAGER->drawLine(RGB(0, 255, 255), this->_posX + 26, this->_posY + 26, 
+								this->_posX + 26 + _layValue * cos(_radius) * TILE_SIZE,
+								this->_posY + 26 + _layValue * (-sin(_radius)) * TILE_SIZE);
+		}
+
+		if (_layValue > _layMax) bright = 0;
+		else					 bright = _layValue;
+
+		if (currentSight > sightMax)
+		{
+			currentSight = 0;
+			bright = 0;
+			_layValue = 0;
+			_radius += _angle;
+		}
+
+		_subX = _playerX + currentSight * cos(_radius) + 0.5;
+		_subY = _playerY + currentSight * (-sin(_radius)) + 0.5;
+
+		if (_playerX < 0 || _playerY < 0)
+		{
+			currentSight = sightMax + 0.1f;
+			continue;
+		}
+
+		int comValX = _subX - _playerX;
+		if (comValX < 0) comValX *= -1;
+		int comValY = _subY - _playerY;
+		if (comValY < 0) comValY *= -1;
+
+		int tempResult;
+		if (comValX > comValY) tempResult = comValX;
+		else					tempResult = comValY;
+
+		tempResult = comValX + comValY;
+
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_subX, _subY);
+		parentObj* floorObj = OBJECTMANAGER->getCheckFloor(_subX, _subY);
+
+		if (obj != NULL)
+		{
+			if (obj->getIsSight() == false)
+			{
+				if (tempResult <= 2 + tempVal)
+				{
+					obj->setHasLight(true);
+					obj->setIsSaw();
+				}
+				obj->setIsSight(true);
+			}
+
+			if (obj->getObjType() == OBJECT_TYPE_WALL)
+			{
+				if (obj->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || obj->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				{
+					if (floorObj->getIsSight() == false)
+					{
+						if (tempResult <= 2 + tempVal)
+						{
+							floorObj->setHasLight(true);
+							floorObj->setIsSaw();
+						}
+						floorObj->setIsSight(true);
+					}
+				}
+
+				_layValue = 0;
+				currentSight = 0;
+				_radius += _angle;
+
+				continue;
+			}
+		}
+
+		if (floorObj != NULL)
+		{
+			if (floorObj->getIsSight() == false)
+			{
+				if (tempResult <= 2 + tempVal)
+				{
+					floorObj->setHasLight(true);
+					floorObj->setIsSaw();
+				}
+				floorObj->setIsSight(true);
+			}
+		}
+
+		_layValue += 0.25f;
+		currentSight += 0.25f;
+	}
+
+	
+
 }
 
 void player::playerAniSetUp()
@@ -141,15 +268,15 @@ void player::playerAniStart_Body(string keyName)
 
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX, _posY + _posZ - 18, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX, _posY + _posZ - 18, _playerBody_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
+	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
 }
 
 void player::drawHead()
 {
 
-	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX, _posY + _posZ - 18, _playerHead_Ani);
-	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX, _posY + _posZ - 18, _playerHead_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
+	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
 }
 
 void player::keyUpdate()
@@ -208,219 +335,222 @@ void player::keyUpdate()
 		playerStateUpdate(_isMove);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	if (_moveDistance == 0)
 	{
-		_isLeft = true;
-		_playerState = PLAYER_STATE_JUMP_LEFT;
-		_moveDistance = TILE_SIZE;
-		_jumpPower = JUMPPOWER;
-		if (_isBeat)
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
-			target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
-			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX - 1, _idxY, 4))
+			_isLeft = true;
+			_playerState = PLAYER_STATE_JUMP_LEFT;
+			_moveDistance = TILE_SIZE;
+			_jumpPower = JUMPPOWER;
+			if (_isBeat)
 			{
-				//사운드적용
-				//카메라흔들림적용
-			}
-			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
-			{
-				_tempX = _idxX;
-				_tempY = _idxY;
-				OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
-
-				if (_putObj != NULL)
-				{
-					putItem(_putObj);
-					_putObj = nullptr;
-				}
-				_playerState = PLAYER_STATE_JUMP_LEFT;
-				_moveDistance = TILE_SIZE;
-				_jumpPower = JUMPPOWER;
-
-				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
-				{
-					addInven(target);
-				}
-			}
-			else if (target->getObjType() == OBJECT_TYPE_WALL)
-			{
-				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
+				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX - 1, _idxY, 4))
 				{
 					//사운드적용
 					//카메라흔들림적용
-					OBJECTMANAGER->deleteObject(target);
 				}
-				else if (_playerShovel != NULL)
+				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
-					if (_playerShovel->useItem(_idxX - 1, _idxY, 4))
+					_tempX = _idxX;
+					_tempY = _idxY;
+					OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
+
+					if (_putObj != NULL)
 					{
-						//카메라흔들림적용
+						putItem(_putObj);
+						_putObj = nullptr;
+					}
+					_playerState = PLAYER_STATE_JUMP_LEFT;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = JUMPPOWER;
+
+					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+					{
+						addInven(target);
+					}
+				}
+				else if (target->getObjType() == OBJECT_TYPE_WALL)
+				{
+					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+					{
 						//사운드적용
+						//카메라흔들림적용
+						OBJECTMANAGER->deleteObject(target);
+					}
+					else if (_playerShovel != NULL)
+					{
+						if (_playerShovel->useItem(_idxX - 1, _idxY, 4))
+						{
+							//카메라흔들림적용
+							//사운드적용
+						}
 					}
 				}
 			}
+			_isBeat = false;
 		}
-		_isBeat = false;
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-	{
-		_isLeft = false;
-		_playerState = PLAYER_STATE_JUMP_RIGHT;
-		_moveDistance = TILE_SIZE;
-		_jumpPower = JUMPPOWER;
-		if (_isBeat)
+		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
-			target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
-			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX + 1, _idxY, 6))
+			_isLeft = false;
+			_playerState = PLAYER_STATE_JUMP_RIGHT;
+			_moveDistance = TILE_SIZE;
+			_jumpPower = JUMPPOWER;
+			if (_isBeat)
 			{
-				//사운드적용
-				//카메라흔들림적용
-			}
-			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
-			{
-				_tempX = _idxX;
-				_tempY = _idxY;
-				OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
-
-				if (_putObj != NULL)
-				{
-					putItem(_putObj);
-					_putObj = nullptr;
-				}
-				_playerState = PLAYER_STATE_JUMP_RIGHT;
-				_moveDistance = TILE_SIZE;
-				_jumpPower = JUMPPOWER;
-
-				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
-				{
-					addInven(target);
-				}
-			}
-			else if (target->getObjType() == OBJECT_TYPE_WALL)
-			{
-				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
+				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX + 1, _idxY, 6))
 				{
 					//사운드적용
 					//카메라흔들림적용
-					OBJECTMANAGER->deleteObject(target);
 				}
-				else if (_playerShovel != NULL)
+				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
-					if (_playerShovel->useItem(_idxX + 1, _idxY, 6))
+					_tempX = _idxX;
+					_tempY = _idxY;
+					OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
+
+					if (_putObj != NULL)
 					{
-						//카메라흔들림적용
+						putItem(_putObj);
+						_putObj = nullptr;
+					}
+					_playerState = PLAYER_STATE_JUMP_RIGHT;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = JUMPPOWER;
+
+					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+					{
+						addInven(target);
+					}
+				}
+				else if (target->getObjType() == OBJECT_TYPE_WALL)
+				{
+					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+					{
 						//사운드적용
+						//카메라흔들림적용
+						OBJECTMANAGER->deleteObject(target);
+					}
+					else if (_playerShovel != NULL)
+					{
+						if (_playerShovel->useItem(_idxX + 1, _idxY, 6))
+						{
+							//카메라흔들림적용
+							//사운드적용
+						}
 					}
 				}
 			}
+			_isBeat = false;
 		}
-		_isBeat = false;
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_UP))
-	{
-	_playerState = PLAYER_STATE_JUMP_UP;
-	_moveDistance = TILE_SIZE;
-	_jumpPower = JUMPPOWER;
-		if (_isBeat)
+		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
-			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY - 1, 8))
+			_playerState = PLAYER_STATE_JUMP_UP;
+			_moveDistance = TILE_SIZE;
+			_jumpPower = JUMPPOWER;
+			if (_isBeat)
 			{
-				//사운드적용
-				//카메라흔들림적용
-			}
-			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
-			{
-				_tempX = _idxX;
-				_tempY = _idxY;
-				OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
-
-				if (_putObj != NULL)
-				{
-					putItem(_putObj);
-					_putObj = nullptr;
-				}
-				_playerState = PLAYER_STATE_JUMP_UP;
-				_moveDistance = TILE_SIZE;
-				_jumpPower = JUMPPOWER;
-
-				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
-				{
-					addInven(target);
-				}
-			}
-			else if (target->getObjType() == OBJECT_TYPE_WALL)
-			{
-				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
+				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY - 1, 8))
 				{
 					//사운드적용
 					//카메라흔들림적용
-					OBJECTMANAGER->deleteObject(target);
 				}
-				else if (_playerShovel != NULL)
+				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
-					if (_playerShovel->useItem(_idxX, _idxY - 1, 8))
+					_tempX = _idxX;
+					_tempY = _idxY;
+					OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+
+					if (_putObj != NULL)
 					{
-						//카메라흔들림적용
+						putItem(_putObj);
+						_putObj = nullptr;
+					}
+					_playerState = PLAYER_STATE_JUMP_UP;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = JUMPPOWER;
+
+					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+					{
+						addInven(target);
+					}
+				}
+				else if (target->getObjType() == OBJECT_TYPE_WALL)
+				{
+					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+					{
 						//사운드적용
+						//카메라흔들림적용
+						OBJECTMANAGER->deleteObject(target);
+					}
+					else if (_playerShovel != NULL)
+					{
+						if (_playerShovel->useItem(_idxX, _idxY - 1, 8))
+						{
+							//카메라흔들림적용
+							//사운드적용
+						}
 					}
 				}
 			}
+			_isBeat = false;
 		}
-		_isBeat = false;
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
-	{
-	_playerState = PLAYER_STATE_JUMP_DOWN;
-	_moveDistance = TILE_SIZE;
-	_jumpPower = JUMPPOWER;
-		if (_isBeat)
+		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
-			target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
-			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY + 1, 2))
+			_playerState = PLAYER_STATE_JUMP_DOWN;
+			_moveDistance = TILE_SIZE;
+			_jumpPower = JUMPPOWER;
+			if (_isBeat)
 			{
-				//사운드적용
-				//카메라흔들림적용
-			}
-			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
-			{
-				_tempX = _idxX;
-				_tempY = _idxY;
-				OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
-
-				if (_putObj != NULL)
-				{
-					putItem(_putObj);
-					_putObj = nullptr;
-				}
-				_playerState = PLAYER_STATE_JUMP_DOWN;
-				_moveDistance = TILE_SIZE;
-				_jumpPower = JUMPPOWER;
-
-				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
-				{
-					addInven(target);
-				}
-			}
-			else if (target->getObjType() == OBJECT_TYPE_WALL)
-			{
-				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
+				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY + 1, 2))
 				{
 					//사운드적용
 					//카메라흔들림적용
-					OBJECTMANAGER->deleteObject(target);
 				}
-				else if (_playerShovel != NULL)
+				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
-					if (_playerShovel->useItem(_idxX, _idxY + 1, 2))
+					_tempX = _idxX;
+					_tempY = _idxY;
+					OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+
+					if (_putObj != NULL)
 					{
-						//카메라흔들림적용
+						putItem(_putObj);
+						_putObj = nullptr;
+					}
+					_playerState = PLAYER_STATE_JUMP_DOWN;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = JUMPPOWER;
+
+					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+					{
+						addInven(target);
+					}
+				}
+				else if (target->getObjType() == OBJECT_TYPE_WALL)
+				{
+					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+					{
 						//사운드적용
+						//카메라흔들림적용
+						OBJECTMANAGER->deleteObject(target);
+					}
+					else if (_playerShovel != NULL)
+					{
+						if (_playerShovel->useItem(_idxX, _idxY + 1, 2))
+						{
+							//카메라흔들림적용
+							//사운드적용
+						}
 					}
 				}
 			}
+			_isBeat = false;
 		}
-		_isBeat = false;
 	}
 }
 
@@ -569,6 +699,12 @@ void player::verticalSet()
 	_moveDistance = 0;
 	_tileY = _posY / TILE_SIZE;
 	_idxY = _posY / TILE_SIZE;
+}
+
+bool player::checkMove()
+{
+	if (_playerState != PLAYER_STATE_NONE) return true;
+	else return false;
 }
 
 void player::initEquipUI()

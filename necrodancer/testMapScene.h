@@ -8,6 +8,8 @@ class testMapScene : public gameNode
 private:
 
 	player* _player;
+	POINT _pos;
+	POINT _curPos;
 
 	vector<vector<tagTile*>>			_vvTile;
 	UINT								_tileX;

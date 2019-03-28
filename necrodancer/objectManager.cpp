@@ -2,6 +2,8 @@
 #include "objectManager.h"
 #include "parentObj.h"
 
+#include "floorZone_01.h"
+
 
 objectManager::objectManager()
 {
@@ -9,6 +11,32 @@ objectManager::objectManager()
 
 objectManager::~objectManager()
 {
+}
+
+HRESULT objectManager::init()
+{
+	
+	for (UINT i = 0; i < _tileY; i++)
+	{
+		vector<parentObj*> vFloorTile;
+		vector<parentObj*> vObjectTile;
+		for (UINT j = 0; j < _tileX; j++)
+		{
+			parentObj* floorTile = new parentObj;
+			parentObj* objTile = new parentObj;
+
+			floorTile->init("", i, j, OBJECT_TYPE_NONE, 0);
+			objTile->init("", i, j, OBJECT_TYPE_NONE, 0);
+
+			vFloorTile.push_back(floorTile);
+			vObjectTile.push_back(objTile);
+		}
+		_vvFloorTile.push_back(vFloorTile);
+		_vvObjTile.push_back(vObjectTile);
+	}
+
+
+	return S_OK;
 }
 
 void objectManager::release()
@@ -78,11 +106,6 @@ void objectManager::render()
 	//	IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
 	//else
 	//	IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
-
-
-
-
-
 }
 
 void objectManager::vectorClear()
@@ -212,7 +235,7 @@ parentObj* objectManager::objectPush(parentObj obj)
 	parentObj* tempObject;
 	switch (obj.getObjType())
 	{
-		/*case OBJECT_TYPE_FLOOR:
+		case OBJECT_TYPE_FLOOR:
 		{
 			tempObject = createFloor(obj);
 			tempObject->setObjType(OBJECT_TYPE_FLOOR);
@@ -249,7 +272,7 @@ parentObj* objectManager::objectPush(parentObj obj)
 			tempObject->setObjType(OBJECT_TYPE_TRAP);
 			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
 			break;
-		}*/
+		}
 		case OBJECT_TYPE_PLAYER:
 		{
 			tempObject = createPlayer(obj);
@@ -257,10 +280,9 @@ parentObj* objectManager::objectPush(parentObj obj)
 			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
 			break;
 		}
-
-		_vObj.push_back(tempObject);
 	}
-	return 0;
+	_vObj.push_back(tempObject);
+	return tempObject;
 }
 
 parentObj * objectManager::createFloor(parentObj obj)
@@ -268,7 +290,9 @@ parentObj * objectManager::createFloor(parentObj obj)
 
 	if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_FLOOR_01])
 	{
-
+		floorZone_01* tempObj = new floorZone_01;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_FLOOR_02])
 	{
@@ -959,4 +983,31 @@ parentObj * objectManager::createPlayer(parentObj obj)
 	newObj->init(obj.getIdxX(), obj.getIdxY());
 	_player = newObj;
 	return newObj;
+}
+
+void objectManager::initLight()
+{
+	_viObj2 = _vObj.begin();
+	for (_viObj2; _viObj2 != _vObj.end(); _viObj2++)
+	{
+		if ((*_viObj2)->getObjType() != OBJECT_TYPE_PLAYER)
+		{
+			(*_viObj2)->setHasLight(false);
+			(*_viObj2)->setIsSight(false);
+		}
+	}
+}
+
+void objectManager::initSight()
+{
+	_viObj2 = _vObj.begin();
+	for (_viObj2; _viObj2 != _vObj.end(); _viObj2++)
+	{
+		if ((*_viObj2)->getObjType() != OBJECT_TYPE_PLAYER)
+		{
+			if ((*_viObj2)->getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_11]) continue;
+
+			(*_viObj2)->setIsSaw();
+		}
+	}
 }
