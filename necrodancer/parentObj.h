@@ -110,6 +110,11 @@ public:
 	void setTileX(UINT x) { _tileX = x; }
 	void setTileY(UINT y) { _tileY = y; }
 
+	int getFrameX() { return _frameX; }
+	void setFrameX(int frameX) { _frameX = frameX; }
+
+	int getFrameY() { return _frameY; }
+	void setFrameY(int frameY) { _frameY = frameY; }
 
 };
 

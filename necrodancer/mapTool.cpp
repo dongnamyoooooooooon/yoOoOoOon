@@ -475,6 +475,16 @@ void mapTool::setTile()
 		_vvRECT.push_back(vRECT);
 	}
 
+	_idxX = 0;
+	_idxY = 0;
+
+	parentObj* player = new parentObj;
+	player->init("", 0, 0, OBJECT_TYPE_PLAYER, 0);
+	_vvTile[_idxY][_idxX]->player = player;
+	_vvTile[_idxY][_idxX]->type_obj = OBJECT_TYPE_PLAYER;
+	_vvTile[_idxY][_idxX]->objPosX = _idxX;
+	_vvTile[_idxY][_idxX]->objPosY = _idxY;
+
 	{
 		parentObj object;
 
@@ -715,11 +725,31 @@ void mapTool::drawobject(int i, int j)
 	tempObj->init("", -1, -1, OBJECT_TYPE_NONE, 0);
 
 	parentObj* obj = new parentObj;
+	parentObj* player;
 
 	if (_eraseButton.curFrameY == 0)
 	{
 		switch (_selectObj.getObjType())
 		{
+		case OBJECT_TYPE_PLAYER:
+		{
+			player = _vvTile[_idxY][_idxX]->player;
+			_vvTile[_idxY][_idxX]->player = nullptr;
+			_vvTile[_idxY][_idxX]->objName = "";
+			_vvTile[_idxY][_idxX]->objPosX = -1;
+			_vvTile[_idxY][_idxX]->objPosY = -1;
+			_idxX = j;
+			_idxY = i;
+			_vvTile[i][j]->player = player;
+			_vvTile[i][j]->item = nullptr;
+			_vvTile[i][j]->wall = nullptr;
+			_vvTile[i][j]->enemy = nullptr;
+			_vvTile[i][j]->objName = _selectObj.getImgName();
+			_vvTile[i][j]->type_obj = _selectObj.getObjType();
+			_vvTile[i][j]->objPosX = j;
+			_vvTile[i][j]->objPosY = i;
+			break;
+		}
 		case OBJECT_TYPE_FLOOR:
 		{
 			obj = new parentObj;
@@ -1132,6 +1162,17 @@ void mapTool::mapLoad()
 		{
 			_vvTile[i][j] = new tagTile;
 			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
+
+			if (_vvTile[i][j]->player != NULL)
+			{
+				parentObj* player = new parentObj;
+				player->init("", j, i, OBJECT_TYPE_PLAYER, 0);
+				_vvTile[i][j]->player = nullptr;
+				_idxX = j;
+				_idxY = i;
+				_vvTile[_idxY][_idxX]->player = player;
+
+			}
 			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
 			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
 						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };

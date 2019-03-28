@@ -98,3 +98,4 @@ void floorZone_01::checkFever(int idxX, int idxY)
 
 
 }
+

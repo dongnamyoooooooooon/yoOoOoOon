@@ -71,6 +71,9 @@ private:
 	tagInven				_inven[9];						//인벤토리
 	tagPlayerStat			_playerStat;					//스탯
 
+	int						_heartBeat;						//플레이어 하트 두근두근
+	int						_heartBeatCount;
+
 	//플레이어 장착템
 	parentObj*			_playerShovel;
 	parentObj*			_playerWeapon;
@@ -120,6 +123,9 @@ public:
 	void initEquipUI();
 	void setEquipUI(parentObj* obj);
 	void brokenItemEquipUI();
+	void drawPlayerUI();
+	void drawEquipUI();
+	void bounceHeart();
 
 
 	//=======================================
@@ -129,6 +135,7 @@ public:
 	void addInven(parentObj* obj);	//아이템 인벤으로
 	void drawItemHint();
 	void hitPlayer(int damage);		//맞았을때
+	void equipUpdate();
 	
 };
 

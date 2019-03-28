@@ -111,6 +111,11 @@ void image::render(float destX, float destY, float alpha)
 	render(destX, destY, _imageInfo->width, _imageInfo->height, 0.f, 0.f, _imageInfo->width, _imageInfo->height, alpha);
 }
 
+void image::render2(float destX, float destY, float alpha)
+{
+	render2(destX, destY, _imageInfo->width, _imageInfo->height, 0.f, 0.f, _imageInfo->width, _imageInfo->height, alpha);
+}
+
 void image::render(float destX, float destY, int showWidth, int showHeight, float alpha)
 {
 	render(destX, destY, showWidth, showHeight, 0.f, 0.f, _imageInfo->width, _imageInfo->height, alpha);
@@ -140,6 +145,28 @@ void image::render(float destX, float destY, int showWidth, int showHeight, floa
 													, alpha
 													, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
 													, dxArea2);
+	}
+}
+
+void image::render2(float destX, float destY, int showWidth, int showHeight, float sourX, float sourY, int sourWidth, int sourHeight, float alpha)
+{
+	POINTFLOAT pf = GetRenderPosition2(destX, destY);
+
+	if (_imageInfo->bitmap != NULL)
+	{
+		if (!IsRnderPositionInWindow(pf, showWidth, showHeight))
+			return;
+
+		D2D1_RECT_F dxArea = RectF(pf.x, pf.y, pf.x + showWidth, pf.y + showHeight);
+		D2D1_RECT_F dxArea2 = RectF(sourX
+			, sourY
+			, sourX + sourWidth
+			, sourY + sourHeight);
+		D2DMANAGER->_renderTarget->DrawBitmap(_imageInfo->bitmap
+			, dxArea
+			, alpha
+			, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+			, dxArea2);
 	}
 }
 

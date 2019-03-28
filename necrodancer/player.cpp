@@ -31,6 +31,12 @@ HRESULT player::init(UINT idx_X, UINT idx_Y)
 	//boolean
 	_isLeft = false;
 
+	_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
+
+	_heartBeat = 0;
+	_heartBeatCount = 0;
+
+	initEquipUI();
 	playerAniSetUp();
 
 	return S_OK;
@@ -60,6 +66,7 @@ void player::render()
 {
 	drawBody();
 	drawHead();
+	drawEquipUI();
 }
 
 void player::playerDead()
@@ -134,15 +141,15 @@ void player::playerAniStart_Body(string keyName)
 
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX, _posY + _posZ, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX, _posY + _posZ, _playerBody_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX, _posY + _posZ - 18, _playerBody_Ani);
+	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX, _posY + _posZ - 18, _playerBody_Ani);
 }
 
 void player::drawHead()
 {
 
-	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX, _posY + _posZ, _playerHead_Ani);
-	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX, _posY + _posZ, _playerHead_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX, _posY + _posZ - 18, _playerHead_Ani);
+	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX, _posY + _posZ - 18, _playerHead_Ani);
 }
 
 void player::keyUpdate()
@@ -198,12 +205,15 @@ void player::keyUpdate()
 
 	if (_playerState != PLAYER_STATE_NONE)
 	{
-		//움직임함수 설정
+		playerStateUpdate(_isMove);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
 		_isLeft = true;
+		_playerState = PLAYER_STATE_JUMP_LEFT;
+		_moveDistance = TILE_SIZE;
+		_jumpPower = JUMPPOWER;
 		if (_isBeat)
 		{
 			target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
@@ -255,6 +265,9 @@ void player::keyUpdate()
 	else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		_isLeft = false;
+		_playerState = PLAYER_STATE_JUMP_RIGHT;
+		_moveDistance = TILE_SIZE;
+		_jumpPower = JUMPPOWER;
 		if (_isBeat)
 		{
 			target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
@@ -305,6 +318,9 @@ void player::keyUpdate()
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
+	_playerState = PLAYER_STATE_JUMP_UP;
+	_moveDistance = TILE_SIZE;
+	_jumpPower = JUMPPOWER;
 		if (_isBeat)
 		{
 			target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
@@ -355,6 +371,9 @@ void player::keyUpdate()
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
+	_playerState = PLAYER_STATE_JUMP_DOWN;
+	_moveDistance = TILE_SIZE;
+	_jumpPower = JUMPPOWER;
 		if (_isBeat)
 		{
 			target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
@@ -473,6 +492,66 @@ void player::playerStateUpdate(bool check)
 				break;
 			}
 		}
+		if (_moveDistance == 0) _isMove = true;
+	}
+	else
+	{
+		switch (_playerState)
+		{
+		case PLAYER_STATE_JUMP_LEFT:
+		{
+			_moveDistance -= _speed;
+			//_posX -= _speed;
+			if (_moveDistance < _speed)
+			{
+				horizonSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_playerState = PLAYER_STATE_NONE;
+			}
+			break;
+		}
+		case PLAYER_STATE_JUMP_RIGHT:
+		{
+			_moveDistance -= _speed;
+			//_posX += _speed;
+			if (_moveDistance < _speed)
+			{
+				horizonSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_playerState = PLAYER_STATE_NONE;
+			}
+			break;
+		}
+		case PLAYER_STATE_JUMP_UP:
+		{
+			_moveDistance -= _speed;
+			//_posY -= _speed;
+			if (_moveDistance < _speed)
+			{
+				verticalSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_playerState = PLAYER_STATE_NONE;
+			}
+			break;
+		}
+		case PLAYER_STATE_JUMP_DOWN:
+		{
+			_moveDistance -= _speed;
+			//_posY += _speed;
+			if (_moveDistance < _speed)
+			{
+				verticalSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_playerState = PLAYER_STATE_NONE;
+			}
+			break;
+		}
+		}
+		if (_moveDistance == 0) _isMove = true;
 	}
 }
 
@@ -764,6 +843,191 @@ void player::brokenItemEquipUI()
 	}
 }
 
+void player::drawPlayerUI()
+{
+	WCHAR str[128];
+
+	int fullHeart = _playerStat.heart / 2;
+	int halfHeart = _playerStat.heart % 2;
+	int	emptyHeart = _playerStat.maxHeart - fullHeart / 2;
+
+	if (_playerStat.maxHeart / 2 <= 3)
+	{
+		for (int i = 0; i < _playerStat.maxHeart / 2; i++)
+		{
+			if (i < fullHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					IMAGEMANAGER->findImage("ui_large_heart")->render2(CAMERA->getPosX() + 630 + i * 53, CAMERA->getPosY() + 7);
+					_heartBeatCount--;
+				}
+				else
+					IMAGEMANAGER->findImage("ui_heart")->render2(CAMERA->getPosX() + 633 - i * 53, CAMERA->getPosY() + 10);
+			}
+			else if (halfHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					IMAGEMANAGER->findImage("ui_large_half_heart")->render2(CAMERA->getPosX() + 630 + i * 53, CAMERA->getPosY() + 7);
+					_heartBeatCount--;
+				}
+				else
+					IMAGEMANAGER->findImage("ui_half_heart")->render2(CAMERA->getPosX() + 633 + i * 53, CAMERA->getPosY() + 10);
+				halfHeart = 0;
+			}
+			else
+				IMAGEMANAGER->findImage("ui_empty_heart")->render2(CAMERA->getPosX() + 633 + i * 53, CAMERA->getPosY() + 10);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < _playerStat.maxHeart / 2; i++)
+		{
+			if (i < fullHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_large_heart")->render2(CAMERA->getPosX() + 770 + (i - 9) * 53, CAMERA->getPosY() + 57);
+					else
+						IMAGEMANAGER->findImage("ui_large_heart")->render2(CAMERA->getPosX() + 560 + i * 53, CAMERA->getPosY() + 7);
+					_heartBeatCount--;
+				}
+				else
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_heart")->render2(CAMERA->getPosX() + 773 + (i - 9) * 53, CAMERA->getPosY() + 60);
+					else
+						IMAGEMANAGER->findImage("ui_heart")->render2(CAMERA->getPosX() + 563 + i * 53, CAMERA->getPosY() + 10);
+				}
+			}
+			else if (halfHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_large_half_heart")->render2(CAMERA->getPosX() + 770 + (i - 9) * 53, CAMERA->getPosY() + 57);
+					else
+						IMAGEMANAGER->findImage("ui_large_half_heart")->render2(CAMERA->getPosX() + 560 + i * 53, CAMERA->getPosY() + 7);
+					_heartBeatCount--;
+				}
+				else
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_half_heart")->render2(CAMERA->getPosX() + 773 + (i - 9) * 53, CAMERA->getPosY() + 60);
+					else
+						IMAGEMANAGER->findImage("ui_half_heart")->render2(CAMERA->getPosX() + 563 + i * 53, CAMERA->getPosY() + 10);
+				}
+				halfHeart = 0;
+			}
+			else
+			{
+				if (i > 4)
+					IMAGEMANAGER->findImage("ui_empty_heart")->render2(CAMERA->getPosX() + 773 + (i - 9) * 53, CAMERA->getPosY() + 60);
+				else
+					IMAGEMANAGER->findImage("ui_empty_heart")->render2(CAMERA->getPosX() + 563 + i * 53, CAMERA->getPosY() + 10);
+			}
+		}
+	}
+
+
+
+	//돈
+	IMAGEMANAGER->findImage("ui_coins")->render2(CAMERA->getPosX() + 830, CAMERA->getPosY() + 10);
+	IMAGEMANAGER->findImage("ui_X")->render2(CAMERA->getPosX() + 880, CAMERA->getPosY() + 40);
+
+	int chipher[4] = { 0, };
+
+	chipher[0] = _playerStat.coin / 1000;
+	chipher[1] = (_playerStat.coin - chipher[0] * 1000) / 100;
+	chipher[2] = (_playerStat.coin - chipher[0] * 1000 - chipher[1] * 100) / 10;
+	chipher[3] = (_playerStat.coin - chipher[0] * 1000 - chipher[1] * 100 - chipher[2] * 10) / 1;
+
+	bool check = false;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (check || i == 3)
+		{
+			IMAGEMANAGER->findImage("ui_digit")->frameRender2(CAMERA->getPosX() + 890 + 12 * i, CAMERA->getPosY() + 30, chipher[i], 0);
+		}
+		else if (check == false && chipher[i] != 0)
+		{
+			IMAGEMANAGER->findImage("ui_digit")->frameRender2(CAMERA->getPosX() + 890 + 12 * i, CAMERA->getPosY() + 30, chipher[i], 0);
+			check = true;
+		}
+	}
+}
+
+void player::drawEquipUI()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		if (_inven[i].UIKey == "") break;
+
+		if (_inven[i].object->getImgName() == "armor_none" || _inven[i].object->getImgName() == "weapon_none"
+			|| _inven[i].object->getImgName() == "footwear_none" || _inven[i].object->getImgName() == "headwear_none"
+			|| _inven[i].object->getImgName() == "weapon_none" || _inven[i].object->getImgName() == "consumable_none"
+			|| _inven[i].object->getImgName() == "heart_none" || _inven[i].object->getImgName() == "coin_none"
+			|| _inven[i].object->getImgName() == "bomb_none" || _inven[i].object->getImgName() == "none") continue;
+
+		if (_inven[i].isUse)
+		{
+			_inven[i].object->setXY(_inven[i].pos.x + 3, _inven[i].pos.y + 12);
+
+			if (_inven[i].object->getPos().x == _inven[i].pos.x + 8)
+			{
+				if (_inven[i].object->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
+				{
+					IMAGEMANAGER->frameRender(_inven[i].UIKey, _inven[i].pos.x + 13, _inven[i].pos.y - 10, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
+				}
+				else
+					IMAGEMANAGER->frameRender(_inven[i].object->getImgName(), _inven[i].pos.x + 8, _inven[i].pos.y + 13, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
+			}
+			if (_inven[i].object->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
+			{
+				if (_inven[i].object->getFrameX() == 1)
+					IMAGEMANAGER->frameRender("equipUI_reload", _inven[i].pos.x, _inven[i].pos.y, 0, 0);
+				else
+					IMAGEMANAGER->frameRender("equipUI_weapon", _inven[i].pos.x, _inven[i].pos.y, 0, 0);
+			}
+
+			if (_inven[i].UIKey == "equipUI_shovel")
+				IMAGEMANAGER->findImage("equipUI_shovel")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_attack")
+				IMAGEMANAGER->findImage("equipUI_attack")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_body")
+				IMAGEMANAGER->findImage("equipUI_body")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_head")
+				IMAGEMANAGER->findImage("equipUI_head")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_feet")
+				IMAGEMANAGER->findImage("equipUI_feet")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_torch")
+				IMAGEMANAGER->findImage("equipUI_torch")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_item")
+				IMAGEMANAGER->findImage("equipUI_item")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+
+		}
+
+	}
+
+
+}
+
+void player::bounceHeart()
+{
+	if (_playerStat.isLive)
+	{
+		_heartBeat++;
+		_heartBeatCount = _playerStat.maxHeart - (_playerStat.maxHeart - 2);
+		int fullHeart = _playerStat.heart / 2;
+		bool heartCheck = ((_playerStat.heart % 2) != 0);
+
+		_heartBeat = _heartBeat % (fullHeart + heartCheck);
+	}
+}
+
 void player::putItem(parentObj * obj)
 {
 	obj->setXY(_posX, _posY - 20);
@@ -971,5 +1235,26 @@ void player::hitPlayer(int damage)
 		_playerStat.heart = 0;
 		this->playerDead();
 	}
+
+}
+
+void player::equipUpdate()
+{
+	if (_playerWeapon)
+		_playerWeapon->update();
+	if (_playerArmor)
+		_playerArmor->update();
+	if (_playerShovel)
+		_playerShovel->update();
+	if (_playerHeadWear)
+		_playerHeadWear->update();
+	if (_playerFootWear)
+		_playerFootWear->update();
+	if (_playerTorch)
+		_playerTorch->update();
+	if (_playerItem)
+		_playerItem->update();
+	if (_playerBomb)
+		_playerBomb->update();
 
 }

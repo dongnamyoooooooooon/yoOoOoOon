@@ -140,6 +140,8 @@ private:
 	int							_count;				//프레임카운트용
 	int							_frameX;
 	int							_frameY;
+	int							_idxX;
+	int							_idxY;
 
 	//BOOLEAN
 	bool						_isTileClick;		//타일클릭했니?
