@@ -109,6 +109,8 @@ public:
 	//=======================================
 	void keyUpdate();
 	void playerStateUpdate(bool check);
+	void horizonSet();
+	void verticalSet();
 
 
 

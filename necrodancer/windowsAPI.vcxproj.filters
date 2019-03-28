@@ -79,6 +79,9 @@
     <Filter Include="PlayGround\dataInfo">
       <UniqueIdentifier>{9dc1512b-9bef-4aca-8853-bdb163e18915}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\floor">
+      <UniqueIdentifier>{a3f94219-a513-4ab6-88b7-a1250d30ed3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -189,6 +192,9 @@
     <ClInclude Include="testMapScene.h">
       <Filter>PlayGround\scene</Filter>
     </ClInclude>
+    <ClInclude Include="floorZone_01.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -277,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="testMapScene.cpp">
       <Filter>PlayGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="floorZone_01.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

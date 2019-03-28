@@ -31,6 +31,8 @@ HRESULT player::init(UINT idx_X, UINT idx_Y)
 	//boolean
 	_isLeft = false;
 
+	playerAniSetUp();
+
 	return S_OK;
 }
 
@@ -50,6 +52,8 @@ void player::update()
 {
 	KEYANIMANAGER->update(_playerHead);
 	KEYANIMANAGER->update(_playerBody);
+
+	keyUpdate();
 }
 
 void player::render()
@@ -109,6 +113,8 @@ void player::playerAniSetUp()
 
 	int right_body_glass[] = { 36, 37, 38, 39 };
 	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_GLASS], _playerBody.c_str(), right_body_glass, 4, ANISPEED, true);
+
+	_curArmor = ARMOR_NAME[ITEM_ARMOR_GLASS];
 
 	playerAniStart_Head("right_head");
 	playerAniStart_Body(_curArmor);
@@ -415,29 +421,75 @@ void player::playerStateUpdate(bool check)
 				if (_posZ > 0) _posZ = 0;
 				if (_moveDistance < _speed)
 				{
-
+					horizonSet();
+					_jumpPower = 0;
+					_posZ = 0;
 				}
-
-
 				break;
 			}
 			case PLAYER_STATE_JUMP_RIGHT:
 			{
-
+				_posX += _speed;
+				_moveDistance -= _speed;
+				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+				if (_posZ > 0) _posZ = 0;
+				if (_moveDistance < _speed)
+				{
+					horizonSet();
+					_jumpPower = 0;
+					_posZ = 0;
+				}
 				break;
 			}
 			case PLAYER_STATE_JUMP_UP:
 			{
-
+				_posY -= _speed;
+				_moveDistance -= _speed;
+				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+				if (_posZ > 0) _posZ = 0;
+				if (_moveDistance < _speed)
+				{
+					verticalSet();
+					_jumpPower = 0;
+					_posZ = 0;
+				}
 				break;
 			}
 			case PLAYER_STATE_JUMP_DOWN:
 			{
-
+				_posY += _speed;
+				_moveDistance -= _speed;
+				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+				if (_posZ > 0) _posZ = 0;
+				if (_moveDistance < _speed)
+				{
+					verticalSet();
+					_jumpPower = 0;
+					_posZ = 0;
+				}
 				break;
 			}
 		}
 	}
+}
+
+void player::horizonSet()
+{
+	_posX = (int)_posX / TILE_SIZE * TILE_SIZE + 26;
+	_moveDistance = 0;
+	_tileX = _posX / TILE_SIZE;
+	_idxX = _posX / TILE_SIZE;
+}
+
+void player::verticalSet()
+{
+	_posY = (int)_posY / TILE_SIZE * TILE_SIZE + 26;
+	_moveDistance = 0;
+	_tileY = _posY / TILE_SIZE;
+	_idxY = _posY / TILE_SIZE;
 }
 
 void player::initEquipUI()

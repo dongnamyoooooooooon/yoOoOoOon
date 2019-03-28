@@ -337,7 +337,7 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("¸ÊÅø", new mapToolScene);
 	SCENEMANAGER->addScene("Å×½ÁÈå", new testMapScene);
 
-	SCENEMANAGER->changeScene("¸ÊÅø");
+	SCENEMANAGER->changeScene("Å×½ÁÈå");
 	
 	//Ä¿¼­
 	initCursor();

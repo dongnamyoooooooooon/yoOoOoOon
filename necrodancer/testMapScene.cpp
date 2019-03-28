@@ -16,6 +16,17 @@ HRESULT testMapScene::init()
 
 	load("map/testMapSize.map", "map/testMapData.map");
 
+	_player = new player;
+	_player->init(1, 1);
+	_player->setObjType(OBJECT_TYPE_PLAYER);
+
+	_ii = 0;
+	_jj = 0;
+	_iiMax = 0;
+	_jjMax = 0;
+
+	//OBJECTMANAGER->objectPush(*_player);
+
 	return S_OK;
 }
 
@@ -25,15 +36,36 @@ void testMapScene::release()
 
 void testMapScene::update()
 {
+	//OBJECTMANAGER->allObjectUpdate();
+
+	_ii = CAMERA->getPosY() / TILE_SIZE;
+	if (_ii < 0) _ii = 0;
+	_jj = CAMERA->getPosX() / TILE_SIZE;
+	if (_jj < 0) _jj = 0;
+	_iiMax = ((CAMERA->getPosY() + WINSIZEY) / TILE_SIZE) + 2;
+	if (_iiMax >= _tileY) _iiMax = _tileY - 1;
+	_jjMax = ((CAMERA->getPosX() + WINSIZEX) / TILE_SIZE) + 1;
+	if (_jjMax >= _tileX) _jjMax = _tileX - 1;
+
+	_player->update();
 }
 
 void testMapScene::render()
 {
-	OBJECTMANAGER->render();
+	for (; _ii < _iiMax; ++_ii)
+	{
+		for (; _jj < _jjMax; ++_jj)
+		{
+			_vvTile[_ii][_jj]->floor->render(_ii * TILE_SIZE, _jj * TILE_SIZE);
+			_player->render();
+		}
+	}
 }
 
 void testMapScene::load(const char * size, const char * data)
 {
+	OBJECTMANAGER->vectorClear();
+
 	for (int i = _tileY - 1; i >= 0; i--)
 	{
 		for (int j = _tileX - 1; j >= 0; j--)
@@ -106,7 +138,7 @@ void testMapScene::load(const char * size, const char * data)
 		{
 			_vvTile[i][j] = new tagTile;
 			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
-			OBJECTMANAGER->objectPush(*(*(_vvTile[i])[j]).floor);
+			
 		}
 	}
 }

@@ -2,6 +2,7 @@
 #include "singletonBase.h"
 #include "gameNode.h"
 #include "parentObj.h"
+#include "player.h"
 #include <algorithm>
 
 
@@ -53,9 +54,11 @@ private:
 	//			   플레이어
 	// =================================
 
+	player* _player;
 	bool	_isPlayerAlive = true;
 	int		_killCount;
 
+	int		_feverCount;
 
 public:
 	objectManager();
@@ -91,10 +94,17 @@ public:
 	void setTileX(UINT x) { _tileX = x; }
 	void setTileY(UINT y) { _tileY = y; }
 
+	UINT getTileX() { return _tileX; }
+	UINT getTileY() { return _tileY; }
+
+
 	void setIsPlayerAlive() { _isPlayerAlive = false; }
 
 	vector<parentObj*> getVObj() { return _vObj; }
 	vector<parentObj*>::iterator getVIObj() { return _viObj; }
+
+	int getFeverCount() { return _feverCount; }
+	void setFever();
 
 
 	//타일

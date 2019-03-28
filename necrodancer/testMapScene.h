@@ -10,8 +10,12 @@ private:
 	player* _player;
 
 	vector<vector<tagTile*>>			_vvTile;
-	UINT _tileX;
-	UINT _tileY;
+	UINT								_tileX;
+	UINT								_tileY;
+	UINT								_ii;
+	UINT								_jj;
+	UINT								_iiMax;
+	UINT								_jjMax;
 
 public:
 	testMapScene();

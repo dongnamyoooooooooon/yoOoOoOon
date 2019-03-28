@@ -125,6 +125,7 @@ void objectManager::allObjectUpdate()
 			}
 		}
 	}
+	//_player->update();
 	//플레이어 업데이트
 }
 
@@ -211,7 +212,7 @@ parentObj* objectManager::objectPush(parentObj obj)
 	parentObj* tempObject;
 	switch (obj.getObjType())
 	{
-		case OBJECT_TYPE_FLOOR:
+		/*case OBJECT_TYPE_FLOOR:
 		{
 			tempObject = createFloor(obj);
 			tempObject->setObjType(OBJECT_TYPE_FLOOR);
@@ -248,7 +249,7 @@ parentObj* objectManager::objectPush(parentObj obj)
 			tempObject->setObjType(OBJECT_TYPE_TRAP);
 			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
 			break;
-		}
+		}*/
 		case OBJECT_TYPE_PLAYER:
 		{
 			tempObject = createPlayer(obj);
@@ -953,6 +954,9 @@ parentObj * objectManager::createTrap(parentObj obj)
 
 parentObj * objectManager::createPlayer(parentObj obj)
 {
+	player* newObj = new player;
 
-	return nullptr;
+	newObj->init(obj.getIdxX(), obj.getIdxY());
+	_player = newObj;
+	return newObj;
 }

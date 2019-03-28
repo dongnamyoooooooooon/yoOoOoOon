@@ -23,6 +23,9 @@ protected:
 	int				_posX;
 	int				_posY;
 
+	UINT			_tileX;
+	UINT			_tileY;
+
 	
 	int				_frameX;
 	int				_frameY;
@@ -103,6 +106,9 @@ public:
 
 	ITEM_TYPE getItemKind() { return _itemKind; }
 	void setItemKind(ITEM_TYPE type) { _itemKind = type; }
+
+	void setTileX(UINT x) { _tileX = x; }
+	void setTileY(UINT y) { _tileY = y; }
 
 
 };
