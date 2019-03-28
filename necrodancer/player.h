@@ -58,7 +58,7 @@ private:
 	D2D1_RECT_F				_rc;
 	int						_posX;							//플레이어위치
 	int						_posY;							//플레이어위치
-	float					_posZ;							//점프
+	int						_posZ;							//점프
 	int						_moveDistance;					//이동거리
 	float					_jumpPower;						//점프빠워
 	float					_gravity;						//중력
@@ -78,8 +78,8 @@ private:
 	parentObj*			_playerHeadWear;
 	parentObj*			_playerFootWear;
 	parentObj*			_playerTorch;
-	parentObj*			_playerBomb;
 	parentObj*			_playerItem;
+	parentObj*			_playerBomb;
 
 	parentObj*			_putObj = nullptr;
 
@@ -91,6 +91,8 @@ public:
 	void release();
 	void update();
 	void render();
+
+	void playerDead();	//플레이어 죽음
 
 
 	//=======================================
@@ -106,6 +108,7 @@ public:
 	//					키
 	//=======================================
 	void keyUpdate();
+	void playerStateUpdate(bool check);
 
 
 
@@ -113,13 +116,17 @@ public:
 	//					U I
 	//=======================================
 	void initEquipUI();
+	void setEquipUI(parentObj* obj);
+	void brokenItemEquipUI();
 
 
 	//=======================================
 	//				  아 이 템
 	//=======================================
-	void putItem(parentObj* obj);
-	void addInven(parentObj* obj);
+	void putItem(parentObj* obj);	//아이템떨어짐
+	void addInven(parentObj* obj);	//아이템 인벤으로
+	void drawItemHint();
+	void hitPlayer(int damage);		//맞았을때
 	
 };
 

@@ -53,7 +53,7 @@ private:
 	//			   플레이어
 	// =================================
 
-	bool	_isPlayerAlive;
+	bool	_isPlayerAlive = true;
 	int		_killCount;
 
 
@@ -91,7 +91,7 @@ public:
 	void setTileX(UINT x) { _tileX = x; }
 	void setTileY(UINT y) { _tileY = y; }
 
-	void setIsPlayerAlive() { _isPlayerAlive = true; }
+	void setIsPlayerAlive() { _isPlayerAlive = false; }
 
 	vector<parentObj*> getVObj() { return _vObj; }
 	vector<parentObj*>::iterator getVIObj() { return _viObj; }

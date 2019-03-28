@@ -61,6 +61,7 @@ public:
 	virtual void setXY(int x, int y) { this->_posX = x; this->_posY = y; }
 	virtual void setIsItemInven(bool check) { _isItemInven = check; }
 	virtual void setItemInven(int x, int y) {};	//바닥에서 인벤으로
+	virtual void drawHint() {};
 
 	/*string makeSaveInfo();
 	void loadSaveInfo(string* data);*/

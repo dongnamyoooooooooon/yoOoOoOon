@@ -58,6 +58,13 @@ void player::render()
 	drawHead();
 }
 
+void player::playerDead()
+{
+	_playerStat.isLive = false;
+	//사운드설정
+	OBJECTMANAGER->setIsPlayerAlive();
+}
+
 void player::playerAniSetUp()
 {
 	KEYANIMANAGER->addAnimationType(_playerHead);
@@ -142,7 +149,41 @@ void player::keyUpdate()
 		{
 			if (_playerItem != NULL)
 			{
-				_playerItem->useItem(_idxX, _idxY, 0);
+				if (_playerItem->getImgName() == CONSUMABLE_NAME[ITEM_CONSUMABLE_WARDRUM])
+				{
+					_playerItem->useItem(_idxX, _idxY, 1);
+					//사운드적용
+				}
+				else
+					_playerItem->useItem(_idxX, _idxY, 0);
+				//사운드적용
+			}
+			_isBeat = false;
+		}
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('W'))		//리로드
+	{
+		if (_isBeat)
+		{
+			if (_playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_RIFLE]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_BASIC] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_TITANIUM]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_OBSIDIAN]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_BLOOD] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_GOLD])
+			{
+				_playerWeapon->useItem(_idxX, _idxY, 5);
+			}
+			_isBeat = false;
+		}
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('E'))		//폭탄
+	{
+		if (_isBeat)
+		{
+			if (_playerBomb != NULL)
+			{
+				_playerBomb->useItem(_idxX, _idxY, 0);
 				//사운드적용
 			}
 			_isBeat = false;
@@ -170,26 +211,233 @@ void player::keyUpdate()
 				_tempX = _idxX;
 				_tempY = _idxY;
 				OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
-				
-				if(_putObj != NULL)
-				{ 
+
+				if (_putObj != NULL)
+				{
 					putItem(_putObj);
 					_putObj = nullptr;
 				}
 				_playerState = PLAYER_STATE_JUMP_LEFT;
 				_moveDistance = TILE_SIZE;
-				_jumpPower = 0;
+				_jumpPower = JUMPPOWER;
 
 				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
 				{
 					addInven(target);
 				}
 			}
-
+			else if (target->getObjType() == OBJECT_TYPE_WALL)
+			{
+				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				{
+					//사운드적용
+					//카메라흔들림적용
+					OBJECTMANAGER->deleteObject(target);
+				}
+				else if (_playerShovel != NULL)
+				{
+					if (_playerShovel->useItem(_idxX - 1, _idxY, 4))
+					{
+						//카메라흔들림적용
+						//사운드적용
+					}
+				}
+			}
 		}
-
+		_isBeat = false;
 	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+	{
+		_isLeft = false;
+		if (_isBeat)
+		{
+			target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
+			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX + 1, _idxY, 6))
+			{
+				//사운드적용
+				//카메라흔들림적용
+			}
+			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
+			{
+				_tempX = _idxX;
+				_tempY = _idxY;
+				OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
 
+				if (_putObj != NULL)
+				{
+					putItem(_putObj);
+					_putObj = nullptr;
+				}
+				_playerState = PLAYER_STATE_JUMP_RIGHT;
+				_moveDistance = TILE_SIZE;
+				_jumpPower = JUMPPOWER;
+
+				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+				{
+					addInven(target);
+				}
+			}
+			else if (target->getObjType() == OBJECT_TYPE_WALL)
+			{
+				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				{
+					//사운드적용
+					//카메라흔들림적용
+					OBJECTMANAGER->deleteObject(target);
+				}
+				else if (_playerShovel != NULL)
+				{
+					if (_playerShovel->useItem(_idxX + 1, _idxY, 6))
+					{
+						//카메라흔들림적용
+						//사운드적용
+					}
+				}
+			}
+		}
+		_isBeat = false;
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	{
+		if (_isBeat)
+		{
+			target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
+			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY - 1, 8))
+			{
+				//사운드적용
+				//카메라흔들림적용
+			}
+			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
+			{
+				_tempX = _idxX;
+				_tempY = _idxY;
+				OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+
+				if (_putObj != NULL)
+				{
+					putItem(_putObj);
+					_putObj = nullptr;
+				}
+				_playerState = PLAYER_STATE_JUMP_UP;
+				_moveDistance = TILE_SIZE;
+				_jumpPower = JUMPPOWER;
+
+				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+				{
+					addInven(target);
+				}
+			}
+			else if (target->getObjType() == OBJECT_TYPE_WALL)
+			{
+				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				{
+					//사운드적용
+					//카메라흔들림적용
+					OBJECTMANAGER->deleteObject(target);
+				}
+				else if (_playerShovel != NULL)
+				{
+					if (_playerShovel->useItem(_idxX, _idxY - 1, 8))
+					{
+						//카메라흔들림적용
+						//사운드적용
+					}
+				}
+			}
+		}
+		_isBeat = false;
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
+		if (_isBeat)
+		{
+			target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
+			if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY + 1, 2))
+			{
+				//사운드적용
+				//카메라흔들림적용
+			}
+			else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
+			{
+				_tempX = _idxX;
+				_tempY = _idxY;
+				OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+
+				if (_putObj != NULL)
+				{
+					putItem(_putObj);
+					_putObj = nullptr;
+				}
+				_playerState = PLAYER_STATE_JUMP_DOWN;
+				_moveDistance = TILE_SIZE;
+				_jumpPower = JUMPPOWER;
+
+				if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
+				{
+					addInven(target);
+				}
+			}
+			else if (target->getObjType() == OBJECT_TYPE_WALL)
+			{
+				if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				{
+					//사운드적용
+					//카메라흔들림적용
+					OBJECTMANAGER->deleteObject(target);
+				}
+				else if (_playerShovel != NULL)
+				{
+					if (_playerShovel->useItem(_idxX, _idxY + 1, 2))
+					{
+						//카메라흔들림적용
+						//사운드적용
+					}
+				}
+			}
+		}
+		_isBeat = false;
+	}
+}
+
+void player::playerStateUpdate(bool check)
+{
+	_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
+	if (check)
+	{
+		switch (_playerState)
+		{
+			case PLAYER_STATE_JUMP_LEFT:
+			{
+				_posX -= _speed;
+				_moveDistance -= _speed;
+				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+				if (_posZ > 0) _posZ = 0;
+				if (_moveDistance < _speed)
+				{
+
+				}
+
+
+				break;
+			}
+			case PLAYER_STATE_JUMP_RIGHT:
+			{
+
+				break;
+			}
+			case PLAYER_STATE_JUMP_UP:
+			{
+
+				break;
+			}
+			case PLAYER_STATE_JUMP_DOWN:
+			{
+
+				break;
+			}
+		}
+	}
 }
 
 void player::initEquipUI()
@@ -204,6 +452,263 @@ void player::initEquipUI()
 		_inven[i].UIKey = "";
 		_inven[i].object = nullptr;
 		_inven[i].isUse = false;
+	}
+}
+
+void player::setEquipUI(parentObj* obj)
+{
+	for (int i = 0; i < 9; i++)
+	{
+		_inven[i] = { };
+		if (i < 6)
+			_inven[i].pos = { 20 + (i * 70) , 10 };
+		else
+			_inven[i].pos = { 20, 10 + ((i - 5) * 85) };
+	}
+
+	//플레이어 스탯 초기화
+	_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
+
+	if (_playerShovel != NULL)
+	{
+		_inven[0].isUse = true;
+		_inven[0].UIKey = "equipUI_shovel";
+		_inven[0].object = _playerShovel;
+
+		if (_playerShovel == obj)
+			obj->setItemInven(_inven[0].pos.x + 8, _inven[0].pos.y + 13);
+	}
+	if (_playerWeapon != NULL)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_weapon";
+				_inven[i].object = _playerWeapon;
+
+				if (_playerWeapon == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+	if (_playerArmor != NULL)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_armor";
+				_inven[i].object = _playerArmor;
+
+				if (_playerArmor == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+	if (_playerHeadWear != NULL)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_headwear";
+				_inven[i].object = _playerHeadWear;
+
+				if (_playerHeadWear == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+	if (_playerFootWear != NULL)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_footwear";
+				_inven[i].object = _playerFootWear;
+
+				if (_playerFootWear == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+	if (_playerTorch != NULL)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_torch";
+				_inven[i].object = _playerTorch;
+
+				if (_playerTorch == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+	if (_playerItem != NULL)
+	{
+		for (int i = 6; i < 9; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_item";
+				_inven[i].object = _playerItem;
+
+				if (_playerItem == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+	if (_playerBomb != NULL)
+	{
+		for (int i = 6; i < 9; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_bomb";
+				_inven[i].object = _playerBomb;
+
+				if (_playerBomb == obj)
+					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				break;
+			}
+		}
+	}
+}
+
+void player::brokenItemEquipUI()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		_inven[i] = { };
+		if (i < 6)
+			_inven[i].pos = { 20 + (i * 70) , 10 };
+		else
+			_inven[i].pos = { 20, 10 + ((i - 5) * 85) };
+	}
+
+	//플레이어 스탯 초기화
+	_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
+
+	if (_playerShovel != NULL)
+	{
+		_inven[0].isUse = true;
+		_inven[0].UIKey = "equipUI_shovel";
+		_inven[0].object = _playerShovel;
+	}
+	if (_playerWeapon != NULL)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_weapon";
+				_inven[i].object = _playerWeapon;
+				break;
+			}
+		}
+	}
+	if (_playerArmor != NULL)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_armor";
+				_inven[i].object = _playerArmor;
+				break;
+			}
+		}
+	}
+	if (_playerHeadWear != NULL)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_headwear";
+				_inven[i].object = _playerHeadWear;
+				break;
+			}
+		}
+	}
+	if (_playerFootWear != NULL)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_footwear";
+				_inven[i].object = _playerFootWear;
+				break;
+			}
+		}
+	}
+	if (_playerTorch != NULL)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_torch";
+				_inven[i].object = _playerTorch;
+				break;
+			}
+		}
+	}
+	if (_playerItem != NULL)
+	{
+		for (int i = 6; i < 9; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_item";
+				_inven[i].object = _playerItem;
+				break;
+			}
+		}
+	}
+	if (_playerBomb != NULL)
+	{
+		for (int i = 6; i < 9; i++)
+		{
+			if (!_inven[i].isUse)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_bomb";
+				_inven[i].object = _playerBomb;
+				break;
+			}
+		}
 	}
 }
 
@@ -225,7 +730,7 @@ void player::addInven(parentObj * obj)
 				//사운드 적용
 				_putObj = _playerShovel;
 				_playerShovel = obj;
-				
+
 				//적용값
 				//_playerStat.shovelPower += obj
 
@@ -300,147 +805,7 @@ void player::addInven(parentObj * obj)
 				break;
 			}
 		}
-
-		for (int i = 0; i < 9; i++)
-		{
-			_inven[i] = { };
-			if (i < 6)
-				_inven[i].pos = { 20 + (i * 70) , 10 };
-			else
-				_inven[i].pos = { 20, 10 + ((i - 5) * 85) };
-		}
-
-		//플레이어 스탯 초기화
-		_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
-
-		if (_playerShovel != NULL)
-		{
-			_inven[0].isUse = true;
-			_inven[0].UIKey = "equipUI_shovel";
-			_inven[0].object = _playerShovel;
-			
-			if (_playerShovel == obj)
-				obj->setItemInven(_inven[0].pos.x + 8, _inven[0].pos.y + 13);
-		}
-		if (_playerWeapon != NULL)
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_weapon";
-					_inven[i].object = _playerWeapon;
-
-					if (_playerWeapon == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
-					break;
-				}
-			}
-		}
-		if (_playerArmor != NULL)
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_armor";
-					_inven[i].object = _playerArmor;
-
-					if (_playerArmor == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
-					break;
-				}
-			}
-		}
-		if (_playerHeadWear != NULL)
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_headwear";
-					_inven[i].object = _playerHeadWear;
-
-					if (_playerHeadWear == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
-					break;
-				}
-			}
-		}
-		if (_playerFootWear != NULL)
-		{
-			for (int i = 0; i < 5; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_footwear";
-					_inven[i].object = _playerFootWear;
-
-					if (_playerFootWear == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-					
-					break;
-				}
-			}
-		}
-		if (_playerTorch != NULL)
-		{
-			for (int i = 0; i < 6; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_torch";
-					_inven[i].object = _playerTorch;
-
-					if (_playerTorch == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
-					break;
-				}
-			}
-		}
-		if (_playerItem != NULL)
-		{
-			for (int i = 6; i < 9; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_item";
-					_inven[i].object = _playerItem;
-
-					if (_playerItem == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
-					break;
-				}
-			}
-		}
-		if (_playerBomb != NULL)
-		{
-			for (int i = 6; i < 9; i++)
-			{
-				if (!_inven[i].isUse)
-				{
-					_inven[i].isUse = true;
-					_inven[i].UIKey = "equipUI_bomb";
-					_inven[i].object = _playerBomb;
-
-					if (_playerBomb == obj)
-						obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
-					break;
-				}
-			}
-		}
+		setEquipUI(obj);
 	}
 }
 
@@ -459,6 +824,100 @@ void player::drawItemHint()
 	tempObj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
 	if (tempObj != NULL && tempObj->getObjType() == OBJECT_TYPE_ITEM)
 		tempObj->drawHint();
+}
 
+void player::hitPlayer(int damage)
+{
+	if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_GLASS])	//갑옷이 유리갑옷일때
+	{
+		_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
+
+		playerAniStart_Head("right_head");
+		playerAniStart_Body(_curArmor);
+
+		//적용값설정
+		//_playerStat.defence -= _playerArmor.방어력
+
+		_playerArmor = NULL;
+
+		SOUNDMANAGER->play("effect_glass_break");
+		{
+			brokenItemEquipUI();
+		}
+	}
+	else if (_playerHeadWear->getImgName() == HEADWEAR_NAME[ITEM_HEADWEAR_TELEPORT])
+	{
+		SOUNDMANAGER->play("effect_teleport");
+		_playerHeadWear = NULL;
+		/*_indX =
+		_indY =
+		_tileX =				//상점주인이 있는 곳으로
+		_tileY =*/
+		_posX = _idxX * 52 + 26;
+		_posY = _idxY * 52 + 26;
+		{
+			brokenItemEquipUI();
+		}
+	}
+	else
+	{
+		int rand = RND->getFromIntTo(1, 6);
+
+		switch (rand)
+		{
+			case 1: SOUNDMANAGER->play("effect_hurt_player_01"); break;
+			case 2: SOUNDMANAGER->play("effect_hurt_player_02"); break;
+			case 3: SOUNDMANAGER->play("effect_hurt_player_03"); break;
+			case 4: SOUNDMANAGER->play("effect_hurt_player_04"); break;
+			case 5: SOUNDMANAGER->play("effect_hurt_player_05"); break;
+			case 6: SOUNDMANAGER->play("effect_hurt_player_06"); break;
+		}
+
+		int hurt;
+
+		if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_KARADE])	hurt = (damage * 2 - _playerStat.defence) * 2;	//(적공격력 - 내방어력) X 2;
+		else																hurt = damage * 2 - _playerStat.defence;	//플레이어가 입은 데미지 = 적데미지 * 2 - 플레이어 방어력
+
+		if (hurt < 0) hurt = 0;
+
+		_playerStat.heart -= hurt;
+
+		if (_playerTorch->getImgName() == TORCH_NAME[ITEM_TORCH_GLASS])
+		{
+			SOUNDMANAGER->play("effect_glass_break");
+			_playerTorch = NULL;
+			{
+				brokenItemEquipUI();
+			}
+		}
+		if (_playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_DAGGER_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BROADSWORD_GLASS]
+		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_RAPIER_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_SPEAR_GLASS]
+		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_LONGSWORD_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_WHIP_GLASS]
+		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BOW_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_GLASS]
+		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_NINETAILS_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_FIAIL_GLASS])
+		{
+			SOUNDMANAGER->play("effect_glass_break");
+			_playerWeapon = NULL;
+			//바닥에 유리조각 떨어져야 한다.
+			{
+				brokenItemEquipUI();
+			}
+		}
+		if (_playerShovel->getImgName() == SHOVEL_NAME[ITEM_SHOVEL_GLASS])
+		{
+			SOUNDMANAGER->play("effect_glass_break");
+			_playerShovel = NULL;
+			//바닥에 유리조각 떨어져야 한다.
+			{
+				brokenItemEquipUI();
+			}
+		}
+	}
+	//카메라 흔들림 설정
+	if (_playerStat.heart <= 0)
+	{
+		_playerStat.heart = 0;
+		this->playerDead();
+	}
 
 }
