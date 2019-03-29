@@ -51,7 +51,7 @@ void floorZone_01::release()
 
 void floorZone_01::update()
 {
-	if (!_isBeat)
+	/*if (!_isBeat)
 	{
 		if (_isCrossStripes)
 		{
@@ -64,14 +64,14 @@ void floorZone_01::update()
 			else _frameX = 0;
 		}
 		_isBeat = false;
-	}
+	}*/
 
-	if (OBJECTMANAGER->getFeverCount() != 0)
+	if (OBJECTMANAGER->getChainCount() != 0)
 		_frameY = 1;
 	else
 		_frameY = 0;
 
-	//floorAni();
+	floorAni();
 }
 
 void floorZone_01::render()
@@ -83,6 +83,23 @@ void floorZone_01::render()
 			if (_isSight)
 			{
 				if(_hasLight)
+					IMAGEMANAGER->findImage(IMAGE_NAME[IMAGE_NAME_FLOOR_01])->frameRender(_idxX * TILE_SIZE, _idxY * TILE_SIZE, _frameX, 1);
+				else
+					IMAGEMANAGER->findImage(IMAGE_NAME[IMAGE_NAME_FLOOR_01])->frameRender(_idxX * TILE_SIZE, _idxY * TILE_SIZE, _frameX, 1, 0.5f);
+			}
+			else
+			{
+				IMAGEMANAGER->findImage(IMAGE_NAME[IMAGE_NAME_FLOOR_01])->frameRender(_idxX * TILE_SIZE, _idxY * TILE_SIZE, _frameX, 1, 0.5f);
+			}
+		}
+	}
+	else
+	{
+		if (_isSaw)
+		{
+			if (_isSight)
+			{
+				if (_hasLight)
 					IMAGEMANAGER->findImage(IMAGE_NAME[IMAGE_NAME_FLOOR_01])->frameRender(_idxX * TILE_SIZE, _idxY * TILE_SIZE, _frameX, _frameY);
 				else
 					IMAGEMANAGER->findImage(IMAGE_NAME[IMAGE_NAME_FLOOR_01])->frameRender(_idxX * TILE_SIZE, _idxY * TILE_SIZE, _frameX, _frameY, 0.5f);
@@ -91,7 +108,6 @@ void floorZone_01::render()
 			{
 				IMAGEMANAGER->findImage(IMAGE_NAME[IMAGE_NAME_FLOOR_01])->frameRender(_idxX * TILE_SIZE, _idxY * TILE_SIZE, _frameX, _frameY, 0.5f);
 			}
-			
 		}
 	}
 }
@@ -114,7 +130,7 @@ void floorZone_01::floorAni()
 {
 	_count++;
 
-	if (_count % 8 == 0)
+	if (_count % 10 == 0)
 	{
 		_count = 0;
 		if (_isCrossStripes)

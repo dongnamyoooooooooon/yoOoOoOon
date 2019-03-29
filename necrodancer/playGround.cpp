@@ -23,7 +23,7 @@ HRESULT playGround::init()
 	//맵툴버튼
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_FLOOR], L"image/button/mapTool_floor.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_WALL], L"image/button/mapTool_wall.png", 100, 90, 1, 3);
-	//IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_CHEST], L"image/button/mapTool_chest.png", 100, 90, 1, 3);
+	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_PLAYER], L"image/button/mapTool_player.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_ENEMY], L"image/button/mapTool_enemy.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_TRAP], L"image/button/mapTool_trap.png", 100, 90, 1, 3);
 	IMAGEMANAGER->addFrameImage(BUTTON_NAME[MAPTOOL_BUTTON_ITEM], L"image/button/mapTool_item.png", 100, 90, 1, 3);
@@ -307,7 +307,8 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addImage("equipUI_throw", L"image/ui/ui_slot_throw.png", 60, 84);
 	IMAGEMANAGER->addImage("equipUI_throw2", L"image/ui/ui_slot_throw2.png", 60, 84);
 
-
+	//아이템설명
+	IMAGEMANAGER->addImage("hint_dagger_basic", L"image/hint/hint_daggerthrowable.png", 140, 18);
 
 	//음악
 	SOUNDMANAGER->addSound("mapTool", "sound/music/boss_10.ogg", true, true);
@@ -321,17 +322,24 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("boss_all", "sound/music/boss4_all.mp3", true, true);
 
 	//사운드
-	SOUNDMANAGER->addSound("effect_dig_fail", "sound/effect/sfx_dig_fail.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_glass_break", "sound/effect/sfx_glass_break.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_teleport", "sound/effect/sfx_teleport.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_hurt_player_01", "sound/effect/vo_cad_hurt_01.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_hurt_player_02", "sound/effect/vo_cad_hurt_02.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_hurt_player_03", "sound/effect/vo_cad_hurt_03.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_hurt_player_04", "sound/effect/vo_cad_hurt_04.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_hurt_player_05", "sound/effect/vo_cad_hurt_05.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_hurt_player_06", "sound/effect/vo_cad_hurt_06.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_pickup_armor", "sound/effect/sfx_pickup_armor.ogg", false, false);
-	SOUNDMANAGER->addSound("effect_pickup_weapon", "sound/effect/sfx_pickup_weapon.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_dig_fail", "sound/effect/sfx_dig_fail.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_glass_break", "sound/effect/sfx_glass_break.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_teleport", "sound/effect/sfx_teleport.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_hurt_player_01", "sound/effect/vo_cad_hurt_01.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_hurt_player_02", "sound/effect/vo_cad_hurt_02.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_hurt_player_03", "sound/effect/vo_cad_hurt_03.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_hurt_player_04", "sound/effect/vo_cad_hurt_04.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_hurt_player_05", "sound/effect/vo_cad_hurt_05.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_hurt_player_06", "sound/effect/vo_cad_hurt_06.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_pickup_armor", "sound/effect/sfx_pickup_armor.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_pickup_weapon", "sound/effect/sfx_pickup_weapon.ogg", false, false);
+
+	SOUNDMANAGER->addSound("sound_chain_break", "sound/effect/sfx_chain_break.ogg", false, false);
+	SOUNDMANAGER->addSound("sound_chain_groove", "sound/effect/sfx_chain_groove.ogg", false, false);
+
+
+	//이펙트
+	EFFECTMANAGER->addEffect("effect_dagger_basic", "image/effect/swipe_dagger.png", 144, 48, 48, 48, 8, 1, 50);
 
 
 	SCENEMANAGER->addScene("맵툴", new mapToolScene);

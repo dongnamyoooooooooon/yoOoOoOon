@@ -11,6 +11,9 @@ private:
 	POINT _pos;
 	POINT _curPos;
 
+	vector<parentObj*>			 _vObj;
+	vector<parentObj*>::iterator _viObj;
+
 	vector<vector<tagTile*>>			_vvTile;
 	UINT								_tileX;
 	UINT								_tileY;
@@ -29,5 +32,6 @@ public:
 	void render();
 
 	void load(const char* size, const char* data);
+	void playerMgr();
 };
 

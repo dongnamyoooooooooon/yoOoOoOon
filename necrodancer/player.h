@@ -119,6 +119,7 @@ public:
 	void playerAniStart_Body(string keyName);
 	void drawBody();
 	void drawHead();
+	void drawShadow();
 
 	//=======================================
 	//					키
@@ -145,12 +146,17 @@ public:
 	//=======================================
 	//				  아 이 템
 	//=======================================
+	void initItem();
 	void putItem(parentObj* obj);	//아이템떨어짐
 	void addInven(parentObj* obj);	//아이템 인벤으로
 	void drawItemHint();
 	void hitPlayer(int damage);		//맞았을때
 	void equipUpdate();
 	
+
+	int getPlayerPosX() { return _posX; }
+	int getPlayerPosY() { return _posY; }
+
 };
 
 

@@ -160,7 +160,10 @@ tagTilePack parentObj::makeSave()
 		pack->itemType = _itemType;
 		pack->itemSubType = _itemSubType;
 	}
-
+	else if (pack->objType == OBJECT_TYPE_PLAYER)
+	{
+		pack->imgName = 0;
+	}
 
 
 	return *pack;
@@ -173,7 +176,6 @@ void parentObj::makeLoad(tagTilePack * pack)
 	_appValue = pack->appValue;
 	_idxX = pack->idxX;
 	_idxY = pack->idxY;
-	_imgKey = (IMAGE_NAME_INFO)pack->imgName;
 	_pos.x = pack->posX;
 	_pos.y = pack->posY;
 	_posX = pack->pos_X;
@@ -185,6 +187,7 @@ void parentObj::makeLoad(tagTilePack * pack)
 
 	if (_objType == OBJECT_TYPE_ITEM)
 	{
+		_imgKey = (IMAGE_NAME_INFO)pack->imgName;
 		_itemSubType = pack->itemSubType;
 		
 		switch (_itemType)
@@ -201,8 +204,15 @@ void parentObj::makeLoad(tagTilePack * pack)
 			case 9: _img = IMAGEMANAGER->findImage(BOMB_NAME[_itemSubType]); break;
 		}
 	}
+	else if (_objType == OBJECT_TYPE_PLAYER)
+	{
+		_imgKey = 0;
+		_imgName = "player_head";
+		_img = IMAGEMANAGER->findImage("player_head");
+	}
 	else
 	{
+		_imgKey = (IMAGE_NAME_INFO)pack->imgName;
 		_imgName = IMAGE_NAME[_imgKey];
 		_img = IMAGEMANAGER->findImage(IMAGE_NAME[_imgKey]);
 	}

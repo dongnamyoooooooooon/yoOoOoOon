@@ -156,7 +156,7 @@ void d2dManager::drawRectangle(COLORREF rgb, float left, float top, float right,
 	if ( !isRectFInRangeWindow(rcf) )
 		return;
 
-	_renderTarget->DrawRectangle(rcf, _yellowBrush, 1);
+	_renderTarget->DrawRectangle(rcf, createBrush(rgb, 1), 1);
 }
 
 void d2dManager::drawRectangle(float left, float top, float right, float bottom)
@@ -166,7 +166,7 @@ void d2dManager::drawRectangle(float left, float top, float right, float bottom)
 	if (!isRectFInRangeWindow(rcf))
 		return;
 
-	_renderTarget->DrawRectangle(rcf, _defaultBrush, 1);
+	_renderTarget->DrawRectangle(rcf, _yellowBrush, 1);
 }
 
 void d2dManager::drawRectangle(D2D_RECT_F rc)

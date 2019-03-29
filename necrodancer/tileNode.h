@@ -265,7 +265,7 @@ public:
 			case OBJECT_TYPE_PLAYER:
 			{
 				temp = new parentObj;
-				temp->init(objName, objPosX, objPosY, type_obj, imgKey);
+				temp->init("", objPosX, objPosY, type_obj, 0);
 				player = temp;
 				break;
 			}
@@ -292,9 +292,8 @@ public:
 			item->makeLoad(&pack->item);
 		if (enemy != NULL)
 			enemy->makeLoad(&pack->enemy);
-		if (player != NULL)
+		if (enemy != NULL)
 			player->makeLoad(&pack->player);
-
 	}
 
 	//void makePack()

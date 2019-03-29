@@ -16,18 +16,13 @@ HRESULT testMapScene::init()
 
 	load("map/testMapSize.map", "map/testMapData.map");
 
-	_player = new player;
-	_player->init(1, 1);
-	_player->setObjType(OBJECT_TYPE_PLAYER);
-
 	_ii = 0;
 	_jj = 0;
 	_iiMax = 0;
 	_jjMax = 0;
 
+	OBJECTMANAGER->initBeat("sound/music/zone1.txt", "test_music");
 
-
-	//OBJECTMANAGER->objectPush(*_player);
 
 	return S_OK;
 }
@@ -38,18 +33,10 @@ void testMapScene::release()
 
 void testMapScene::update()
 {
-	//OBJECTMANAGER->allObjectUpdate();
-
-	_ii = CAMERA->getPosY() / TILE_SIZE;
-	if (_ii < 0) _ii = 0;
-	_jj = CAMERA->getPosX() / TILE_SIZE;
-	if (_jj < 0) _jj = 0;
-	_iiMax = ((CAMERA->getPosY() + WINSIZEY) / TILE_SIZE) + 2;
-	if (_iiMax >= _tileY) _iiMax = _tileY - 1;
-	_jjMax = ((CAMERA->getPosX() + WINSIZEX) / TILE_SIZE) + 1;
-	if (_jjMax >= _tileX) _jjMax = _tileX - 1;
-
-	_player->update();
+	playerMgr();
+	CAMERA->move(_pos.x, _pos.y);
+	OBJECTMANAGER->createBeat();
+	OBJECTMANAGER->deleteBeat();
 }
 
 void testMapScene::render()
@@ -63,6 +50,7 @@ void testMapScene::render()
 	//	}
 	//}
 	OBJECTMANAGER->render();
+	//_player->render();
 }
 
 void testMapScene::load(const char * size, const char * data)
@@ -165,4 +153,23 @@ void testMapScene::load(const char * size, const char * data)
 			}
 		}
 	}
+}
+
+void testMapScene::playerMgr()
+{
+	_player = OBJECTMANAGER->getPlayer();
+
+	_pos.x = _player->getPlayerPosX();
+	_pos.y = _player->getPlayerPosY();
+
+	_player->update();
+
+	_vObj = OBJECTMANAGER->getVObj();
+	_viObj = OBJECTMANAGER->getVIObj();
+
+	OBJECTMANAGER->allObjectUpdate();
+
+	_curPos.x = _player->getPlayerPosX();
+	_curPos.y = _player->getPlayerPosY();
+
 }

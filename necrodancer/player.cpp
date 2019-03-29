@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
+#include "weapon_dagger_basic.h"
 
 
 player::player()
@@ -36,7 +37,9 @@ HRESULT player::init(UINT idx_X, UINT idx_Y)
 	_heartBeat = 0;
 	_heartBeatCount = 0;
 
+
 	initEquipUI();
+	initItem();
 	playerAniSetUp();
 
 	return S_OK;
@@ -68,9 +71,11 @@ void player::render()
 {
 	drawBody();
 	drawHead();
-	IMAGEMANAGER->findImage("player_shadow")->render(_posX - 26, _posY - 26, 0.2f);
+	drawShadow();
 
+	drawPlayerUI();
 	drawEquipUI();
+	//layCast();
 }
 
 void player::playerDead()
@@ -89,8 +94,8 @@ void player::layCast()
 	float	sightMax = 6.0f;
 	float	currentSight = 0.0f;
 
-	_playerX = (float)_idxX * TILE_SIZE;
-	_playerY = (float)_idxY * TILE_SIZE;
+	_playerX = (float)_idxX;
+	_playerY = (float)_idxY;
 
 	_layValue = 0;
 	_layMax = (float)_playerStat.torchLight - 0.25;
@@ -106,7 +111,7 @@ void player::layCast()
 
 	while (_radius < 2 * PI)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_F5))
+		if (KEYMANAGER->isStayKeyDown(VK_F5))
 		{
 			D2DMANAGER->drawLine(RGB(0, 255, 255), this->_posX + 26, this->_posY + 26, 
 								this->_posX + 26 + _layValue * cos(_radius) * TILE_SIZE,
@@ -248,7 +253,7 @@ void player::playerAniSetUp()
 	int right_body_glass[] = { 36, 37, 38, 39 };
 	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_GLASS], _playerBody.c_str(), right_body_glass, 4, ANISPEED, true);
 
-	_curArmor = ARMOR_NAME[ITEM_ARMOR_GLASS];
+	_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
 
 	playerAniStart_Head("right_head");
 	playerAniStart_Body(_curArmor);
@@ -277,6 +282,11 @@ void player::drawHead()
 
 	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
 	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
+}
+
+void player::drawShadow()
+{
+	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY - 26);
 }
 
 void player::keyUpdate()
@@ -332,7 +342,7 @@ void player::keyUpdate()
 
 	if (_playerState != PLAYER_STATE_NONE)
 	{
-		playerStateUpdate(_isMove);
+		playerStateUpdate(true);
 	}
 
 	if (_moveDistance == 0)
@@ -1112,14 +1122,14 @@ void player::drawEquipUI()
 		{
 			_inven[i].object->setXY(_inven[i].pos.x + 3, _inven[i].pos.y + 12);
 
-			if (_inven[i].object->getPos().x == _inven[i].pos.x + 8)
+			if (_inven[i].object->getPosX() == _inven[i].pos.x + 3)
 			{
 				if (_inven[i].object->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
 				{
 					IMAGEMANAGER->frameRender(_inven[i].UIKey, _inven[i].pos.x + 13, _inven[i].pos.y - 10, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
 				}
 				else
-					IMAGEMANAGER->frameRender(_inven[i].object->getImgName(), _inven[i].pos.x + 8, _inven[i].pos.y + 13, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
+					IMAGEMANAGER->frameRender(_inven[i].object->getImgName(), CAMERA->getPosX() + _inven[i].pos.x + 8, CAMERA->getPosY() + _inven[i].pos.y + 13, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
 			}
 			if (_inven[i].object->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
 			{
@@ -1131,8 +1141,8 @@ void player::drawEquipUI()
 
 			if (_inven[i].UIKey == "equipUI_shovel")
 				IMAGEMANAGER->findImage("equipUI_shovel")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
-			else if (_inven[i].UIKey == "equipUI_attack")
-				IMAGEMANAGER->findImage("equipUI_attack")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_weapon")
+				IMAGEMANAGER->findImage("equipUI_weapon")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
 			else if (_inven[i].UIKey == "equipUI_body")
 				IMAGEMANAGER->findImage("equipUI_body")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
 			else if (_inven[i].UIKey == "equipUI_head")
@@ -1143,12 +1153,8 @@ void player::drawEquipUI()
 				IMAGEMANAGER->findImage("equipUI_torch")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
 			else if (_inven[i].UIKey == "equipUI_item")
 				IMAGEMANAGER->findImage("equipUI_item")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
-
 		}
-
 	}
-
-
 }
 
 void player::bounceHeart()
@@ -1164,11 +1170,53 @@ void player::bounceHeart()
 	}
 }
 
+void player::initItem()
+{
+	_playerArmor = nullptr;
+	_playerWeapon = nullptr;
+	_playerBomb = nullptr;
+	_playerFootWear = nullptr;
+	_playerHeadWear = nullptr;
+	_playerItem = nullptr;
+	_playerShovel = nullptr;
+	_playerTorch = nullptr;
+
+	parentObj tempObj;
+	parentObj* pTempObj;
+	weapon_dagger_basic weapon;
+
+	weapon.init(WEAPON_NAME[ITEM_WEAPON_DAGGER_BASIC], _idxX, _idxY - 1, ITEM_TYPE_WEAPON);
+	tempObj = weapon;
+	pTempObj = OBJECTMANAGER->objectPush(tempObj);
+
+	_playerWeapon = pTempObj;
+	_playerWeapon->setIsCurInven(true);
+	OBJECTMANAGER->setTileIdx(_playerWeapon, 39, 39);
+	_playerWeapon->setIsMoveInven(false);
+
+	if (_playerWeapon != NULL)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			if (_inven[i].isUse == false)
+			{
+				_inven[i].isUse = true;
+				_inven[i].UIKey = "equipUI_weapon";
+				_inven[i].object = _playerWeapon;
+				break;
+			}
+		}
+	}
+
+
+
+}
+
 void player::putItem(parentObj * obj)
 {
 	obj->setXY(_posX, _posY - 20);
 	OBJECTMANAGER->setTileIdx(obj, _tempX, _tempY);
-	obj->setIsItemInven(false);
+	obj->setIsCurInven(false);
 }
 
 void player::addInven(parentObj * obj)
@@ -1210,6 +1258,7 @@ void player::addInven(parentObj * obj)
 				//사운드 적용
 				_putObj = _playerArmor;
 				_playerArmor = obj;
+				_curArmor = _playerArmor->getImgName();
 				break;
 			}
 			case ITEM_TYPE_HEADWEAR:
@@ -1292,14 +1341,14 @@ void player::hitPlayer(int damage)
 
 		_playerArmor = NULL;
 
-		SOUNDMANAGER->play("effect_glass_break");
+		SOUNDMANAGER->play("sound_glass_break");
 		{
 			brokenItemEquipUI();
 		}
 	}
 	else if (_playerHeadWear->getImgName() == HEADWEAR_NAME[ITEM_HEADWEAR_TELEPORT])
 	{
-		SOUNDMANAGER->play("effect_teleport");
+		SOUNDMANAGER->play("sound_teleport");
 		_playerHeadWear = NULL;
 		/*_indX =
 		_indY =
@@ -1317,12 +1366,12 @@ void player::hitPlayer(int damage)
 
 		switch (rand)
 		{
-			case 1: SOUNDMANAGER->play("effect_hurt_player_01"); break;
-			case 2: SOUNDMANAGER->play("effect_hurt_player_02"); break;
-			case 3: SOUNDMANAGER->play("effect_hurt_player_03"); break;
-			case 4: SOUNDMANAGER->play("effect_hurt_player_04"); break;
-			case 5: SOUNDMANAGER->play("effect_hurt_player_05"); break;
-			case 6: SOUNDMANAGER->play("effect_hurt_player_06"); break;
+			case 1: SOUNDMANAGER->play("sound_hurt_player_01"); break;
+			case 2: SOUNDMANAGER->play("sound_hurt_player_02"); break;
+			case 3: SOUNDMANAGER->play("sound_hurt_player_03"); break;
+			case 4: SOUNDMANAGER->play("sound_hurt_player_04"); break;
+			case 5: SOUNDMANAGER->play("sound_hurt_player_05"); break;
+			case 6: SOUNDMANAGER->play("sound_hurt_player_06"); break;
 		}
 
 		int hurt;
@@ -1336,7 +1385,7 @@ void player::hitPlayer(int damage)
 
 		if (_playerTorch->getImgName() == TORCH_NAME[ITEM_TORCH_GLASS])
 		{
-			SOUNDMANAGER->play("effect_glass_break");
+			SOUNDMANAGER->play("sound_glass_break");
 			_playerTorch = NULL;
 			{
 				brokenItemEquipUI();
@@ -1348,7 +1397,7 @@ void player::hitPlayer(int damage)
 		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BOW_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_GLASS]
 		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_NINETAILS_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_FIAIL_GLASS])
 		{
-			SOUNDMANAGER->play("effect_glass_break");
+			SOUNDMANAGER->play("sound_glass_break");
 			_playerWeapon = NULL;
 			//바닥에 유리조각 떨어져야 한다.
 			{
@@ -1357,7 +1406,7 @@ void player::hitPlayer(int damage)
 		}
 		if (_playerShovel->getImgName() == SHOVEL_NAME[ITEM_SHOVEL_GLASS])
 		{
-			SOUNDMANAGER->play("effect_glass_break");
+			SOUNDMANAGER->play("sound_glass_break");
 			_playerShovel = NULL;
 			//바닥에 유리조각 떨어져야 한다.
 			{

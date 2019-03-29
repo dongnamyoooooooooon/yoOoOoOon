@@ -82,6 +82,12 @@
     <Filter Include="PlayGround\floor">
       <UniqueIdentifier>{a3f94219-a513-4ab6-88b7-a1250d30ed3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\item\getherItem">
+      <UniqueIdentifier>{7af78acc-1ccf-49dc-8eaa-c05e721e67b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\item\getherItem\weapon">
+      <UniqueIdentifier>{a9fcd504-5554-432d-9831-6fb373185d0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -193,7 +199,13 @@
       <Filter>PlayGround\scene</Filter>
     </ClInclude>
     <ClInclude Include="floorZone_01.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>PlayGround\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>PlayGround\item</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_dagger_basic.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -285,7 +297,13 @@
       <Filter>PlayGround\scene</Filter>
     </ClCompile>
     <ClCompile Include="floorZone_01.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>PlayGround\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>PlayGround\item</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_dagger_basic.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

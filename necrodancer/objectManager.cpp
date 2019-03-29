@@ -3,6 +3,7 @@
 #include "parentObj.h"
 
 #include "floorZone_01.h"
+#include "weapon_dagger_basic.h"
 
 
 objectManager::objectManager()
@@ -87,25 +88,26 @@ void objectManager::render()
 	}
 
 
-	////비트
-	////RECT rc;
-	//for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
-	//{
-	//	if (_viBeat->beat < 1500)
-	//	{
-	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, 1.0f);
-	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, 1.0f);
-	//	}
-	//	else
-	//	{
-	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, _viBeat->alpha);
-	//		_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, _viBeat->alpha);
-	//	}
-	//}
-	//if (_vBeat.begin()->left_RC.right <= WINSIZEX / 2)
-	//	IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
-	//else
-	//	IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
+	//비트
+	//RECT rc;
+	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
+	{
+		if (_viBeat->beat < 1500)
+		{
+			_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, 1.0f);
+			_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, 1.0f);
+		}
+		else
+		{
+			_viBeat->img->render(CAMERA->getPosX() + _viBeat->left_RC.left, CAMERA->getPosY() + _viBeat->left_RC.top, 10, 48, _viBeat->alpha);
+			_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, _viBeat->alpha);
+		}
+	}
+	if (_vBeat.begin()->left_RC.right <= WINSIZEX / 2)
+		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
+	else
+		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
+
 }
 
 void objectManager::vectorClear()
@@ -148,7 +150,7 @@ void objectManager::allObjectUpdate()
 			}
 		}
 	}
-	//_player->update();
+
 	//플레이어 업데이트
 }
 
@@ -178,21 +180,28 @@ void objectManager::deleteObject(parentObj * obj)
 	_vvObjTile[tempY][tempX] = nullptr;
 }
 
-void objectManager::createBeat()
+void objectManager::initBeat(const char * fileName, string musicKey)
 {
+	SOUNDMANAGER->loadBeat(fileName, _beatKey);
 
-	SOUNDMANAGER->loadBeat(_beatFile, _beatKey);
+	_beatFile = fileName;
+	_musicKey = musicKey;
 
 	if (_musicKey == "boss")
 		SOUNDMANAGER->playBossZone(_musicKey, _volume);
 	else
-		SOUNDMANAGER->playZone(_musicKey, 1.0f);
+		SOUNDMANAGER->playZone(_musicKey, 0.1f);
 
 	_vBeat = SOUNDMANAGER->getVBeat();
 	_viBeat = SOUNDMANAGER->getVIBeat();
 	_mBeat = SOUNDMANAGER->getMBeat();
 	_miBeat = SOUNDMANAGER->getMIBeat();
+}
 
+void objectManager::createBeat()
+{
+
+	_playTime = SOUNDMANAGER->getPosition(_musicKey);
 
 	//RECT rc;
 	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
@@ -228,6 +237,15 @@ void objectManager::createBeat()
 					(float)(WINSIZEX / 2) + 70,
 					(float)WINSIZEY - 40 };
 
+}
+
+void objectManager::deleteBeat()
+{
+	if (_vBeat.begin()->beat < _playTime - 50)
+	{
+		_player->bounceHeart();
+		if (_musicKey != "어쩌고 저쩌고") _vBeat.erase(_vBeat.begin());
+	}
 }
 
 parentObj* objectManager::objectPush(parentObj obj)
@@ -406,7 +424,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_DAGGER_BASIC])
 	{
-
+		weapon_dagger_basic* tempObj = new weapon_dagger_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_DAGGER_TITANIUM])
 	{
@@ -983,6 +1003,38 @@ parentObj * objectManager::createPlayer(parentObj obj)
 	newObj->init(obj.getIdxX(), obj.getIdxY());
 	_player = newObj;
 	return newObj;
+}
+
+void objectManager::grooveChain()
+{
+	if (_chainCount == 0)
+	{
+		_chainCount++;
+		//사운드 적용
+		SOUNDMANAGER->play("sound_chain_groove");
+	}
+
+	_killCount++;
+	
+	if (_killCount % 5 == 0 && _chainCount < 4)
+	{
+		_chainCount++;
+		//사운드 적용
+		SOUNDMANAGER->play("sound_chain_groove");
+	}
+
+}
+
+void objectManager::breakChain()
+{
+	if (_chainCount != 0)
+	{
+		SOUNDMANAGER->play("sound_chain_break");
+		_killCount = 0;
+		_chainCount = 0;
+	}
+
+
 }
 
 void objectManager::initLight()

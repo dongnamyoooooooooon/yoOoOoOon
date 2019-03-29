@@ -37,10 +37,12 @@ void camera::update()
 {
 }
 
-void camera::move(float x, float y)
+void camera::move(int x, int y)
 {
-	_posX = x - 480.0f;
-	_posY = y - 260.0f;
+	_posX = x - 480;
+	if (_posX <= 0) _posX = 0;
+	_posY = y - 260;
+	if (_posY <= 0) _posY = 0;
 }
 
 void camera::mapToolMove()

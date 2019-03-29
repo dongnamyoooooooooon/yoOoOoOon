@@ -24,7 +24,7 @@ public:
 	void release();
 	void update();
 
-	void move(float x, float y);
+	void move(int x, int y);
 	void mapToolMove();
 	void sampleToolMove();
 

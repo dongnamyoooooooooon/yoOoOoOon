@@ -6,7 +6,7 @@
 #include <algorithm>
 
 class floorZone_01;
-
+class weapon_dagger_basic;
 
 class parentObj;
 class objectManager : public singletonBase<objectManager>, public gameNode
@@ -60,7 +60,7 @@ private:
 	bool	_isPlayerAlive = true;
 	int		_killCount;
 
-	int		_feverCount;
+	int		_chainCount;
 
 public:
 	objectManager();
@@ -80,7 +80,9 @@ public:
 	void deleteObject(parentObj* obj);
 
 	//비트
+	void initBeat(const char* fileName, string musicKey);
 	void createBeat();
+	void deleteBeat();
 
 
 	//오브젝트생성
@@ -92,7 +94,8 @@ public:
 	parentObj* createTrap(parentObj obj);
 	parentObj* createPlayer(parentObj obj);
 
-
+	//카메라
+	
 	
 	void setTileX(UINT x) { _tileX = x; }
 	void setTileY(UINT y) { _tileY = y; }
@@ -106,9 +109,13 @@ public:
 	vector<parentObj*> getVObj() { return _vObj; }
 	vector<parentObj*>::iterator getVIObj() { return _viObj; }
 
-	int getFeverCount() { return _feverCount; }
-	void setFever();
+	int getChainCount() { return _chainCount; }
+	void grooveChain();
+	void breakChain();
 
+
+	//플레이어
+	player* getPlayer() { return _player; }
 
 	//타일
 	parentObj* getCheckObj(int x, int y) { return _vvObjTile[y][x]; }

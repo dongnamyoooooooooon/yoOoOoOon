@@ -40,7 +40,8 @@ protected:
 	bool			_isSight;		//플레이어 시야 안에 있는지?
 	bool			_isSaw;			//플레이어에게 보여졌는지?
 	
-	bool			_isItemInven;
+	bool			_isCurInven;
+	bool			_isMoveInven;
 
 
 
@@ -62,7 +63,8 @@ public:
 	//아이템
 	virtual bool useItem(int idxX, int idxY, int dir) { return false; }
 	virtual void setXY(int x, int y) { this->_posX = x; this->_posY = y; }
-	virtual void setIsItemInven(bool check) { _isItemInven = check; }
+	virtual void setIsCurInven(bool check) { _isCurInven = check; }
+	virtual void setIsMoveInven(bool check) { _isMoveInven = check; }
 	virtual void setItemInven(int x, int y) {};	//바닥에서 인벤으로
 	virtual void drawHint() {};
 
@@ -73,6 +75,10 @@ public:
 	//=======================================
 	//			  g e t & s e t
 	//=======================================
+
+	int getPosX() { return _posX; }
+	int getPosY() { return _posY; }
+
 
 	bool getTorch() { return _isTorch; }
 	void setTorch(bool check) { _isTorch = check; }
