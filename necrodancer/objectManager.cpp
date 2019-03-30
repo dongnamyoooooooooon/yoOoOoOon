@@ -4,6 +4,8 @@
 
 #include "floorZone_01.h"
 #include "weapon_dagger_basic.h"
+#include "shovel_basic.h"
+#include "wallZone_01.h"
 
 
 objectManager::objectManager()
@@ -17,7 +19,7 @@ objectManager::~objectManager()
 HRESULT objectManager::init()
 {
 	
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		vector<parentObj*> vFloorTile;
 		vector<parentObj*> vObjectTile;
@@ -107,12 +109,15 @@ void objectManager::render()
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
 	else
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
+	
+	_player->drawEquipUI();
+	_player->drawPlayerUI();
 
 }
 
 void objectManager::vectorClear()
 {
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; i < _tileX; j++)
 		{
@@ -134,7 +139,7 @@ void objectManager::objectSort_IndexX()
 
 void objectManager::allObjectUpdate()
 {
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -150,8 +155,6 @@ void objectManager::allObjectUpdate()
 			}
 		}
 	}
-
-	//플레이어 업데이트
 }
 
 void objectManager::deleteObject(parentObj * obj)
@@ -338,7 +341,9 @@ parentObj * objectManager::createWall(parentObj obj)
 
 	if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_01])
 	{
-
+		wallZone_01* tempObj = new wallZone_01;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_02])
 	{
@@ -396,7 +401,9 @@ parentObj * objectManager::createItem(parentObj obj)
 {
 	if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_BASIC])
 	{
-
+		shovel_basic* tempObj = new shovel_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_TITANIUM])
 	{

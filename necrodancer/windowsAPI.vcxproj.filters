@@ -55,9 +55,6 @@
     <Filter Include="PlayGround\camera">
       <UniqueIdentifier>{411658ea-c87c-4119-a62f-1966e33e45a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayGround\object">
-      <UniqueIdentifier>{ab60129a-ecb7-4a06-9391-805bded8c5b3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PlayGround\mapTool">
       <UniqueIdentifier>{6fc4ad5f-820b-4cd5-a707-5708dabed8f4}</UniqueIdentifier>
     </Filter>
@@ -79,14 +76,26 @@
     <Filter Include="PlayGround\dataInfo">
       <UniqueIdentifier>{9dc1512b-9bef-4aca-8853-bdb163e18915}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayGround\floor">
-      <UniqueIdentifier>{a3f94219-a513-4ab6-88b7-a1250d30ed3d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PlayGround\item\getherItem">
       <UniqueIdentifier>{7af78acc-1ccf-49dc-8eaa-c05e721e67b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="PlayGround\item\getherItem\weapon">
       <UniqueIdentifier>{a9fcd504-5554-432d-9831-6fb373185d0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\item\getherItem\shovel">
+      <UniqueIdentifier>{2ed2c749-845b-4305-a81b-02ce3c1bb77d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\대빵">
+      <UniqueIdentifier>{ab60129a-ecb7-4a06-9391-805bded8c5b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\object">
+      <UniqueIdentifier>{e16261d4-638a-4e63-bd86-893a3a88274c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\object\floor">
+      <UniqueIdentifier>{a3f94219-a513-4ab6-88b7-a1250d30ed3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\object\wall">
+      <UniqueIdentifier>{eeaeffe2-98a5-4719-8915-a4f77f950a6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +181,7 @@
       <Filter>PlayGround\camera</Filter>
     </ClInclude>
     <ClInclude Include="parentObj.h">
-      <Filter>PlayGround\object</Filter>
+      <Filter>PlayGround\대빵</Filter>
     </ClInclude>
     <ClInclude Include="mapTool.h">
       <Filter>PlayGround\mapTool</Filter>
@@ -199,13 +208,25 @@
       <Filter>PlayGround\scene</Filter>
     </ClInclude>
     <ClInclude Include="floorZone_01.h">
-      <Filter>PlayGround\floor</Filter>
+      <Filter>PlayGround\object\floor</Filter>
     </ClInclude>
     <ClInclude Include="item.h">
       <Filter>PlayGround\item</Filter>
     </ClInclude>
     <ClInclude Include="weapon_dagger_basic.h">
       <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_basic.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallZone_01.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -279,7 +300,7 @@
       <Filter>PlayGround\camera</Filter>
     </ClCompile>
     <ClCompile Include="parentObj.cpp">
-      <Filter>PlayGround\object</Filter>
+      <Filter>PlayGround\대빵</Filter>
     </ClCompile>
     <ClCompile Include="mapTool.cpp">
       <Filter>PlayGround\mapTool</Filter>
@@ -297,13 +318,25 @@
       <Filter>PlayGround\scene</Filter>
     </ClCompile>
     <ClCompile Include="floorZone_01.cpp">
-      <Filter>PlayGround\floor</Filter>
+      <Filter>PlayGround\object\floor</Filter>
     </ClCompile>
     <ClCompile Include="item.cpp">
       <Filter>PlayGround\item</Filter>
     </ClCompile>
     <ClCompile Include="weapon_dagger_basic.cpp">
       <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_basic.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallZone_01.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

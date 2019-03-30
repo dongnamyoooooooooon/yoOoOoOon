@@ -25,7 +25,7 @@ public:
 	void floorAni();
 
 	UINT getTileX() { return _tileX; }
-	UINT getTileY() { return _tileY; }
+	UINT getTiray() { return _tiray; }
 
 
 };

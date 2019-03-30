@@ -22,7 +22,7 @@ HRESULT weapon_dagger_basic::init(string imgName, int idxX, int idxY, ITEM_TYPE 
 
 	_appliedValue = 1;
 
-	_isThrow = false;
+	_isThrow = true;
 
 	return S_OK;
 }

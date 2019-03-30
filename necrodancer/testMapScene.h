@@ -16,7 +16,7 @@ private:
 
 	vector<vector<tagTile*>>			_vvTile;
 	UINT								_tileX;
-	UINT								_tileY;
+	UINT								_tiray;
 	UINT								_ii;
 	UINT								_jj;
 	UINT								_iiMax;

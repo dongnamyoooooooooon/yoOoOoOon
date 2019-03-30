@@ -11,6 +11,7 @@ private:
 	int _drawY;
 	int _effectCount;
 
+	//bool _isThrow;
 
 public:
 	weapon_dagger_basic();
@@ -23,5 +24,7 @@ public:
 
 	void drawHint();
 	bool useItem(int idxX, int idxY, int way);
+
+	bool getIsThrow() { return _isThrow; }
 };
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "player.h"
 #include "weapon_dagger_basic.h"
+#include "shovel_basic.h"
 
 
 player::player()
@@ -15,11 +16,11 @@ player::~player()
 HRESULT player::init(UINT idx_X, UINT idx_Y)
 {
 	_tileX = idx_X;
-	_tileY = idx_Y;
+	_tiray = idx_Y;
 	_idxX = idx_X;
 	_idxY = idx_Y;
 	_posX = _tileX * 52 + 26;
-	_posY = _tileY * 52 + 26;
+	_posY = _tiray * 52 + 26;
 	_posZ = 0;
 	_playerState = PLAYER_STATE_NONE;
 	_moveDistance = 0;
@@ -64,7 +65,7 @@ void player::update()
 
 	keyUpdate();
 
-	//layCast();
+	layCast();
 }
 
 void player::render()
@@ -72,9 +73,6 @@ void player::render()
 	drawBody();
 	drawHead();
 	drawShadow();
-
-	drawPlayerUI();
-	drawEquipUI();
 	//layCast();
 }
 
@@ -131,6 +129,9 @@ void player::layCast()
 
 		_subX = _playerX + currentSight * cos(_radius) + 0.5;
 		_subY = _playerY + currentSight * (-sin(_radius)) + 0.5;
+
+		if (_subX < 0) _subX = 0;
+		if (_subY < 0) _subY = 0;
 
 		if (_playerX < 0 || _playerY < 0)
 		{
@@ -273,20 +274,20 @@ void player::playerAniStart_Body(string keyName)
 
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ, _playerBody_Ani);
+	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ, _playerBody_Ani);
 }
 
 void player::drawHead()
 {
 
-	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
-	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ, _playerHead_Ani);
+	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ, _playerHead_Ani);
 }
 
 void player::drawShadow()
 {
-	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY - 26);
+	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY );
 }
 
 void player::keyUpdate()
@@ -707,7 +708,7 @@ void player::verticalSet()
 {
 	_posY = (int)_posY / TILE_SIZE * TILE_SIZE + 26;
 	_moveDistance = 0;
-	_tileY = _posY / TILE_SIZE;
+	_tiray = _posY / TILE_SIZE;
 	_idxY = _posY / TILE_SIZE;
 }
 
@@ -1138,6 +1139,19 @@ void player::drawEquipUI()
 				else
 					IMAGEMANAGER->frameRender("equipUI_weapon", _inven[i].pos.x, _inven[i].pos.y, 0, 0);
 			}
+			if (_inven[i].object->getIsThrow())
+			{
+				if (_inven[6].object != NULL)
+				{
+					IMAGEMANAGER->findImage("equipUI_throw")->render2(CAMERA->getPosX() + _inven[7].pos.x, CAMERA->getPosY() + _inven[7].pos.y);
+					IMAGEMANAGER->findImage(_inven[i].object->getImgName())->frameRender2(CAMERA->getPosX() + _inven[6].pos.x + 5, CAMERA->getPosY() + _inven[6].pos.y + 12, 0, 0);
+				}
+				else
+				{
+					IMAGEMANAGER->findImage("equipUI_throw")->render2(CAMERA->getPosX() + _inven[6].pos.x, CAMERA->getPosY() + _inven[6].pos.y);
+					IMAGEMANAGER->findImage(_inven[i].object->getImgName())->frameRender2(CAMERA->getPosX() + _inven[6].pos.x + 5, CAMERA->getPosY() + _inven[6].pos.y + 12, 0, 0);
+				}
+			}
 
 			if (_inven[i].UIKey == "equipUI_shovel")
 				IMAGEMANAGER->findImage("equipUI_shovel")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
@@ -1193,7 +1207,28 @@ void player::initItem()
 	_playerWeapon->setIsCurInven(true);
 	OBJECTMANAGER->setTileIdx(_playerWeapon, 39, 39);
 	_playerWeapon->setIsMoveInven(false);
+	_playerWeapon->setIsThrow(true);
 
+	shovel_basic shovel;
+	shovel.init(SHOVEL_NAME[ITEM_SHOVEL_BASIC], _idxX - 1, _idxY, ITEM_TYPE_SHOVEL);
+	tempObj = shovel;
+	pTempObj = OBJECTMANAGER->objectPush(tempObj);
+
+	_playerShovel = pTempObj;
+	_playerShovel->setIsCurInven(true);
+	OBJECTMANAGER->setTileIdx(_playerShovel, 39, 39);
+	_playerShovel->setIsMoveInven(false);
+
+	
+	if (_playerShovel != NULL)
+	{
+		if (_inven[0].isUse == false)
+		{
+			_inven[0].isUse = true;
+			_inven[0].UIKey = "equipUI_shovel";
+			_inven[0].object = _playerShovel;
+		}
+	}
 	if (_playerWeapon != NULL)
 	{
 		for (int i = 0; i < 2; i++)
@@ -1207,9 +1242,6 @@ void player::initItem()
 			}
 		}
 	}
-
-
-
 }
 
 void player::putItem(parentObj * obj)
@@ -1353,7 +1385,7 @@ void player::hitPlayer(int damage)
 		/*_indX =
 		_indY =
 		_tileX =				//상점주인이 있는 곳으로
-		_tileY =*/
+		_tiray =*/
 		_posX = _idxX * 52 + 26;
 		_posY = _idxY * 52 + 26;
 		{

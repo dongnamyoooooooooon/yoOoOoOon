@@ -126,13 +126,13 @@ private:
 
 	//UINT
 	UINT						_tileX;				//맵크기X
-	UINT						_tileY;				//맵크기Y
+	UINT						_tiray;				//맵크기Y
 	UINT						_savePointX;		//드래그용 X
 	UINT						_savePointY;		//드래그용 Y
 	UINT						_saveSampleX;		//샘플드래그용 X
-	UINT						_saveSampleY;		//샘플드래그용 Y
+	UINT						_saveSampray;		//샘플드래그용 Y
 	UINT						_drawSampleX;		//샘플그리기(드래그)용 X
-	UINT						_drawSampleY;		//샘플그리기(드래그)용 Y
+	UINT						_drawSampray;		//샘플그리기(드래그)용 Y
 
 	//int
 	int							_curImgNum;			//현재 이미지 번호

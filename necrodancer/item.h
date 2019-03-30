@@ -50,6 +50,7 @@ public:
 	void moveItem();
 
 	virtual void setIsCurInven(bool check) { _isCurInven = check; }
+	virtual bool getIsThrow() { return _isThrow; }
 
 };
 

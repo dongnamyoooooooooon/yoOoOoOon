@@ -37,27 +37,20 @@ void testMapScene::update()
 	CAMERA->move(_pos.x, _pos.y);
 	OBJECTMANAGER->createBeat();
 	OBJECTMANAGER->deleteBeat();
+	OBJECTMANAGER->allObjectUpdate();
+
 }
 
 void testMapScene::render()
 {
-	//for (int i = 0; i < _tileY; i++)
-	//{
-	//	for (int j = 0; j < _tileX; j++)
-	//	{
-	//		//_vvTile[i][j]->floor->render(i * TILE_SIZE, j * TILE_SIZE);
-	//		_player->render();
-	//	}
-	//}
 	OBJECTMANAGER->render();
-	//_player->render();
 }
 
 void testMapScene::load(const char * size, const char * data)
 {
 	OBJECTMANAGER->vectorClear();
 
-	for (int i = _tileY - 1; i >= 0; i--)
+	for (int i = _tiray - 1; i >= 0; i--)
 	{
 		for (int j = _tileX - 1; j >= 0; j--)
 		{
@@ -104,19 +97,19 @@ void testMapScene::load(const char * size, const char * data)
 	}
 
 	_tileX = stoi(mapX);
-	_tileY = stoi(mapY);
-	_vvTile.resize(_tileY);
+	_tiray = stoi(mapY);
+	_vvTile.resize(_tiray);
 
-	for (UINT i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tiray; ++i)
 	{
 		_vvTile[i].resize(_tileX);
 	}
 
-	tagPack* pack = new tagPack[_tileX * _tileY];
+	tagPack* pack = new tagPack[_tileX * _tiray];
 
 
 	OBJECTMANAGER->setTileX(_tileX);
-	OBJECTMANAGER->setTileY(_tileY);
+	OBJECTMANAGER->setTiray(_tiray);
 
 	OBJECTMANAGER->init();
 
@@ -125,10 +118,10 @@ void testMapScene::load(const char * size, const char * data)
 
 	file2 = CreateFile(data, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
+	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tiray, &read2, NULL);
 	CloseHandle(file2);
 
-	for (UINT i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tiray; ++i)
 	{
 		vector<D2D1_RECT_F> vRECT;
 		for (UINT j = 0; j < _tileX; ++j)
@@ -141,7 +134,7 @@ void testMapScene::load(const char * size, const char * data)
 		}
 	}
 
-	for (UINT i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tiray; ++i)
 	{
 		for (int j = 0; j < _tileX; ++j)
 		{
@@ -151,6 +144,10 @@ void testMapScene::load(const char * size, const char * data)
 				_pos = { (LONG)j * TILE_SIZE, (LONG)i * TILE_SIZE };
 
 			}
+			else if (_vvTile[i][j]->type_obj == OBJECT_TYPE_WALL)
+				OBJECTMANAGER->objectPush(*_vvTile[i][j]->wall);
+			else if (_vvTile[i][j]->type_obj == OBJECT_TYPE_ITEM)
+				OBJECTMANAGER->objectPush(*_vvTile[i][j]->item);
 		}
 	}
 }
@@ -167,7 +164,6 @@ void testMapScene::playerMgr()
 	_vObj = OBJECTMANAGER->getVObj();
 	_viObj = OBJECTMANAGER->getVIObj();
 
-	OBJECTMANAGER->allObjectUpdate();
 
 	_curPos.x = _player->getPlayerPosX();
 	_curPos.y = _player->getPlayerPosY();

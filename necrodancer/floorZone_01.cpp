@@ -19,7 +19,7 @@ HRESULT floorZone_01::init(int idxX, int idxY)
 	_idxY = idxY;
 
 	setTileX(OBJECTMANAGER->getTileX());
-	setTileY(OBJECTMANAGER->getTileY());
+	setTiray(OBJECTMANAGER->getTiray());
 
 	checkFever(idxX, idxY);
 

@@ -154,6 +154,7 @@
     <ClInclude Include="d2dManager.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyInfomation.h" />
     <ClInclude Include="floorZone_01.h" />
     <ClInclude Include="fontLoader.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="shovel_basic.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -185,6 +187,8 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="wall.h" />
+    <ClInclude Include="wallZone_01.h" />
     <ClInclude Include="weapon_dagger_basic.h" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +199,7 @@
     <ClCompile Include="d2dManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="floorZone_01.cpp" />
     <ClCompile Include="fontLoader.cpp" />
     <ClCompile Include="gameNode.cpp" />
@@ -211,6 +216,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="shovel_basic.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -223,6 +229,8 @@
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="wall.cpp" />
+    <ClCompile Include="wallZone_01.cpp" />
     <ClCompile Include="weapon_dagger_basic.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>

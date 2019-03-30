@@ -9,6 +9,7 @@ class parentObj : public gameNode
 {
 protected:
 	image*			_img;			//이미지					
+	image*			_blackImg;
 	string			_imgName;		//이미지키값
 	OBJECT_TYPE		_objType;		//오브젝트타입
 	ITEM_TYPE		_itemKind;		//아이템종류
@@ -24,7 +25,7 @@ protected:
 	int				_posY;
 
 	UINT			_tileX;
-	UINT			_tileY;
+	UINT			_tiray;
 
 	int				_appliedValue;
 	int				_frameX;
@@ -42,6 +43,8 @@ protected:
 	
 	bool			_isCurInven;
 	bool			_isMoveInven;
+
+	bool			_isThrow;
 
 
 
@@ -67,6 +70,9 @@ public:
 	virtual void setIsMoveInven(bool check) { _isMoveInven = check; }
 	virtual void setItemInven(int x, int y) {};	//바닥에서 인벤으로
 	virtual void drawHint() {};
+
+	//벽
+	virtual bool wallBroken(int power) { return false; }
 
 	/*string makeSaveInfo();
 	void loadSaveInfo(string* data);*/
@@ -114,7 +120,7 @@ public:
 	void setItemKind(ITEM_TYPE type) { _itemKind = type; }
 
 	void setTileX(UINT x) { _tileX = x; }
-	void setTileY(UINT y) { _tileY = y; }
+	void setTiray(UINT y) { _tiray = y; }
 
 	int getFrameX() { return _frameX; }
 	void setFrameX(int frameX) { _frameX = frameX; }
@@ -128,6 +134,12 @@ public:
 	bool getIsSight() { return _isSight; }
 
 	int getAppliedValue() { return _appliedValue; }
+
+	bool getIsThrow() { return _isThrow;}
+	void setIsThrow(bool check) { _isThrow = check; }
+
+	bool getIsTorch() { return _isTorch; }
+	void setIsTorch(bool check) { _isTorch = check; }
 
 };
 

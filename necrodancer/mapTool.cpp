@@ -18,7 +18,7 @@ HRESULT mapTool::init()
 
 	//맵크기 설정
 	_tileX = 40;
-	_tileY = 40;
+	_tiray = 40;
 
 	SOUNDMANAGER->allSoundStop();
 
@@ -69,7 +69,7 @@ void mapTool::release()
 void mapTool::update()
 {
 	OBJECTMANAGER->setTileX(_tileX);
-	OBJECTMANAGER->setTileY(_tileY);
+	OBJECTMANAGER->setTiray(_tiray);
 
 	CAMERA->mapToolMove();								//카메라이동
 	choiceButton();										//버튼선택
@@ -452,7 +452,7 @@ void mapTool::dragSampleTile()
 void mapTool::setTile()
 {
 	//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		//처음에는 vTile과 vRECT에 초기화한 값들을 넣어주고
 		//그담에 이중벡터인 vvTile과 vvRECT에 넣어준다.
@@ -605,7 +605,7 @@ void mapTool::drawTile()
 	if (_ptMouse.x - CAMERA->getPosX() > WINSIZEX - TOTAL_SAMPLE_SIZE + TILE_SIZE)	return;								//샘플타일쪽 그리면 안돼
 	if (_ptMouse.x > _vvRECT[0][_tileX - 1].right)									return;								//맵 제일 오른쪽 안돼
 	if (_ptMouse.x < _vvRECT[0][0].left)											return;								//맵 제일 왼쪽 안돼
-	if (_ptMouse.y > _vvRECT[_tileY - 1][0].bottom)									return;								//맵 제일 아래쪽 안돼
+	if (_ptMouse.y > _vvRECT[_tiray - 1][0].bottom)									return;								//맵 제일 아래쪽 안돼
 	if (_ptMouse.y < _vvRECT[0][0].top)												return;								//맵 제일 윗쪽 안돼
 	if (_isDrag)																	return;								//드래그중일때 안돼
 	if (!_isEnter)																	return;								//샘플타일창이 없을때도 안돼
@@ -622,7 +622,7 @@ void mapTool::drawTile()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				for (UINT i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tiray; i++)
 				{
 					for (UINT j = 0; j < _tileX; j++)
 					{
@@ -640,7 +640,7 @@ void mapTool::drawTile()
 				UINT savePointX2;
 				UINT savePointY2;
 
-				for (UINT i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tiray; i++)
 				{
 					for (UINT j = 0; j < _tileX; j++)
 					{
@@ -671,7 +671,7 @@ void mapTool::drawTile()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				for (UINT i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tiray; i++)
 				{
 					for (UINT j = 0; j < _tileX; j++)
 					{
@@ -692,7 +692,7 @@ void mapTool::drawTile()
 
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 			{
-				for (UINT i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tiray; i++)
 				{
 					for (UINT j = 0; j < _tileX; j++)
 					{
@@ -709,7 +709,7 @@ void mapTool::drawTile()
 		{
 			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				for (UINT i = 0; i < _tileY; i++)
+				for (UINT i = 0; i < _tiray; i++)
 				{
 					for (UINT j = 0; j < _tileX; j++)
 					{
@@ -784,8 +784,8 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 			_vvTile[i][j]->terrain_frameX = 0;
 
-			if(_selectObj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_01] && _rendomButton.curFrameY == 1)
-				_vvTile[i][j]->terrain_frameX = RND->getInt(15);
+			if(_rendomButton.curFrameY == 1 && IMAGEMANAGER->findImage(_selectObj.getImgName())->GetMaxFrameX() > 1)
+				_vvTile[i][j]->terrain_frameX = RND->getFromIntTo(0, IMAGEMANAGER->findImage(_selectObj.getImgName())->GetMaxFrameX());
 
 			break;
 		}
@@ -916,7 +916,7 @@ void mapTool::mapSizeChange()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_button[MAPTOOL_BUTTON_SIZE_WIDTH_DOWN].curFrameY = 1;
-			for (int i = _tileY - 1; i >= 0; i--)
+			for (int i = _tiray - 1; i >= 0; i--)
 			{
 				tagTile* target = _vvTile[i].back();
 				_vvTile[i].pop_back();
@@ -935,7 +935,7 @@ void mapTool::mapSizeChange()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_button[MAPTOOL_BUTTON_SIZE_WIDTH_UP].curFrameY = 1;
-			for (UINT i = 0; i < _tileY; i++)
+			for (UINT i = 0; i < _tiray; i++)
 			{
 				tagTile* tempTile = new tagTile;
 				parentObj* floor = new parentObj;
@@ -964,7 +964,7 @@ void mapTool::mapSizeChange()
 	// 세로사이즈 감소
 	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN].rc), makePOINT_NoCamera(_ptMouse)))
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && _tileY > 1)
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && _tiray > 1)
 		{
 			_button[MAPTOOL_BUTTON_SIZE_HEIGHT_DOWN].curFrameY = 1;
 			for (int i = _tileX - 1; i >= 0; i--)
@@ -978,12 +978,12 @@ void mapTool::mapSizeChange()
 			}
 			_vvTile.pop_back();
 			_vvRECT.pop_back();
-			_tileY--;
+			_tiray--;
 		}
 	}
 
 	// 세로사이즈 증가
-	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_HEIGHT_UP].rc), makePOINT_NoCamera(_ptMouse)) && _tileY <= 100)
+	if (PtInRect(&makeRECT(_button[MAPTOOL_BUTTON_SIZE_HEIGHT_UP].rc), makePOINT_NoCamera(_ptMouse)) && _tiray <= 100)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
@@ -1018,7 +1018,7 @@ void mapTool::mapSizeChange()
 			_vvTile.push_back(vTile);
 			_vvRECT.push_back(vRECT);
 
-			_tileY++;
+			_tiray++;
 		}
 	}
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
@@ -1034,7 +1034,7 @@ void mapTool::mapSizeChange()
 void mapTool::loadSetTile()
 {
 	//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		//처음에는 vTile과 vRECT에 초기화한 값들을 넣어주고
 		//그담에 이중벡터인 vvTile과 vvRECT에 넣어준다.
@@ -1079,15 +1079,15 @@ void mapTool::mapSave(int mapNum)
 	DWORD write;
 
 	char mapSize[128];
-	sprintf_s(mapSize, "%d/%d", _tileX, _tileY);
+	sprintf_s(mapSize, "%d/%d", _tileX, _tiray);
 
 	file = CreateFile(_mSizeMapNames[(MAP_NAME)mapNum].c_str(), GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	WriteFile(file, mapSize, strlen(mapSize), &write, NULL);
 
 	CloseHandle(file);
 
-	tagPack* pack = new tagPack[_tileX * _tileY];
-	for (UINT i = 0; i < _tileY; i++)
+	tagPack* pack = new tagPack[_tileX * _tiray];
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1099,14 +1099,14 @@ void mapTool::mapSave(int mapNum)
 	DWORD write2;
 
 	file2 = CreateFile(_mDataMapNames[(MAP_NAME)mapNum].c_str(), GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	WriteFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &write2, NULL);
+	WriteFile(file2, pack, sizeof(tagPack) * _tileX * _tiray, &write2, NULL);
 
 	CloseHandle(file2);
 }
 
 void mapTool::mapLoad()
 {
-	for (int i = _tileY - 1; i >= 0; i--)
+	for (int i = _tiray - 1; i >= 0; i--)
 	{
 		for (int j = _tileX - 1; j >= 0; j--)
 		{
@@ -1155,25 +1155,25 @@ void mapTool::mapLoad()
 	}
 
 	_tileX = stoi(mapX);
-	_tileY = stoi(mapY);
-	_vvTile.resize(_tileY);
+	_tiray = stoi(mapY);
+	_vvTile.resize(_tiray);
 
-	for (UINT i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tiray; ++i)
 	{
 		_vvTile[i].resize(_tileX);
 	}
 
-	tagPack* pack = new tagPack[_tileX * _tileY];
+	tagPack* pack = new tagPack[_tileX * _tiray];
 
 	HANDLE file2;
 	DWORD read2;
 
 	file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
+	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tiray, &read2, NULL);
 	CloseHandle(file2);
 
-	for (UINT i = 0; i < _tileY; ++i)
+	for (UINT i = 0; i < _tiray; ++i)
 	{
 		vector<D2D1_RECT_F> vRECT;
 		for (UINT j = 0; j < _tileX; ++j)
@@ -1201,7 +1201,7 @@ void mapTool::mapLoad()
 
 void mapTool::initMapLoad()
 {
-	for (int i = _tileY - 1; i >= 0; i--)
+	for (int i = _tiray - 1; i >= 0; i--)
 	{
 		for (int j = _tileX - 1; j >= 0; j--)
 		{
@@ -1250,25 +1250,25 @@ for (int i = 0; i < strlen(mapSize); ++i)
 }
 
 _tileX = stoi(mapX);
-_tileY = stoi(mapY);
-_vvTile.resize(_tileY);
+_tiray = stoi(mapY);
+_vvTile.resize(_tiray);
 
-for (UINT i = 0; i < _tileY; ++i)
+for (UINT i = 0; i < _tiray; ++i)
 {
 	_vvTile[i].resize(_tileX);
 }
 
-tagPack* pack = new tagPack[_tileX * _tileY];
+tagPack* pack = new tagPack[_tileX * _tiray];
 
 HANDLE file2;
 DWORD read2;
 
 file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
+ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tiray, &read2, NULL);
 CloseHandle(file2);
 
-for (UINT i = 0; i < _tileY; ++i)
+for (UINT i = 0; i < _tiray; ++i)
 {
 	vector<D2D1_RECT_F> vRECT;
 	for (UINT j = 0; j < _tileX; ++j)
@@ -1314,7 +1314,7 @@ void mapTool::drawMap()
 	int coorMouse[2] = { -1, -1 };
 
 
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1339,7 +1339,7 @@ void mapTool::drawMap()
 	}
 
 
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1357,7 +1357,7 @@ void mapTool::drawMap()
 
 	}
 
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1375,7 +1375,7 @@ void mapTool::drawMap()
 		}
 	}
 
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1400,7 +1400,7 @@ void mapTool::drawMap()
 		}
 	}
 
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1423,7 +1423,7 @@ void mapTool::drawMap()
 	}
 
 
-	for (UINT i = 0; i < _tileY; i++)
+	for (UINT i = 0; i < _tiray; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -1504,8 +1504,9 @@ void mapTool::drawMap()
 	}
 	if (coorMouse[0] != -1)
 	{
-		D2DMANAGER->drawRectangle(RGB(255, 0, 0), _vvRECT[coorMouse[0]][coorMouse[1]].left, _vvRECT[coorMouse[0]][coorMouse[1]].top,
-													_vvRECT[coorMouse[0]][coorMouse[1]].right, _vvRECT[coorMouse[0]][coorMouse[1]].bottom);
+		IMAGEMANAGER->findImage("mapTool_cursor")->render(_vvRECT[coorMouse[0]][coorMouse[1]].left + 2, _vvRECT[coorMouse[0]][coorMouse[1]].top + 2);
+		//D2DMANAGER->drawRectangle(RGB(255, 0, 0), _vvRECT[coorMouse[0]][coorMouse[1]].left, _vvRECT[coorMouse[0]][coorMouse[1]].top,
+		//											_vvRECT[coorMouse[0]][coorMouse[1]].right, _vvRECT[coorMouse[0]][coorMouse[1]].bottom);
 	}
 }
 
@@ -1536,9 +1537,9 @@ void mapTool::drawUI()
 	swprintf_s(str, L"던전크기");
 	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2, CAMERA->getPosY() + 10, 30, RGB(0, 255, 255));
 
-	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
+	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tiray);
 	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 23, CAMERA->getPosY() + 41, 15, RGB(255, 0, 0));
-	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
+	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tiray);
 	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 24, CAMERA->getPosY() + 40, 15, RGB(0, 255, 255));
 }
 
