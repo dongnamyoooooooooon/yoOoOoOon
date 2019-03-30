@@ -9,6 +9,7 @@ class floorZone_01;
 class weapon_dagger_basic;
 class shovel_basic;
 class wallZone_01;
+class enemy_skeleton;
 
 class parentObj;
 class objectManager : public singletonBase<objectManager>, public gameNode
@@ -19,7 +20,7 @@ private:
 	// =================================
 
 	UINT	_tileX;				//∏ ≈©±‚X
-	UINT	_tiray;				//∏ ≈©±‚Y
+	UINT	_tileY;				//∏ ≈©±‚Y
 
 
 	vector<vector<parentObj*>> _vvObjTile;
@@ -100,10 +101,10 @@ public:
 	
 	
 	void setTileX(UINT x) { _tileX = x; }
-	void setTiray(UINT y) { _tiray = y; }
+	void setTileY(UINT y) { _tileY = y; }
 
 	UINT getTileX() { return _tileX; }
-	UINT getTiray() { return _tiray; }
+	UINT getTileY() { return _tileY; }
 
 
 	void setIsPlayerAlive() { _isPlayerAlive = false; }

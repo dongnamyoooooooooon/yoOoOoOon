@@ -16,11 +16,11 @@ player::~player()
 HRESULT player::init(UINT idx_X, UINT idx_Y)
 {
 	_tileX = idx_X;
-	_tiray = idx_Y;
+	_tileY = idx_Y;
 	_idxX = idx_X;
 	_idxY = idx_Y;
 	_posX = _tileX * 52 + 26;
-	_posY = _tiray * 52 + 26;
+	_posY = _tileY * 52 + 26;
 	_posZ = 0;
 	_playerState = PLAYER_STATE_NONE;
 	_moveDistance = 0;
@@ -74,6 +74,12 @@ void player::render()
 	drawHead();
 	drawShadow();
 	//layCast();
+
+	WCHAR temp[128];
+	swprintf_s(temp, L"%d", _moveDistance);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 150, 30, RGB(0, 255, 255));
+	swprintf_s(temp, L"%.1f", _speed);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 180, 30, RGB(0, 255, 255));
 }
 
 void player::playerDead()
@@ -274,20 +280,20 @@ void player::playerAniStart_Body(string keyName)
 
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ, _playerBody_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
+	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
 }
 
 void player::drawHead()
 {
 
-	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ, _playerHead_Ani);
-	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ, _playerHead_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
+	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
 }
 
 void player::drawShadow()
 {
-	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY );
+	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY - 26);
 }
 
 void player::keyUpdate()
@@ -708,7 +714,7 @@ void player::verticalSet()
 {
 	_posY = (int)_posY / TILE_SIZE * TILE_SIZE + 26;
 	_moveDistance = 0;
-	_tiray = _posY / TILE_SIZE;
+	_tileY = _posY / TILE_SIZE;
 	_idxY = _posY / TILE_SIZE;
 }
 
@@ -1385,7 +1391,7 @@ void player::hitPlayer(int damage)
 		/*_indX =
 		_indY =
 		_tileX =				//상점주인이 있는 곳으로
-		_tiray =*/
+		_tileY =*/
 		_posX = _idxX * 52 + 26;
 		_posY = _idxY * 52 + 26;
 		{

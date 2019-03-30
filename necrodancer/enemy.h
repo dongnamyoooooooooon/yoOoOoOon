@@ -120,7 +120,6 @@ public:
 	void patternMove();
 	bool aStarLoad();
 
-	void constructionTile();
 	void initTile();
 	void addOpenList();
 	void addCloseList();

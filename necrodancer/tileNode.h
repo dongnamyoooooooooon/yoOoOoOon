@@ -292,17 +292,9 @@ public:
 			item->makeLoad(&pack->item);
 		if (enemy != NULL)
 			enemy->makeLoad(&pack->enemy);
-		if (enemy != NULL)
+		if (player != NULL)
 			player->makeLoad(&pack->player);
 	}
-
-	//void makePack()
-	//{
-	//	floor->makeSaveInfo()
-
-
-	//}
-	//	void loadPack();
 
 }TILE;
 

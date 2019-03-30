@@ -351,8 +351,114 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_dig_player_05", "sound/effect/vo_cad_dig_05.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dig_player_06", "sound/effect/vo_cad_dig_06.ogg", false, false);
 
+		SOUNDMANAGER->addSound("sound_zombie_attack", "sound/effect/en_zombie_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_armadillo_attack", "sound/effect/en_armadillo_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_bat_attack", "sound/effect/en_bat_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_clone_attack", "sound/effect/en_clone_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_attack_melee", "sound/effect/en_skel_attack_melee.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_attack", "sound/effect/en_slime_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_wraith_attack", "sound/effect/en_wraith_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_banshee_attack", "sound/effect/en_banshee_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_vampbat_attack", "sound/effect/en_vampbat_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_attack_melee", "sound/effect/en_dragon_attack_melee.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_attack", "sound/effect/en_minotaur_attack.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_mel_01", "sound/effect/en_coralriff_attack_mel_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_mel_02", "sound/effect/en_coralriff_attack_mel_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_mel_03", "sound/effect/en_coralriff_attack_mel_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_mel_04", "sound/effect/en_coralriff_attack_mel_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_splash_01", "sound/effect/en_coralriff_attack_splash_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_splash_02", "sound/effect/en_coralriff_attack_splash_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_splash_03", "sound/effect/en_coralriff_attack_splash_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_attack_splash_04", "sound/effect/en_coralriff_attack_splash_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_attack_01", "sound/effect/en_shopkeep_norm_attack_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_attack_02", "sound/effect/en_shopkeep_norm_attack_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_attack_03", "sound/effect/en_shopkeep_norm_attack_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_attack_04", "sound/effect/en_shopkeep_norm_attack_04.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_skel_head_loss_01", "sound/effect/en_skel_head_loss_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_head_loss_02", "sound/effect/en_skel_head_loss_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_head_loss_03", "sound/effect/en_skel_head_loss_03.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_zombie_death", "sound/effect/en_zombie_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_armadillo_death", "sound/effect/en_armadillo_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_bat_death", "sound/effect/en_bat_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_clone_death", "sound/effect/en_clone_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_death", "sound/effect/en_skel_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_death", "sound/effect/en_slime_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_death_01", "sound/effect/en_slime_death_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_death_02", "sound/effect/en_slime_death_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_death_03", "sound/effect/en_slime_death_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_wraith_death", "sound/effect/en_wraith_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_banshee_death", "sound/effect/en_banshee_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_vampbat_death", "sound/effect/en_vampbat_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_death", "sound/effect/en_dragon_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_death", "sound/effect/en_minotaur_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_death", "sound/effect/en_coralriff_death.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_01", "sound/effect/en_shopkeep_norm_death_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_02", "sound/effect/en_shopkeep_norm_death_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_03", "sound/effect/en_shopkeep_norm_death_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_04", "sound/effect/en_shopkeep_norm_death_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_05", "sound/effect/en_shopkeep_norm_death_05.ogg", false, false);
+
+
+		SOUNDMANAGER->addSound("sound_armadillo_hit", "sound/effect/en_armadillo_hit.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_bat_hit", "sound/effect/en_bat_hit.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_hit", "sound/effect/en_skel_hit.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_hit_01", "sound/effect/en_skel_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_hit_02", "sound/effect/en_skel_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_hit_03", "sound/effect/en_skel_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_hit", "sound/effect/en_slime_hit.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_hit_01", "sound/effect/en_slime_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_hit_02", "sound/effect/en_slime_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_slime_hit_03", "sound/effect/en_slime_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_banshee_hit_01", "sound/effect/en_banshee_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_banshee_hit_02", "sound/effect/en_banshee_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_banshee_hit_03", "sound/effect/en_banshee_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_vampbat_hit_01", "sound/effect/en_vampbat_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_vampbat_hit_02", "sound/effect/en_vampbat_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_vampbat_hit_03", "sound/effect/en_vampbat_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_hit_01", "sound/effect/en_dragon_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_hit_02", "sound/effect/en_dragon_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_hit_03", "sound/effect/en_dragon_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_hit", "sound/effect/en_minotaur_hit.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_hit_01", "sound/effect/en_minotaur_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_hit_02", "sound/effect/en_minotaur_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_hit_03", "sound/effect/en_minotaur_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_hit_01", "sound/effect/en_coralriff_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_hit_02", "sound/effect/en_coralriff_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_hit_03", "sound/effect/en_coralriff_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_hit_04", "sound/effect/en_coralriff_hit_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_hit_01", "sound/effect/en_shopkeep_norm_hit_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_hit_02", "sound/effect/en_shopkeep_norm_hit_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_hit_03", "sound/effect/en_shopkeep_norm_hit_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_hit_04", "sound/effect/en_shopkeep_norm_hit_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_hit_05", "sound/effect/en_shopkeep_norm_hit_05.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_shopkeep_norm_hit_06", "sound/effect/en_shopkeep_norm_hit_06.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_wraith_cry", "sound/effect/en_wraith_cry.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_vampbat_cry", "sound/effect/en_vampbat_cry.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_banshee_cry", "sound/effect/en_banshee_cry.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_cry", "sound/effect/en_dragon_cry.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_cry", "sound/effect/en_minotaur_cry.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_coralriff_cry", "sound/effect/en_coralriff_cry.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_banshee_loop", "sound/effect/en_banshee_loop.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_dragon_walk_01", "sound/effect/en_dragon_walk_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_walk_02", "sound/effect/en_dragon_walk_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_dragon_walk_03", "sound/effect/en_dragon_walk_03.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_armadillo_shielded", "sound/effect/en_armadillo_shielded.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_armadillo_wallimpact", "sound/effect/en_armadillo_wallimpact.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_minotaur_wallimpact", "sound/effect/en_minotaur_wallimpact.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_minotaur_charge", "sound/effect/en_minotaur_charge.ogg", false, false);
+
 		SOUNDMANAGER->addSound("sound_chain_break", "sound/effect/sfx_chain_break.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_chain_groove", "sound/effect/sfx_chain_groove.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_announcer_coralriff", "sound/effect/vo_announcer_coralriff.ogg", false, false);
 
 
 		//¿Ã∆Â∆Æ

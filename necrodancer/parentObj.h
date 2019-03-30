@@ -120,7 +120,7 @@ public:
 	void setItemKind(ITEM_TYPE type) { _itemKind = type; }
 
 	void setTileX(UINT x) { _tileX = x; }
-	void setTiray(UINT y) { _tiray = y; }
+	void setTileY(UINT y) { _tileY = y; }
 
 	int getFrameX() { return _frameX; }
 	void setFrameX(int frameX) { _frameX = frameX; }

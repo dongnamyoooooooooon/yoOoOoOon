@@ -226,7 +226,10 @@
       <Filter>PlayGround\object\wall</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_skeleton.h">
+      <Filter>PlayGround\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -336,7 +339,10 @@
       <Filter>PlayGround\object\wall</Filter>
     </ClCompile>
     <ClCompile Include="enemy.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton.cpp">
+      <Filter>PlayGround\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

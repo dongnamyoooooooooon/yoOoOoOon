@@ -50,7 +50,7 @@ void testMapScene::load(const char * size, const char * data)
 {
 	OBJECTMANAGER->vectorClear();
 
-	for (int i = _tiray - 1; i >= 0; i--)
+	for (int i = _tileY - 1; i >= 0; i--)
 	{
 		for (int j = _tileX - 1; j >= 0; j--)
 		{
@@ -97,19 +97,19 @@ void testMapScene::load(const char * size, const char * data)
 	}
 
 	_tileX = stoi(mapX);
-	_tiray = stoi(mapY);
-	_vvTile.resize(_tiray);
+	_tileY = stoi(mapY);
+	_vvTile.resize(_tileY);
 
-	for (UINT i = 0; i < _tiray; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
 		_vvTile[i].resize(_tileX);
 	}
 
-	tagPack* pack = new tagPack[_tileX * _tiray];
+	tagPack* pack = new tagPack[_tileX * _tileY];
 
 
 	OBJECTMANAGER->setTileX(_tileX);
-	OBJECTMANAGER->setTiray(_tiray);
+	OBJECTMANAGER->setTileY(_tileY);
 
 	OBJECTMANAGER->init();
 
@@ -118,10 +118,10 @@ void testMapScene::load(const char * size, const char * data)
 
 	file2 = CreateFile(data, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tiray, &read2, NULL);
+	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
 	CloseHandle(file2);
 
-	for (UINT i = 0; i < _tiray; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
 		vector<D2D1_RECT_F> vRECT;
 		for (UINT j = 0; j < _tileX; ++j)
@@ -134,7 +134,7 @@ void testMapScene::load(const char * size, const char * data)
 		}
 	}
 
-	for (UINT i = 0; i < _tiray; ++i)
+	for (UINT i = 0; i < _tileY; ++i)
 	{
 		for (int j = 0; j < _tileX; ++j)
 		{
@@ -148,6 +148,8 @@ void testMapScene::load(const char * size, const char * data)
 				OBJECTMANAGER->objectPush(*_vvTile[i][j]->wall);
 			else if (_vvTile[i][j]->type_obj == OBJECT_TYPE_ITEM)
 				OBJECTMANAGER->objectPush(*_vvTile[i][j]->item);
+			else if (_vvTile[i][j]->type_obj == OBJECT_TYPE_ENEMY)
+				OBJECTMANAGER->objectPush(*_vvTile[i][j]->enemy);
 		}
 	}
 }

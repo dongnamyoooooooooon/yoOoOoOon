@@ -6,6 +6,7 @@
 #include "weapon_dagger_basic.h"
 #include "shovel_basic.h"
 #include "wallZone_01.h"
+#include "enemy_skeleton.h"
 
 
 objectManager::objectManager()
@@ -19,7 +20,7 @@ objectManager::~objectManager()
 HRESULT objectManager::init()
 {
 	
-	for (UINT i = 0; i < _tiray; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
 		vector<parentObj*> vFloorTile;
 		vector<parentObj*> vObjectTile;
@@ -117,7 +118,7 @@ void objectManager::render()
 
 void objectManager::vectorClear()
 {
-	for (UINT i = 0; i < _tiray; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
 		for (UINT j = 0; i < _tileX; j++)
 		{
@@ -139,7 +140,7 @@ void objectManager::objectSort_IndexX()
 
 void objectManager::allObjectUpdate()
 {
-	for (UINT i = 0; i < _tiray; i++)
+	for (UINT i = 0; i < _tileY; i++)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
@@ -883,7 +884,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 {
 	if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON])
 	{
-
+		enemy_skeleton* tempObj = new enemy_skeleton;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_YELLOW])
 	{

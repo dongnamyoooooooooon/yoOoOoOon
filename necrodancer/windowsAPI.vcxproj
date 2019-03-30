@@ -156,6 +156,7 @@
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyInfomation.h" />
+    <ClInclude Include="enemy_skeleton.h" />
     <ClInclude Include="floorZone_01.h" />
     <ClInclude Include="fontLoader.h" />
     <ClInclude Include="fontLoaderCommon.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemy_skeleton.cpp" />
     <ClCompile Include="floorZone_01.cpp" />
     <ClCompile Include="fontLoader.cpp" />
     <ClCompile Include="gameNode.cpp" />

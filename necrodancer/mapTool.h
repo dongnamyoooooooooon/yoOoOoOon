@@ -126,7 +126,7 @@ private:
 
 	//UINT
 	UINT						_tileX;				//맵크기X
-	UINT						_tiray;				//맵크기Y
+	UINT						_tileY;				//맵크기Y
 	UINT						_savePointX;		//드래그용 X
 	UINT						_savePointY;		//드래그용 Y
 	UINT						_saveSampleX;		//샘플드래그용 X
