@@ -25,7 +25,7 @@ protected:
 	int				_posY;
 
 	UINT			_tileX;
-	UINT			_tiray;
+	UINT			_tileY;
 
 	int				_appliedValue;
 	int				_frameX;

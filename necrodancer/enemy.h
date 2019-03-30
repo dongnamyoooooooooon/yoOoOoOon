@@ -62,16 +62,18 @@ protected:
 
 	int _gravity;					//중력값
 	int _jumpPower;					//점프빠워
+	float _speed;
 
 	int _maxFrameX;					//최대프레임X
 	int _maxFrameY;					//최대프레임Y
 
-	int posX;
-	int posY;
+	int _posX;
+	int _posY;
+	int _posZ;
 	int _subX;						//위치보정용X
 	int _subY;						//위치보정용Y
 	int _moveLoad;					//다음위치
-	int _moveCount = 0;				//이동카운트
+	int _moveDistance;				//이동카운트
 
 	int _moveBeat;					//움직임가능비트
 	int _curMoveBeat;				//현재비트
@@ -133,6 +135,9 @@ public:
 	void soundHit();
 	void soundCry();
 	void soundDie();
+
+	void horizonSet();
+	void verticalSet();
 
 	virtual void SetFirstSight() {
 

@@ -15,28 +15,28 @@ HRESULT enemy::init(string imgName, int idxX, int idxY)
 {
 	_imgName = imgName;
 	_isHalfMove = false;
-	
+
 	_moveBeat = 1;
 	_curMoveBeat = 0;
-	
+
 	_idxX = idxX;
 	_idxY = idxY;
 
 	_posX = _idxX * TILE_SIZE;
 	_posY = _idxY * TILE_SIZE;
-	
+
 	_subX = 0;
 	_subY = 0;
 
 	_frameX = 0;
 	_frameY = 0;
-	
+
 	_maxFrameX = IMAGEMANAGER->findImage(_imgName)->GetMaxFrameX();
 	_maxFrameY = IMAGEMANAGER->findImage(_imgName)->GetMaxFrameY();
 	_count = 0;
 
 	_objType = OBJECT_TYPE_ENEMY;
-	
+
 	_heart = 2;
 	_maxHeart = 2;
 	_damage = 1;
@@ -84,7 +84,7 @@ void enemy::render()
 		{
 			if (_hasLight)
 			{
-				if(_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 0);
+				if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 0);
 				else		_img->frameRender(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 0);
 			}
 			else
@@ -116,7 +116,7 @@ void enemy::render()
 void enemy::aniEnemy()
 {
 	_count++;
-	if(_count % 10 == 0)
+	if (_count % 10 == 0)
 	{
 		_frameX++;
 		if (_frameX > _maxFrameX) _frameX = 0;
@@ -357,41 +357,293 @@ void enemy::rendomMove()
 			_direction = DIRECTION_DOWN;
 	}
 
+	OBJECT_TYPE objType;
+
 	if (_direction == DIRECTION_LEFT)
-		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
-	else if (_direction == DIRECTION_RIGHT)
-		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
-	else if (_direction == DIRECTION_UP)
-		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
-	else if (_direction == DIRECTION_DOWN)
-		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
-
-
-	GameObject * obj = OBJECTMANAGER->GetIsThereObj(m_pos + m_move);
-	OBJECTKIND objKind;
-
-	if (obj != NULL)
 	{
-		objKind = obj->GetObjKind();
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
+		if (obj != NULL)
+		{
+			objType = obj->getObjType();
 
-		if (objKind == OBJ_PLAYER)
-			Attcked(m_move);
+			if (objType == OBJECT_TYPE_PLAYER)
+			{
+				attackEnemy(_direction);
 
-		m_move = M_NONE;
-		moveCount = 0;
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+		}
+
+		OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
 	}
+	else if (_direction == DIRECTION_RIGHT)
+	{
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
+		if (obj != NULL)
+		{
+			objType = obj->getObjType();
 
-	OBJECTMANAGER->SetTilePos(this, m_pos + m_move);
+			if (objType == OBJECT_TYPE_PLAYER)
+			{
+				attackEnemy(_direction);
 
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+		}
+
+		OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
+	}
+	else if (_direction == DIRECTION_UP)
+	{
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
+		if (obj != NULL)
+		{
+			objType = obj->getObjType();
+
+			if (objType == OBJECT_TYPE_PLAYER)
+			{
+				attackEnemy(_direction);
+
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+		}
+
+		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+	}
+	else if (_direction == DIRECTION_DOWN)
+	{
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
+		if (obj != NULL)
+		{
+			objType = obj->getObjType();
+
+			if (objType == OBJECT_TYPE_PLAYER)
+			{
+				attackEnemy(_direction);
+
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+		}
+
+		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+	}
 }
 
 void enemy::patternMove()
 {
+	_moveDistance = TILE_SIZE;
+	OBJECT_TYPE objType;
+
+	if (_idxY % 2 == 0)
+	{
+		_direction = DIRECTION_UP;
+	}
+	else
+	{
+		_direction = DIRECTION_DOWN;
+	}
+
+	if (_direction == DIRECTION_UP)
+	{
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
+		if (obj != NULL)
+		{
+			objType = obj->getObjType();
+
+			if (objType == OBJECT_TYPE_PLAYER)
+			{
+				attackEnemy(_direction);
+
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+		}
+
+		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+	}
+	else if (_direction == DIRECTION_DOWN)
+	{
+		parentObj* obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
+		if (obj != NULL)
+		{
+			objType = obj->getObjType();
+
+			if (objType == OBJECT_TYPE_PLAYER)
+			{
+				attackEnemy(_direction);
+
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+		}
+
+		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+	}
+
 }
 
 bool enemy::aStarLoad()
 {
-	return false;
+	player* _player = OBJECTMANAGER->getPlayer();
+
+	int direction_X = _player->getIdxX() - _idxX;
+	int direction_Y = _player->getIdxY() - _idxY;
+
+	if (direction_X == -1)
+	{
+		direction_X = DIRECTION_LEFT;
+		this->_direction = (DIRECTION)direction_X;
+		attackEnemy(_direction);
+		return true;
+	} 
+	else if (direction_X == 1)
+	{
+		direction_X = DIRECTION_RIGHT;
+		this->_direction = (DIRECTION)direction_X;
+		attackEnemy(_direction);
+		return true;
+	}
+	else if (direction_Y == -1)
+	{
+		direction_Y = DIRECTION_UP;
+		this->_direction = (DIRECTION)direction_Y;
+		attackEnemy(_direction);
+		return true;
+	}
+	else if(direction_Y == 1)
+	{
+		direction_Y = DIRECTION_DOWN;
+		this->_direction = (DIRECTION)direction_Y;
+		attackEnemy(_direction);
+		return true;
+	}
+
+	_startPoint = false;
+	_endPoint = false;
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		for (int j = 0; j < _tileX; j++)
+		{
+			_vvTile[i][j].moveWay = TILE_MOVE_WAY_NONE;
+			_vvTile[i][j].parent = NULL;
+			_vvTile[i][j].F = 5000;
+			_vvTile[i][j].H = 0;
+			_vvTile[i][j].i = i;
+			_vvTile[i][j].j = j;
+		}
+	}
+
+	_closeList.clear();
+	_openList.clear();
+	initTile();
+
+	while (true)
+	{
+		if (_aStarState == ASTAR_STATE_FOUND)
+		{
+			int i;
+			int j;
+
+			aStarTile* tile = _closeList[_lastIndex];
+
+			while (true)
+			{
+				tile = tile->parent;
+				if (tile->parent == NULL || tile->parent->parent == NULL)	break;
+			}
+			parentObj* tempObj;
+			int nextIdx = tile->i * TILE_SIZE + tile->j;
+			int nextIdxX = nextIdx / TILE_SIZE;
+			int nextIdxY = nextIdx % TILE_SIZE;
+			tempObj = OBJECTMANAGER->getCheckObj(nextIdxX, nextIdxY);
+
+			if (tempObj == NULL)
+			{
+				direction_X = nextIdxX - _idxX;
+				direction_Y = nextIdxY - _idxY;
+
+				if (direction_X == -1)
+				{
+					direction_X = DIRECTION_LEFT;
+					this->_direction = (DIRECTION)direction_X;
+					_isLeft = true;
+					OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
+				}
+				else if (direction_X == 1)
+				{
+					direction_X = DIRECTION_RIGHT;
+					this->_direction = (DIRECTION)direction_X;
+					_isLeft = false;
+					OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
+				}
+				else if (direction_Y == -1)
+				{
+					direction_Y = DIRECTION_UP;
+					this->_direction = (DIRECTION)direction_Y;
+					OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+				}
+				else if (direction_Y == 1)
+				{
+					direction_Y = DIRECTION_DOWN;
+					this->_direction = (DIRECTION)direction_Y;
+					OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+				}
+				_moveDistance = TILE_SIZE;
+			}
+			else if (tempObj->getObjType() == OBJECT_TYPE_ENEMY)
+			{
+				if (tempObj->getImgName() != IMAGE_NAME[IMAGE_NAME_ENEMY_BANSHEE])
+				{
+					direction_X = nextIdxX - _idxX;
+					direction_Y = nextIdxY - _idxY;
+					if (direction_X == -1)
+					{
+						direction_X = DIRECTION_LEFT;
+						this->_direction = (DIRECTION)direction_X;
+						_isLeft = true;
+						OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
+					}
+					else if (direction_X == 1)
+					{
+						direction_X = DIRECTION_RIGHT;
+						this->_direction = (DIRECTION)direction_X;
+						_isLeft = false;
+						OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
+					}
+					else if (direction_Y == -1)
+					{
+						direction_Y = DIRECTION_UP;
+						this->_direction = (DIRECTION)direction_Y;
+						OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+					}
+					else if (direction_Y == 1)
+					{
+						direction_Y = DIRECTION_DOWN;
+						this->_direction = (DIRECTION)direction_Y;
+						OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+					}
+					_moveDistance = TILE_SIZE;
+					_isHalfMove = true;
+				}
+				return true;
+			}
+		}
+		else if (_aStarState == ASTAR_STATE_NOWAY)
+		{
+			return false;
+		}
+
+		addOpenList();
+		calculateH();
+		calculateF();
+		addCloseList();
+		checkArrive();
+	}
 }
 
 void enemy::constructionTile()
