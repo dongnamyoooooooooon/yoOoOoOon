@@ -38,7 +38,7 @@ void shovel_basic::render()
 
 void shovel_basic::drawHint()
 {
-	IMAGEMANAGER->findImage("hint_shovel_basic")->render(_posX, _posY);
+	IMAGEMANAGER->findImage("hint_shovel_basic")->render(_posX - 43, _posY - 26);
 }
 
 bool shovel_basic::useItem(int idxX, int idxY, int way)
@@ -73,19 +73,22 @@ bool shovel_basic::useItem(int idxX, int idxY, int way)
 			_posY -= TILE_SIZE;
 			break;
 		}
+	}
 
-		if (obj != NULL)
+	if (obj != NULL)
+	{
+		if (obj->getObjType() == OBJECT_TYPE_WALL)
 		{
-			if (obj->getObjType() == OBJECT_TYPE_WALL)
+			if (obj->wallBroken(shovelPower))
 			{
-				if (obj->wallBroken(shovelPower))
-				{
-					OBJECTMANAGER->deleteObject(obj);
-					return true;
-				}
-				else OBJECTMANAGER->breakChain();
+				OBJECTMANAGER->deleteObject(obj);
+				return true;
 			}
+			else 
+				OBJECTMANAGER->breakChain();
 		}
 	}
+
+
 	return false;
 }

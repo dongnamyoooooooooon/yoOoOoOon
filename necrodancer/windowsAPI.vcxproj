@@ -157,6 +157,8 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyInfomation.h" />
     <ClInclude Include="enemy_skeleton.h" />
+    <ClInclude Include="floorStair.h" />
+    <ClInclude Include="floorStair_nothing.h" />
     <ClInclude Include="floorZone_01.h" />
     <ClInclude Include="fontLoader.h" />
     <ClInclude Include="fontLoaderCommon.h" />
@@ -168,12 +170,14 @@
     <ClInclude Include="item.h" />
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="parentObj.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playGround.h" />
+    <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
@@ -189,7 +193,19 @@
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="wall.h" />
+    <ClInclude Include="wallBoss.h" />
+    <ClInclude Include="wallCatacomb.h" />
+    <ClInclude Include="wallDoor_front.h" />
+    <ClInclude Include="wallDoor_side.h" />
+    <ClInclude Include="wallEnd.h" />
+    <ClInclude Include="wallShop.h" />
+    <ClInclude Include="wallShop_Cracked.h" />
+    <ClInclude Include="wallStone_01.h" />
+    <ClInclude Include="wallStone_02.h" />
+    <ClInclude Include="wallStone_Cracked_01.h" />
+    <ClInclude Include="wallStone_Cracked_02.h" />
     <ClInclude Include="wallZone_01.h" />
+    <ClInclude Include="wallZone_02.h" />
     <ClInclude Include="weapon_dagger_basic.h" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +218,8 @@
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemy_skeleton.cpp" />
+    <ClCompile Include="floorStair.cpp" />
+    <ClCompile Include="floorStair_nothing.cpp" />
     <ClCompile Include="floorZone_01.cpp" />
     <ClCompile Include="fontLoader.cpp" />
     <ClCompile Include="gameNode.cpp" />
@@ -211,12 +229,14 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="parentObj.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playGround.cpp" />
+    <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="shovel_basic.cpp" />
     <ClCompile Include="soundManager.cpp" />
@@ -232,7 +252,19 @@
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="wallBoss.cpp" />
+    <ClCompile Include="wallCatacomb.cpp" />
+    <ClCompile Include="wallDoor_front.cpp" />
+    <ClCompile Include="wallDoor_side.cpp" />
+    <ClCompile Include="wallEnd.cpp" />
+    <ClCompile Include="wallShop.cpp" />
+    <ClCompile Include="wallShop_Cracked.cpp" />
+    <ClCompile Include="wallStone_01.cpp" />
+    <ClCompile Include="wallStone_02.cpp" />
+    <ClCompile Include="wallStone_Cracked_01.cpp" />
+    <ClCompile Include="wallStone_Cracked_02.cpp" />
     <ClCompile Include="wallZone_01.cpp" />
+    <ClCompile Include="wallZone_02.cpp" />
     <ClCompile Include="weapon_dagger_basic.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>

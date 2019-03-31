@@ -3,9 +3,24 @@
 #include "parentObj.h"
 
 #include "floorZone_01.h"
+#include "floorStair.h"
+#include "floorStair_nothing.h"
 #include "weapon_dagger_basic.h"
 #include "shovel_basic.h"
 #include "wallZone_01.h"
+#include "wallZone_02.h"
+#include "wallShop.h"
+#include "wallShop_Cracked.h"
+#include "wallStone_01.h"
+#include "wallStone_02.h"
+#include "wallCatacomb.h"
+#include "wallBoss.h"
+#include "wallStone_Cracked_01.h"
+#include "wallStone_Cracked_02.h"
+#include "wallEnd.h"
+#include "wallDoor_front.h"
+#include "wallDoor_side.h"
+
 #include "enemy_skeleton.h"
 
 
@@ -29,8 +44,8 @@ HRESULT objectManager::init()
 			parentObj* floorTile = new parentObj;
 			parentObj* objTile = new parentObj;
 
-			floorTile->init("", i, j, OBJECT_TYPE_NONE, 0);
-			objTile->init("", i, j, OBJECT_TYPE_NONE, 0);
+			floorTile = NULL;
+			objTile = NULL;
 
 			vFloorTile.push_back(floorTile);
 			vObjectTile.push_back(objTile);
@@ -49,6 +64,35 @@ void objectManager::release()
 
 void objectManager::update()
 {
+	if (_vBeat.begin()->beat <= _playTime + 200 && _vBeat.begin()->beat >= _playTime - 200 && !_player->getIsBeat() && !_isGiveBeatTime)
+	{
+		_player->setIsBeat(true);
+		_isGiveBeatTime = true;
+	}
+
+	if (_vBeat.begin()->beat < _playTime - 50)
+	{
+		for (_viObj = _vObj.begin(); _viObj != _vObj.end(); _viObj++)
+		{
+			if ((*_viObj)->getObjType() == OBJECT_TYPE_PLAYER || (*_viObj)->getObjType() == OBJECT_TYPE_WALL) continue;
+
+			if (_isPlayerAlive)
+			{
+				(*_viObj)->setIsBeat(true);
+			}
+
+			if (_player->getIsBeat())
+			{
+				breakChain();
+			}
+			_player->setIsBeat(false);
+			_isGiveBeatTime = false;
+		}
+		_player->bounceHeart();
+		if (_musicKey != "¾îÂ¼°í ÀúÂ¼°í") _vBeat.erase(_vBeat.begin());
+	}
+
+	
 }
 
 void objectManager::render()
@@ -247,8 +291,7 @@ void objectManager::deleteBeat()
 {
 	if (_vBeat.begin()->beat < _playTime - 50)
 	{
-		_player->bounceHeart();
-		if (_musicKey != "¾îÂ¼°í ÀúÂ¼°í") _vBeat.erase(_vBeat.begin());
+		
 	}
 }
 
@@ -332,6 +375,18 @@ parentObj * objectManager::createFloor(parentObj obj)
 	{
 
 	}
+	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_01])
+	{
+		floorStair* tempObj = new floorStair;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
+	}
+	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_02])
+	{
+		floorStair_nothing* tempObj = new floorStair_nothing;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
+	}
 
 
 	return nullptr;
@@ -348,51 +403,75 @@ parentObj * objectManager::createWall(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_02])
 	{
-
+		wallZone_02* tempObj = new wallZone_02;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_03])
 	{
-
+		wallShop* tempObj = new wallShop;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_04])
 	{
-
+		wallShop_Cracked* tempObj = new wallShop_Cracked;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_05])
 	{
-
+		wallStone_01* tempObj = new wallStone_01;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_06])
 	{
-
+		wallStone_02* tempObj = new wallStone_02;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_07])
 	{
-
+		wallCatacomb* tempObj = new wallCatacomb;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_08])
 	{
-
+		wallBoss* tempObj = new wallBoss;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_09])
 	{
-
+		wallStone_Cracked_01* tempObj = new wallStone_Cracked_01;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_10])
 	{
-
+		wallStone_Cracked_02* tempObj = new wallStone_Cracked_02;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_WALL_11])
 	{
-
+		wallEnd* tempObj = new wallEnd;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01])
 	{
-
+		wallDoor_front* tempObj = new wallDoor_front;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 	{
-
+		wallDoor_side* tempObj = new wallDoor_side;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), obj.getIsTorch());
+		return tempObj;
 	}
 
 	return nullptr;

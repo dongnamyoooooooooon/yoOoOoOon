@@ -231,6 +231,54 @@
     <ClInclude Include="enemy_skeleton.h">
       <Filter>PlayGround\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="wallZone_02.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallShop.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallShop_Cracked.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallStone_01.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallStone_02.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallCatacomb.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallStone_Cracked_01.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallBoss.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallStone_Cracked_02.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallDoor_front.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallDoor_side.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="wallEnd.h">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="floorStair.h">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="floorStair_nothing.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -343,6 +391,54 @@
     </ClCompile>
     <ClCompile Include="enemy_skeleton.cpp">
       <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="wallZone_02.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallShop.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallShop_Cracked.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallStone_01.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallStone_02.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallCatacomb.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallStone_Cracked_01.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallBoss.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallStone_Cracked_02.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallEnd.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallDoor_side.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="wallDoor_front.cpp">
+      <Filter>PlayGround\object\wall</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="floorStair.cpp">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="floorStair_nothing.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

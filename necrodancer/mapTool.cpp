@@ -26,7 +26,7 @@ HRESULT mapTool::init()
 	_vvRECT.clear();
 	_vObj.clear();
 
-	//SOUNDMANAGER->play("mapTool");
+	SOUNDMANAGER->play("mapTool");
 
 	_selectObj.init("", 0, 0, OBJECT_TYPE_NONE, 0);
 
@@ -1033,6 +1033,9 @@ void mapTool::mapSizeChange()
 
 void mapTool::loadSetTile()
 {
+	_vvRECT.clear();
+	_vvTile.clear();
+
 	//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
 	for (UINT i = 0; i < _tileY; i++)
 	{
@@ -1541,6 +1544,7 @@ void mapTool::drawUI()
 	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 23, CAMERA->getPosY() + 41, 15, RGB(255, 0, 0));
 	swprintf_s(str, L" 가로: %d / 세로 : %d", _tileX, _tileY);
 	D2DMANAGER->drawText(str, CAMERA->getPosX() + (WINSIZEX - 240) / 2 - 24, CAMERA->getPosY() + 40, 15, RGB(0, 255, 255));
+
 }
 
 void mapTool::drawSample(int num)

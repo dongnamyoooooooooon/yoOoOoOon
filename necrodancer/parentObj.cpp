@@ -158,6 +158,7 @@ tagTilePack parentObj::makeSave()
 	if (pack->objType == OBJECT_TYPE_ITEM)
 	{
 		pack->itemType = _itemType;
+		pack->itemType = _itemKind;
 		pack->itemSubType = _itemSubType;
 	}
 	else if (pack->objType == OBJECT_TYPE_PLAYER)
@@ -184,6 +185,7 @@ void parentObj::makeLoad(tagTilePack * pack)
 	_rc = pack->rc;
 	_isTorch = pack->isTorch;
 	_itemType = pack->itemType;
+	_itemKind = (ITEM_TYPE)pack->itemType;
 
 	if (_objType == OBJECT_TYPE_ITEM)
 	{

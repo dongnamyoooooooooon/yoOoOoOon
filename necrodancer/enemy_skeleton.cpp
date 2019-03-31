@@ -18,7 +18,7 @@ HRESULT enemy_skeleton::init(string imgName, int idxX, int idxY)
 	_moveBeat = 2;
 	_subX = 0;
 	_subY = 26;
-	_damage = 1;
+	_damage = 1; 
 	_heart = 1;
 	_maxHeart = 1;
 
@@ -32,18 +32,20 @@ void enemy_skeleton::release()
 void enemy_skeleton::update()
 {
 	aniPlay();
-	jumpMoveEnemy();
+	
+	//if(_moveDistance == 0)
+		jumpMoveEnemy();
 
-	/*if (!_isBeat)
-	{*/
+	if (_isBeat)
+	{
 		_curMoveBeat++;
 		if (_moveBeat == _curMoveBeat)
 		{
 			_curMoveBeat = 0;
 			aStarLoad();
 		}
-	//	_isBeat = true;
-	//}
+		_isBeat = false;
+	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F3)) _isBeat = false;
 }

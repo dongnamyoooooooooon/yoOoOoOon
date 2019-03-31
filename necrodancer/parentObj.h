@@ -77,9 +77,13 @@ public:
 	/*string makeSaveInfo();
 	void loadSaveInfo(string* data);*/
 
+	virtual bool getIsMove() { return true; }
+
+	//Àû
+	virtual void hitEnemy(int damage) {};
 	
 	//=======================================
-	//			  g e t & s e t
+	//			  g e t & s e t5
 	//=======================================
 
 	int getPosX() { return _posX; }
@@ -140,6 +144,9 @@ public:
 
 	bool getIsTorch() { return _isTorch; }
 	void setIsTorch(bool check) { _isTorch = check; }
+
+	bool getIsBeat() { return _isBeat; }
+	void setIsBeat(bool check) { _isBeat = check; }
 
 };
 

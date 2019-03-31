@@ -51,7 +51,7 @@ void floorZone_01::release()
 
 void floorZone_01::update()
 {
-	/*if (!_isBeat)
+	if (_isBeat)
 	{
 		if (_isCrossStripes)
 		{
@@ -64,14 +64,14 @@ void floorZone_01::update()
 			else _frameX = 0;
 		}
 		_isBeat = false;
-	}*/
+	}
 
 	if (OBJECTMANAGER->getChainCount() != 0)
 		_frameY = 1;
 	else
 		_frameY = 0;
 
-	floorAni();
+	//floorAni();
 }
 
 void floorZone_01::render()

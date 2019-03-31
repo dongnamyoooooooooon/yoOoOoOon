@@ -157,6 +157,8 @@ public:
 	int getPlayerPosX() { return _posX; }
 	int getPlayerPosY() { return _posY; }
 
+	bool getIsMove();
+
 };
 
 

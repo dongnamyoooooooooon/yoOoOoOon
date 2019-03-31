@@ -46,11 +46,27 @@ HRESULT enemy::init(string imgName, int idxX, int idxY)
 	_isDrawHP = false;
 	_isSaw = false;
 
-	_gravity = 0;
+	_gravity = GRAVETY;
 	_jumpPower = 0;
 
 	_move = DIRECITON_NONE;
 	_direction = DIRECITON_NONE;
+
+	_tileY = OBJECTMANAGER->getTileY();
+	_tileX = OBJECTMANAGER->getTileX();
+
+	for (int i = 0; i < _tileY; i++)
+	{
+		vector<aStarTile> vTile;
+		for (int j = 0; j < _tileX; j++)
+		{
+			aStarTile aTile;
+			aTile = {};
+			vTile.push_back(aTile);
+			//이거 업데이트로 받아야 플레이어 변한위치 받을수있음....
+		}
+		_vvTile.push_back(vTile);
+	}
 
 	return E_NOTIMPL;
 }
@@ -85,19 +101,19 @@ void enemy::render()
 		{
 			if (_hasLight)
 			{
-				if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _posZ, _frameX, 0);
-				else		_img->frameRender(_posX - _subX, _posY - _subY + _posZ, _frameX, 0);
+				if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 0);
+				else		_img->frameRender(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 0);
 			}
 			else
 			{
-				if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _posZ, _frameX, 1);
-				else		_img->frameRender(_posX - _subX, _posY - _subY + _posZ, _frameX, 1);
+				if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 1);
+				else		_img->frameRender(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 1);
 			}
 		}
 		else
 		{
-			if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _posZ, _frameX, 1);
-			else		_img->frameRender(_posX - _subX, _posY - _subY + _posZ, _frameX, 1);
+			if (_isLeft) _img->frameRenderReverseX(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 1);
+			else		_img->frameRender(_posX - _subX, _posY - _subY + _jumpPower, _frameX, 1);
 		}
 	}
 
@@ -133,7 +149,7 @@ void enemy::aniEnemy()
 
 void enemy::moveEnemy()
 {
-	_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
+	
 	//_moveDistance = TILE_SIZE;
 
 	switch (_direction)
@@ -179,7 +195,85 @@ void enemy::moveEnemy()
 
 void enemy::jumpMoveEnemy()
 {
-	_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
+	//_jumpPower = TIMEMANAGER->getElapsedTime() * JUMPPOWER;
+	//_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
+	_jumpPower = 10;
+	_speed = 4;
+
+//	if (!_isHalfMove)
+	{
+		switch (_direction)
+		{
+		case DIRECTION_LEFT:
+			_moveDistance -= _speed;
+			_posX -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_jumpPower -= _jumpPower;
+				}
+				else _jumpPower += _jumpPower;
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+			}
+
+			break;
+		case DIRECTION_RIGHT:
+			_moveDistance -= _speed;
+			_posX += _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_jumpPower -= _jumpPower;
+				}
+				else _jumpPower += _jumpPower;
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+			}
+			break;
+		case DIRECTION_UP:
+			_moveDistance -= _speed;
+			_posY -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_jumpPower -= _jumpPower;
+				}
+				else _jumpPower += _jumpPower;
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+			}
+
+			break;
+		case DIRECTION_DOWN:
+			_moveDistance -= _speed;
+			_posY += _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_jumpPower -= _jumpPower;
+				}
+				else _jumpPower += _jumpPower;
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+			}
+			break;
+		}
+	}
+
+	/*_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
 	_jumpPower = JUMPPOWER;
 	_gravity = GRAVETY;
 
@@ -311,7 +405,7 @@ void enemy::jumpMoveEnemy()
 			}
 			break;
 		}
-	}
+	}*/
 }
 
 void enemy::attackEnemy(DIRECTION dir)
@@ -484,12 +578,25 @@ void enemy::patternMove()
 
 bool enemy::aStarLoad()
 {
+	//for (int i = 0; i < _tileY; i++)
+	//{
+	//	vector<aStarTile> vTile;
+	//	for (int j = 0; j < _tileX; j++)
+	//	{
+	//		aStarTile aTile;
+	//		aTile = {};
+	//		vTile.push_back(aTile);
+	//		//이거 업데이트로 받아야 플레이어 변한위치 받을수있음....
+	//	}
+	//	_vvTile.push_back(vTile);
+	//}
+
 	player* _player = OBJECTMANAGER->getPlayer();
 
 	int direction_X = _player->getIdxX() - _idxX;
 	int direction_Y = _player->getIdxY() - _idxY;
 
-	if (direction_X == -1)
+	/*if (direction_X == -1)
 	{
 		direction_X = DIRECTION_LEFT;
 		this->_direction = (DIRECTION)direction_X;
@@ -516,7 +623,8 @@ bool enemy::aStarLoad()
 		this->_direction = (DIRECTION)direction_Y;
 		attackEnemy(_direction);
 		return true;
-	}
+	}*/
+
 
 	_startPoint = false;
 	_endPoint = false;
@@ -553,12 +661,12 @@ bool enemy::aStarLoad()
 				if (tile->parent == NULL || tile->parent->parent == NULL)	break;
 			}
 			parentObj* tempObj;
-			int nextIdx = tile->i * TILE_SIZE + tile->j;
-			int nextIdxX = nextIdx / TILE_SIZE;
-			int nextIdxY = nextIdx % TILE_SIZE;
+			int nextIdx = tile->i * _tileX + tile->j;
+			int nextIdxX = nextIdx % _tileX;
+			int nextIdxY = nextIdx / _tileX;
 			tempObj = OBJECTMANAGER->getCheckObj(nextIdxX, nextIdxY);
 
-			if (tempObj == NULL)
+			if (tempObj == NULL || tempObj->getObjType() == OBJECT_TYPE_NONE)
 			{
 				direction_X = nextIdxX - _idxX;
 				direction_Y = nextIdxY - _idxY;
@@ -630,8 +738,8 @@ bool enemy::aStarLoad()
 					_moveDistance = TILE_SIZE;
 					_isHalfMove = true;
 				}
-				return true;
 			}
+			return true;
 		}
 		else if (_aStarState == ASTAR_STATE_NOWAY)
 		{

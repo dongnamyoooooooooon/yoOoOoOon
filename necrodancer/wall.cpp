@@ -23,7 +23,7 @@ HRESULT wall::init(string imgName, int idxX, int idxY, bool isTorch)
 	_idxY = idxY;
 
 	_posX = _idxX * TILE_SIZE;
-	_posY = _idxY * TILE_SIZE;
+	_posY = _idxY * TILE_SIZE - 28;
 
 	_frameX = 0;
 	_frameY = 0;

@@ -268,6 +268,10 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addFrameImage(COIN_NAME[ITEM_COIN_35], L"image/items/resource_hoard_gold.png", 48, 96, 1, 2);
 		IMAGEMANAGER->addFrameImage(COIN_NAME[ITEM_COIN_50], L"image/items/resource_hoard.png", 68, 76, 1, 2);
 
+		//무기이펙트
+		IMAGEMANAGER->addFrameImage("attack_dagger_basic", L"image/effect/swipe_dagger.png", 144, 48, 3, 1);
+	
+
 		//몬스터
 		IMAGEMANAGER->addImage("enemy_heart_empty", L"image/enemy/heart_empty_small.png", 24, 24);
 		IMAGEMANAGER->addImage("enemy_heart", L"image/enemy/heart_small.png", 24, 24);
@@ -350,6 +354,27 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_dig_player_04", "sound/effect/vo_cad_dig_04.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dig_player_05", "sound/effect/vo_cad_dig_05.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dig_player_06", "sound/effect/vo_cad_dig_06.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_cad_melee_1_01", "sound/effect/vo_cad_melee_1_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_1_02", "sound/effect/vo_cad_melee_1_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_1_03", "sound/effect/vo_cad_melee_1_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_1_04", "sound/effect/vo_cad_melee_1_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_2_01", "sound/effect/vo_cad_melee_2_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_2_02", "sound/effect/vo_cad_melee_2_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_2_03", "sound/effect/vo_cad_melee_2_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_2_04", "sound/effect/vo_cad_melee_2_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_3_01", "sound/effect/vo_cad_melee_3_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_3_02", "sound/effect/vo_cad_melee_3_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_3_03", "sound/effect/vo_cad_melee_3_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_3_04", "sound/effect/vo_cad_melee_3_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_4_01", "sound/effect/vo_cad_melee_4_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_4_02", "sound/effect/vo_cad_melee_4_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_4_03", "sound/effect/vo_cad_melee_4_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_4_04", "sound/effect/vo_cad_melee_4_04.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_cad_melee_4_05", "sound/effect/vo_cad_melee_4_05.ogg", false, false);
+
+
+		
 
 		SOUNDMANAGER->addSound("sound_zombie_attack", "sound/effect/en_zombie_attack.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_armadillo_attack", "sound/effect/en_armadillo_attack.ogg", false, false);
@@ -467,6 +492,7 @@ HRESULT playGround::init()
 
 	SCENEMANAGER->addScene("맵툴", new mapToolScene);
 	SCENEMANAGER->addScene("테슷흐", new testMapScene);
+	SCENEMANAGER->addScene("로딩", new loadingScene);
 
 	SCENEMANAGER->changeScene("테슷흐");
 	

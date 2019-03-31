@@ -6,9 +6,23 @@
 #include <algorithm>
 
 class floorZone_01;
+class floorStair;
+class floorStair_nothing;
 class weapon_dagger_basic;
 class shovel_basic;
 class wallZone_01;
+class wallZone_02;
+class wallShop;
+class wallShop_Cracked;
+class wallStone_01;
+class wallStone_02;
+class wallCatacomb;
+class wallBoss;
+class wallStone_Cracked_01;
+class wallStone_Cracked_02;
+class wallEnd;
+class wallDoor_front;
+class wallDoor_side;
 class enemy_skeleton;
 
 class parentObj;
@@ -74,6 +88,7 @@ public:
 	void update();
 	void render();
 
+	bool _isGiveBeatTime = false;
 
 	//오브젝트
 	void vectorClear();					//벡터클리어용 함수
@@ -121,7 +136,10 @@ public:
 	player* getPlayer() { return _player; }
 
 	//타일
-	parentObj* getCheckObj(int x, int y) { return _vvObjTile[y][x]; }
+	parentObj* getCheckObj(int x, int y) 
+	{ 
+		return _vvObjTile[y][x]; 
+	}
 	parentObj* getCheckFloor(int x, int y) { return _vvFloorTile[y][x]; }
 	void setTileIdx(parentObj* obj, UINT idxX, UINT idxY)
 	{

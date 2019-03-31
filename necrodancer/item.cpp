@@ -20,11 +20,12 @@ HRESULT item::init(string keyName, int idxX, int idxY, ITEM_TYPE type)
 	_idxX = idxX;
 	_idxY = idxY;
 
-	_posX = _idxX * TILE_SIZE;
+	_posX = _idxX * TILE_SIZE + 26;
 	_posY = _idxY * TILE_SIZE;
 	
 	_objType = OBJECT_TYPE_ITEM;
 	_itemType = type;
+	_itemKind = type;
 	
 	_floatCount = 0;
 	_gravity = 2;
@@ -61,10 +62,10 @@ void item::render()
 		{
 			if (_isSaw)
 			{
-				if (_hasLight)	_img->frameRender(_posX, _posY - _jumpPower, _frameX, 0);
-				else			_img->frameRender(_posX, _posY - _jumpPower, _frameX, 1);
+				if (_hasLight)	_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 0);
+				else			_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 1);
 			}
-			else	_img->frameRender(_posX, _posY - _jumpPower, _frameX, 1);
+			else	_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 1);
 		}
 	}
 	else if (_isMoveInven)	_img->frameRender(_posX, _posY - _jumpPower, _frameX, _frameY);

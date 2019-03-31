@@ -38,6 +38,7 @@ void testMapScene::update()
 	OBJECTMANAGER->createBeat();
 	OBJECTMANAGER->deleteBeat();
 	OBJECTMANAGER->allObjectUpdate();
+	OBJECTMANAGER->update();
 
 }
 

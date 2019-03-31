@@ -74,12 +74,17 @@ void player::render()
 	drawHead();
 	drawShadow();
 	//layCast();
+	drawItemHint();
 
 	WCHAR temp[128];
 	swprintf_s(temp, L"%d", _moveDistance);
 	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 150, 30, RGB(0, 255, 255));
 	swprintf_s(temp, L"%.1f", _speed);
 	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 180, 30, RGB(0, 255, 255));
+	swprintf_s(temp, L"idxX : %d", _idxX);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 210, 30, RGB(0, 255, 255));
+	swprintf_s(temp, L"idxY : %d", _idxY);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 240, 30, RGB(0, 255, 255));
 }
 
 void player::playerDead()
@@ -357,15 +362,35 @@ void player::keyUpdate()
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
 			_isLeft = true;
-			_playerState = PLAYER_STATE_JUMP_LEFT;
+		/*	_playerState = PLAYER_STATE_JUMP_LEFT;
 			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;
+			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX - 1, _idxY, 4))
 				{
-					//사운드적용
+					int num = RND->getFromIntTo(1, 17);
+					switch (num)
+					{
+					case 1: SOUNDMANAGER->play("sound_cad_melee_1_01"); break;
+					case 2: SOUNDMANAGER->play("sound_cad_melee_1_02"); break;
+					case 3: SOUNDMANAGER->play("sound_cad_melee_1_03"); break;
+					case 4: SOUNDMANAGER->play("sound_cad_melee_1_04"); break;
+					case 5: SOUNDMANAGER->play("sound_cad_melee_2_01"); break;
+					case 6: SOUNDMANAGER->play("sound_cad_melee_2_02"); break;
+					case 7: SOUNDMANAGER->play("sound_cad_melee_2_03"); break;
+					case 8: SOUNDMANAGER->play("sound_cad_melee_2_04"); break;
+					case 9: SOUNDMANAGER->play("sound_cad_melee_3_01"); break;
+					case 10: SOUNDMANAGER->play("sound_cad_melee_3_02"); break;
+					case 11: SOUNDMANAGER->play("sound_cad_melee_3_03"); break;
+					case 12: SOUNDMANAGER->play("sound_cad_melee_3_04"); break;
+					case 13: SOUNDMANAGER->play("sound_cad_melee_4_01"); break;
+					case 14: SOUNDMANAGER->play("sound_cad_melee_4_02"); break;
+					case 15: SOUNDMANAGER->play("sound_cad_melee_4_03"); break;
+					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
+					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
+					}
 					//카메라흔들림적용
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
@@ -392,7 +417,7 @@ void player::keyUpdate()
 				{
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
-						//사운드적용
+						SOUNDMANAGER->play("sound_door_open");
 						//카메라흔들림적용
 						OBJECTMANAGER->deleteObject(target);
 					}
@@ -411,15 +436,35 @@ void player::keyUpdate()
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
 			_isLeft = false;
-			_playerState = PLAYER_STATE_JUMP_RIGHT;
+			/*_playerState = PLAYER_STATE_JUMP_RIGHT;
 			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;
+			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX + 1, _idxY, 6))
 				{
-					//사운드적용
+					int num = RND->getFromIntTo(1, 17);
+					switch (num)
+					{
+					case 1: SOUNDMANAGER->play("sound_cad_melee_1_01"); break;
+					case 2: SOUNDMANAGER->play("sound_cad_melee_1_02"); break;
+					case 3: SOUNDMANAGER->play("sound_cad_melee_1_03"); break;
+					case 4: SOUNDMANAGER->play("sound_cad_melee_1_04"); break;
+					case 5: SOUNDMANAGER->play("sound_cad_melee_2_01"); break;
+					case 6: SOUNDMANAGER->play("sound_cad_melee_2_02"); break;
+					case 7: SOUNDMANAGER->play("sound_cad_melee_2_03"); break;
+					case 8: SOUNDMANAGER->play("sound_cad_melee_2_04"); break;
+					case 9: SOUNDMANAGER->play("sound_cad_melee_3_01"); break;
+					case 10: SOUNDMANAGER->play("sound_cad_melee_3_02"); break;
+					case 11: SOUNDMANAGER->play("sound_cad_melee_3_03"); break;
+					case 12: SOUNDMANAGER->play("sound_cad_melee_3_04"); break;
+					case 13: SOUNDMANAGER->play("sound_cad_melee_4_01"); break;
+					case 14: SOUNDMANAGER->play("sound_cad_melee_4_02"); break;
+					case 15: SOUNDMANAGER->play("sound_cad_melee_4_03"); break;
+					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
+					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
+					}
 					//카메라흔들림적용
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
@@ -446,7 +491,7 @@ void player::keyUpdate()
 				{
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
-						//사운드적용
+						SOUNDMANAGER->play("sound_door_open");
 						//카메라흔들림적용
 						OBJECTMANAGER->deleteObject(target);
 					}
@@ -464,15 +509,35 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			_playerState = PLAYER_STATE_JUMP_UP;
+			/*_playerState = PLAYER_STATE_JUMP_UP;
 			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;
+			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY - 1, 8))
 				{
-					//사운드적용
+					int num = RND->getFromIntTo(1, 17);
+					switch (num)
+					{
+					case 1: SOUNDMANAGER->play("sound_cad_melee_1_01"); break;
+					case 2: SOUNDMANAGER->play("sound_cad_melee_1_02"); break;
+					case 3: SOUNDMANAGER->play("sound_cad_melee_1_03"); break;
+					case 4: SOUNDMANAGER->play("sound_cad_melee_1_04"); break;
+					case 5: SOUNDMANAGER->play("sound_cad_melee_2_01"); break;
+					case 6: SOUNDMANAGER->play("sound_cad_melee_2_02"); break;
+					case 7: SOUNDMANAGER->play("sound_cad_melee_2_03"); break;
+					case 8: SOUNDMANAGER->play("sound_cad_melee_2_04"); break;
+					case 9: SOUNDMANAGER->play("sound_cad_melee_3_01"); break;
+					case 10: SOUNDMANAGER->play("sound_cad_melee_3_02"); break;
+					case 11: SOUNDMANAGER->play("sound_cad_melee_3_03"); break;
+					case 12: SOUNDMANAGER->play("sound_cad_melee_3_04"); break;
+					case 13: SOUNDMANAGER->play("sound_cad_melee_4_01"); break;
+					case 14: SOUNDMANAGER->play("sound_cad_melee_4_02"); break;
+					case 15: SOUNDMANAGER->play("sound_cad_melee_4_03"); break;
+					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
+					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
+					}
 					//카메라흔들림적용
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
@@ -499,7 +564,7 @@ void player::keyUpdate()
 				{
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
-						//사운드적용
+						SOUNDMANAGER->play("sound_door_open");
 						//카메라흔들림적용
 						OBJECTMANAGER->deleteObject(target);
 					}
@@ -517,15 +582,35 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
-			_playerState = PLAYER_STATE_JUMP_DOWN;
+			/*_playerState = PLAYER_STATE_JUMP_DOWN;
 			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;
+			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY + 1, 2))
 				{
-					//사운드적용
+					int num = RND->getFromIntTo(1, 17);
+					switch (num)
+					{
+					case 1: SOUNDMANAGER->play("sound_cad_melee_1_01"); break;
+					case 2: SOUNDMANAGER->play("sound_cad_melee_1_02"); break;
+					case 3: SOUNDMANAGER->play("sound_cad_melee_1_03"); break;
+					case 4: SOUNDMANAGER->play("sound_cad_melee_1_04"); break;
+					case 5: SOUNDMANAGER->play("sound_cad_melee_2_01"); break;
+					case 6: SOUNDMANAGER->play("sound_cad_melee_2_02"); break;
+					case 7: SOUNDMANAGER->play("sound_cad_melee_2_03"); break;
+					case 8: SOUNDMANAGER->play("sound_cad_melee_2_04"); break;
+					case 9: SOUNDMANAGER->play("sound_cad_melee_3_01"); break;
+					case 10: SOUNDMANAGER->play("sound_cad_melee_3_02"); break;
+					case 11: SOUNDMANAGER->play("sound_cad_melee_3_03"); break;
+					case 12: SOUNDMANAGER->play("sound_cad_melee_3_04"); break;
+					case 13: SOUNDMANAGER->play("sound_cad_melee_4_01"); break;
+					case 14: SOUNDMANAGER->play("sound_cad_melee_4_02"); break;
+					case 15: SOUNDMANAGER->play("sound_cad_melee_4_03"); break;
+					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
+					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
+					}
 					//카메라흔들림적용
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
@@ -552,7 +637,7 @@ void player::keyUpdate()
 				{
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
-						//사운드적용
+						SOUNDMANAGER->play("sound_door_open");
 						//카메라흔들림적용
 						OBJECTMANAGER->deleteObject(target);
 					}
@@ -1480,4 +1565,11 @@ void player::equipUpdate()
 	if (_playerBomb)
 		_playerBomb->update();
 
+}
+
+bool player::getIsMove()
+{
+	if (_playerState != PLAYER_STATE_NONE)
+		return true;
+	else return false;
 }
