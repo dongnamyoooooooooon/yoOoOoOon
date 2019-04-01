@@ -11,7 +11,7 @@ private:
 	int _drawY;
 	int _effectCount;
 
-	//bool _isThrow;
+	bool _isThrow;
 
 public:
 	weapon_dagger_basic();

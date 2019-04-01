@@ -6,10 +6,23 @@
 #include <algorithm>
 
 class floorZone_01;
+class floorZone_02;
+class floorBoss;
+class floorShop;
+class floorWater;
 class floorStair;
 class floorStair_nothing;
 class weapon_dagger_basic;
+class weapon_broadsword_basic;
 class shovel_basic;
+class armor_Gi;
+class armor_leather;
+class armor_chainmail;
+class armor_platemail;
+class armor_heavyplate;
+class armor_obsidian;
+class armor_glass;
+class torch_basic;
 class wallZone_01;
 class wallZone_02;
 class wallShop;
@@ -24,6 +37,7 @@ class wallEnd;
 class wallDoor_front;
 class wallDoor_side;
 class enemy_skeleton;
+class enemy_shopkeeper;
 
 class parentObj;
 class objectManager : public singletonBase<objectManager>, public gameNode

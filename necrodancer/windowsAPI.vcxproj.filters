@@ -97,6 +97,12 @@
     <Filter Include="PlayGround\object\wall">
       <UniqueIdentifier>{eeaeffe2-98a5-4719-8915-a4f77f950a6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\item\getherItem\armor">
+      <UniqueIdentifier>{3f9bab06-5547-482c-88bf-7df3de09ce29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\item\getherItem\torch">
+      <UniqueIdentifier>{29938fdd-6f51-4b7c-8584-bc78f9a19bec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -267,16 +273,58 @@
     <ClInclude Include="wallEnd.h">
       <Filter>PlayGround\object\wall</Filter>
     </ClInclude>
-    <ClInclude Include="loadingScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="progressBar.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="floorStair.h">
       <Filter>PlayGround\object\floor</Filter>
     </ClInclude>
+    <ClInclude Include="armor_Gi.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
     <ClInclude Include="floorStair_nothing.h">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>PlayGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="armor_leather.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
+    <ClInclude Include="armor_chainmail.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
+    <ClInclude Include="armor_heavyplate.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
+    <ClInclude Include="armor_platemail.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
+    <ClInclude Include="armor_glass.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
+    <ClInclude Include="armor_obsidian.h">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClInclude>
+    <ClInclude Include="torch_basic.h">
+      <Filter>PlayGround\item\getherItem\torch</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_shopkeeper.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="floorZone_02.h">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="floorBoss.h">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="floorShop.h">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="floorWater.h">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_broadsword_basic.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -428,16 +476,58 @@
     <ClCompile Include="wallDoor_front.cpp">
       <Filter>PlayGround\object\wall</Filter>
     </ClCompile>
-    <ClCompile Include="loadingScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="progressBar.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="floorStair.cpp">
       <Filter>PlayGround\object\floor</Filter>
     </ClCompile>
+    <ClCompile Include="armor_Gi.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
     <ClCompile Include="floorStair_nothing.cpp">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>PlayGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="armor_leather.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
+    <ClCompile Include="armor_chainmail.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
+    <ClCompile Include="armor_heavyplate.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
+    <ClCompile Include="armor_platemail.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
+    <ClCompile Include="armor_glass.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
+    <ClCompile Include="armor_obsidian.cpp">
+      <Filter>PlayGround\item\getherItem\armor</Filter>
+    </ClCompile>
+    <ClCompile Include="torch_basic.cpp">
+      <Filter>PlayGround\item\getherItem\torch</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_shopkeeper.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="floorZone_02.cpp">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="floorBoss.cpp">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="floorShop.cpp">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="floorWater.cpp">
+      <Filter>PlayGround\object\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_broadsword_basic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

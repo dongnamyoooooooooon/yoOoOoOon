@@ -74,7 +74,7 @@ void item::render()
 
 void item::itemInven(int moveX, int moveY)
 {
-	_isMoveInven = true;
+	_isMoveInven = false;
 
 	_moveX = moveX;
 	_moveY = moveY;

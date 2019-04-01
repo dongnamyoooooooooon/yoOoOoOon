@@ -410,14 +410,31 @@ void enemy::jumpMoveEnemy()
 
 void enemy::attackEnemy(DIRECTION dir)
 {
+	soundAtt();
+	_direction = dir;
+	player* tempPlayer = OBJECTMANAGER->getPlayer();
+
+	_posX = tempPlayer->getPosX();
+	_posY = tempPlayer->getPosY();
+	tempPlayer->hitPlayer(_damage);
+
 }
 
 void enemy::hitEnemy(int damage)
 {
+	soundHit();
+	_isDrawHP = true;
+	_heart -= damage;
+
+	if (_heart <= 0) this->dieEnemy();
 }
 
 void enemy::dieEnemy()
 {
+	soundDie();
+	OBJECTMANAGER->grooveChain();
+
+	OBJECTMANAGER->deleteObject(this);
 }
 
 
@@ -596,34 +613,42 @@ bool enemy::aStarLoad()
 	int direction_X = _player->getIdxX() - _idxX;
 	int direction_Y = _player->getIdxY() - _idxY;
 
-	/*if (direction_X == -1)
+	if ((direction_X == -1 && direction_Y == 0) || (direction_X == 0 && direction_Y == -1)
+		|| (direction_X == 1 && direction_Y == 0) || (direction_X == 0 && direction_Y == 1))
 	{
-		direction_X = DIRECTION_LEFT;
-		this->_direction = (DIRECTION)direction_X;
+			
 		attackEnemy(_direction);
 		return true;
 	}
-	else if (direction_X == 1)
-	{
-		direction_X = DIRECTION_RIGHT;
-		this->_direction = (DIRECTION)direction_X;
-		attackEnemy(_direction);
-		return true;
-	}
-	else if (direction_Y == -1)
-	{
-		direction_Y = DIRECTION_UP;
-		this->_direction = (DIRECTION)direction_Y;
-		attackEnemy(_direction);
-		return true;
-	}
-	else if (direction_Y == 1)
-	{
-		direction_Y = DIRECTION_DOWN;
-		this->_direction = (DIRECTION)direction_Y;
-		attackEnemy(_direction);
-		return true;
-	}*/
+
+	//if (direction_X == -1)
+	//{
+	//	direction_X = DIRECTION_LEFT;
+	//	this->_direction = (DIRECTION)direction_X;
+	//	attackEnemy(_direction);
+	//	return true;
+	//}
+	//else if (direction_X == 1)
+	//{
+	//	direction_X = DIRECTION_RIGHT;
+	//	this->_direction = (DIRECTION)direction_X;
+	//	attackEnemy(_direction);
+	//	return true;
+	//}
+	//else if (direction_Y == -1)
+	//{
+	//	direction_Y = DIRECTION_UP;
+	//	this->_direction = (DIRECTION)direction_Y;
+	//	attackEnemy(_direction);
+	//	return true;
+	//}
+	//else if (direction_Y == 1)
+	//{
+	//	direction_Y = DIRECTION_DOWN;
+	//	this->_direction = (DIRECTION)direction_Y;
+	//	attackEnemy(_direction);
+	//	return true;
+	//}
 
 
 	_startPoint = false;

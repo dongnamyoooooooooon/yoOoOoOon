@@ -72,6 +72,8 @@ private:
 
 	tagNote	_note;
 
+	string _shopBgmKey;
+
 public:
 	HRESULT init();
 	void release();
@@ -146,7 +148,10 @@ public:
 	float									getShopVolume() { return _shopVolume; }
 	void									setShopVolume(float volume) { _shopVolume = volume; }
 
-	float*									getSpec() { return _spec; }
+	float*									getSpec() 
+	{ 
+		return _spec; 
+	}
 
 	float getEffectVol() { return _effectVol; }
 	void setEffectVol(float effectVol) { _effectVol = effectVol; }
@@ -157,5 +162,8 @@ public:
 	void setVolume(float volume) { _volume = volume; }
 	void VolDown() { _volume -= 0.1f; if (_volume < 0) _volume = 0; }
 	void VolUp() { _volume += 0.1f; if (_volume > 1) _volume = 1; }
+
+	string getShopBgmKey() { return _shopBgmKey;}
+	void setShopBgmKey(string name) { _shopBgmKey = name; }
 };
 

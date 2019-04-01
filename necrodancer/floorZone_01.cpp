@@ -21,9 +21,6 @@ HRESULT floorZone_01::init(int idxX, int idxY)
 	setTileX(OBJECTMANAGER->getTileX());
 	setTileY(OBJECTMANAGER->getTileY());
 
-	checkFever(idxX, idxY);
-
-
 	if (_isCrossStripes)
 	{
 		_frameX = 0;

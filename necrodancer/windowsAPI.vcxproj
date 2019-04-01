@@ -149,6 +149,13 @@
   <ItemGroup>
     <ClInclude Include="action.h" />
     <ClInclude Include="animation.h" />
+    <ClInclude Include="armor_chainmail.h" />
+    <ClInclude Include="armor_Gi.h" />
+    <ClInclude Include="armor_glass.h" />
+    <ClInclude Include="armor_heavyplate.h" />
+    <ClInclude Include="armor_leather.h" />
+    <ClInclude Include="armor_obsidian.h" />
+    <ClInclude Include="armor_platemail.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="d2dManager.h" />
@@ -156,10 +163,15 @@
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyInfomation.h" />
+    <ClInclude Include="enemy_shopkeeper.h" />
     <ClInclude Include="enemy_skeleton.h" />
+    <ClInclude Include="floorBoss.h" />
+    <ClInclude Include="floorShop.h" />
     <ClInclude Include="floorStair.h" />
     <ClInclude Include="floorStair_nothing.h" />
+    <ClInclude Include="floorWater.h" />
     <ClInclude Include="floorZone_01.h" />
+    <ClInclude Include="floorZone_02.h" />
     <ClInclude Include="fontLoader.h" />
     <ClInclude Include="fontLoaderCommon.h" />
     <ClInclude Include="gameNode.h" />
@@ -190,6 +202,7 @@
     <ClInclude Include="tileNode.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
+    <ClInclude Include="torch_basic.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="wall.h" />
@@ -206,21 +219,34 @@
     <ClInclude Include="wallStone_Cracked_02.h" />
     <ClInclude Include="wallZone_01.h" />
     <ClInclude Include="wallZone_02.h" />
+    <ClInclude Include="weapon_broadsword_basic.h" />
     <ClInclude Include="weapon_dagger_basic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="armor_chainmail.cpp" />
+    <ClCompile Include="armor_Gi.cpp" />
+    <ClCompile Include="armor_glass.cpp" />
+    <ClCompile Include="armor_heavyplate.cpp" />
+    <ClCompile Include="armor_leather.cpp" />
+    <ClCompile Include="armor_obsidian.cpp" />
+    <ClCompile Include="armor_platemail.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="d2dManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemy_shopkeeper.cpp" />
     <ClCompile Include="enemy_skeleton.cpp" />
+    <ClCompile Include="floorBoss.cpp" />
+    <ClCompile Include="floorShop.cpp" />
     <ClCompile Include="floorStair.cpp" />
     <ClCompile Include="floorStair_nothing.cpp" />
+    <ClCompile Include="floorWater.cpp" />
     <ClCompile Include="floorZone_01.cpp" />
+    <ClCompile Include="floorZone_02.cpp" />
     <ClCompile Include="fontLoader.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="image.cpp" />
@@ -249,6 +275,7 @@
     <ClCompile Include="testMapScene.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="torch_basic.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -265,6 +292,7 @@
     <ClCompile Include="wallStone_Cracked_02.cpp" />
     <ClCompile Include="wallZone_01.cpp" />
     <ClCompile Include="wallZone_02.cpp" />
+    <ClCompile Include="weapon_broadsword_basic.cpp" />
     <ClCompile Include="weapon_dagger_basic.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>

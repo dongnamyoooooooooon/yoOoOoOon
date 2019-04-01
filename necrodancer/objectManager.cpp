@@ -3,10 +3,23 @@
 #include "parentObj.h"
 
 #include "floorZone_01.h"
+#include "floorZone_02.h"
+#include "floorBoss.h"
+#include "floorShop.h"
+#include "floorWater.h"
 #include "floorStair.h"
 #include "floorStair_nothing.h"
 #include "weapon_dagger_basic.h"
+#include "weapon_broadsword_basic.h"
 #include "shovel_basic.h"
+#include "armor_Gi.h"
+#include "armor_leather.h"
+#include "armor_chainmail.h"
+#include "armor_platemail.h"
+#include "armor_heavyplate.h"
+#include "armor_obsidian.h"
+#include "armor_glass.h"
+#include "torch_basic.h"
 #include "wallZone_01.h"
 #include "wallZone_02.h"
 #include "wallShop.h"
@@ -22,6 +35,7 @@
 #include "wallDoor_side.h"
 
 #include "enemy_skeleton.h"
+#include "enemy_shopkeeper.h"
 
 
 objectManager::objectManager()
@@ -34,7 +48,7 @@ objectManager::~objectManager()
 
 HRESULT objectManager::init()
 {
-	
+
 	for (UINT i = 0; i < _tileY; i++)
 	{
 		vector<parentObj*> vFloorTile;
@@ -64,7 +78,11 @@ void objectManager::release()
 
 void objectManager::update()
 {
-	if (_vBeat.begin()->beat <= _playTime + 200 && _vBeat.begin()->beat >= _playTime - 200 && !_player->getIsBeat() && !_isGiveBeatTime)
+
+	SOUNDMANAGER->getSingShopkeeper(_musicKey);
+
+
+	if (_vBeat.begin()->beat <= _playTime + 300 && _vBeat.begin()->beat >= _playTime - 300 && !_player->getIsBeat() && !_isGiveBeatTime)
 	{
 		_player->setIsBeat(true);
 		_isGiveBeatTime = true;
@@ -92,7 +110,7 @@ void objectManager::update()
 		if (_musicKey != "¾îÂ¼°í ÀúÂ¼°í") _vBeat.erase(_vBeat.begin());
 	}
 
-	
+
 }
 
 void objectManager::render()
@@ -108,12 +126,12 @@ void objectManager::render()
 
 		if ((*_viObj)->getObjType() == OBJECT_TYPE_FLOOR)
 		{
-			if(_vvObjTile[(*_viObj)->getIdxY()][(*_viObj)->getIdxX()] == NULL)
+			if (_vvObjTile[(*_viObj)->getIdxY()][(*_viObj)->getIdxX()] == NULL)
 			{
 				(*_viObj)->render();
 			}
 			else if (_vvObjTile[(*_viObj)->getIdxY()][(*_viObj)->getIdxX()]->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] ||
-					 _vvObjTile[(*_viObj)->getIdxY()][(*_viObj)->getIdxX()]->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
+				_vvObjTile[(*_viObj)->getIdxY()][(*_viObj)->getIdxX()]->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 			{
 				(*_viObj)->render();
 			}
@@ -134,7 +152,6 @@ void objectManager::render()
 		}
 	}
 
-
 	//ºñÆ®
 	//RECT rc;
 	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
@@ -154,7 +171,7 @@ void objectManager::render()
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
 	else
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
-	
+
 	_player->drawEquipUI();
 	_player->drawPlayerUI();
 
@@ -291,7 +308,7 @@ void objectManager::deleteBeat()
 {
 	if (_vBeat.begin()->beat < _playTime - 50)
 	{
-		
+
 	}
 }
 
@@ -300,51 +317,51 @@ parentObj* objectManager::objectPush(parentObj obj)
 	parentObj* tempObject;
 	switch (obj.getObjType())
 	{
-		case OBJECT_TYPE_FLOOR:
-		{
-			tempObject = createFloor(obj);
-			tempObject->setObjType(OBJECT_TYPE_FLOOR);
-			if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_01])
-				_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
-			else
-				_vvFloorTile[obj.getIdxY()][obj.getIdxX()] = tempObject;
-			break;
-		}
-		case OBJECT_TYPE_WALL:
-		{
-			tempObject = createWall(obj);
-			tempObject->setObjType(OBJECT_TYPE_WALL);
+	case OBJECT_TYPE_FLOOR:
+	{
+		tempObject = createFloor(obj);
+		tempObject->setObjType(OBJECT_TYPE_FLOOR);
+		if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_01])
 			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
-			break;
-		}
-		case OBJECT_TYPE_ITEM:
-		{
-			tempObject = createItem(obj);
-			tempObject->setObjType(OBJECT_TYPE_ITEM);
-			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
-			break;
-		}
-		case OBJECT_TYPE_ENEMY:
-		{
-			tempObject = createEnemy(obj);
-			tempObject->setObjType(OBJECT_TYPE_ENEMY);
-			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
-			break;
-		}
-		case OBJECT_TYPE_TRAP:
-		{
-			tempObject = createTrap(obj);
-			tempObject->setObjType(OBJECT_TYPE_TRAP);
-			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
-			break;
-		}
-		case OBJECT_TYPE_PLAYER:
-		{
-			tempObject = createPlayer(obj);
-			tempObject->setObjType(OBJECT_TYPE_PLAYER);
-			_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
-			break;
-		}
+		else
+			_vvFloorTile[obj.getIdxY()][obj.getIdxX()] = tempObject;
+		break;
+	}
+	case OBJECT_TYPE_WALL:
+	{
+		tempObject = createWall(obj);
+		tempObject->setObjType(OBJECT_TYPE_WALL);
+		_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
+		break;
+	}
+	case OBJECT_TYPE_ITEM:
+	{
+		tempObject = createItem(obj);
+		tempObject->setObjType(OBJECT_TYPE_ITEM);
+		_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
+		break;
+	}
+	case OBJECT_TYPE_ENEMY:
+	{
+		tempObject = createEnemy(obj);
+		tempObject->setObjType(OBJECT_TYPE_ENEMY);
+		_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
+		break;
+	}
+	case OBJECT_TYPE_TRAP:
+	{
+		tempObject = createTrap(obj);
+		tempObject->setObjType(OBJECT_TYPE_TRAP);
+		_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
+		break;
+	}
+	case OBJECT_TYPE_PLAYER:
+	{
+		tempObject = createPlayer(obj);
+		tempObject->setObjType(OBJECT_TYPE_PLAYER);
+		_vvObjTile[tempObject->getIdxY()][tempObject->getIdxX()] = tempObject;
+		break;
+	}
 	}
 	_vObj.push_back(tempObject);
 	return tempObject;
@@ -361,19 +378,27 @@ parentObj * objectManager::createFloor(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_FLOOR_02])
 	{
-
+		floorZone_02* tempObj = new floorZone_02;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_FLOOR_03])
 	{
-
+		floorBoss* tempObj = new floorBoss;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_FLOOR_04])
 	{
-
+		floorShop* tempObj = new floorShop;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_FLOOR_05])
 	{
-
+		floorWater* tempObj = new floorWater;
+		tempObj->init(obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_STAIRS_01])
 	{
@@ -537,7 +562,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_BROADSWORD_BASIC])
 	{
-
+		weapon_broadsword_basic* tempObj = new weapon_broadsword_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_BROADSWORD_TITANIUM])
 	{
@@ -773,7 +800,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == TORCH_NAME[ITEM_TORCH_BASIC])
 	{
-
+		torch_basic* tempObj = new torch_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_TORCH);
+		return tempObj;
 	}
 	else if (obj.getImgName() == TORCH_NAME[ITEM_TORCH_BRIGHT])
 	{
@@ -801,31 +830,45 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_LEATHER])
 	{
-
+		armor_leather* tempObj = new armor_leather;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_CHAINMAIL])
 	{
-
+		armor_chainmail* tempObj = new armor_chainmail;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_PLATEMAIL])
 	{
-
+		armor_platemail* tempObj = new armor_platemail;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_HEAVYPLATE])
 	{
-
+		armor_heavyplate* tempObj = new armor_heavyplate;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_KARADE])
 	{
-
+		armor_Gi* tempObj = new armor_Gi;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_OBSIDIAN])
 	{
-
+		armor_obsidian* tempObj = new armor_obsidian;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == ARMOR_NAME[ITEM_ARMOR_GLASS])
 	{
-
+		armor_glass* tempObj = new armor_glass;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_ARMOR);
+		return tempObj;
 	}
 	else if (obj.getImgName() == HEADWEAR_NAME[ITEM_HEADWEAR_HELMAT])
 	{
@@ -1053,7 +1096,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SHOPKEEPER])
 	{
-
+		enemy_shopkeeper* tempObj = new enemy_shopkeeper;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 
 
@@ -1104,7 +1149,7 @@ void objectManager::grooveChain()
 	}
 
 	_killCount++;
-	
+
 	if (_killCount % 5 == 0 && _chainCount < 4)
 	{
 		_chainCount++;

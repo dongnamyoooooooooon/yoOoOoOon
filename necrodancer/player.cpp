@@ -845,7 +845,7 @@ void player::setEquipUI(parentObj* obj)
 		_inven[0].object = _playerShovel;
 
 		if (_playerShovel == obj)
-			obj->setItemInven(_inven[0].pos.x + 8, _inven[0].pos.y + 13);
+			obj->itemInven(_inven[0].pos.x + 8, _inven[0].pos.y + 13);
 	}
 	if (_playerWeapon != NULL)
 	{
@@ -858,7 +858,7 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerWeapon;
 
 				if (_playerWeapon == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				break;
 			}
@@ -875,7 +875,11 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerArmor;
 
 				if (_playerArmor == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+
+				_curArmor = _playerArmor->getImgName();
+				playerAniStart_Head("right_head");
+				playerAniStart_Body(_curArmor);
 
 				break;
 			}
@@ -892,7 +896,7 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerHeadWear;
 
 				if (_playerHeadWear == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				break;
 			}
@@ -909,7 +913,7 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerFootWear;
 
 				if (_playerFootWear == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				break;
 			}
@@ -926,7 +930,7 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerTorch;
 
 				if (_playerTorch == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				break;
 			}
@@ -943,7 +947,7 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerItem;
 
 				if (_playerItem == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				break;
 			}
@@ -960,7 +964,7 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].object = _playerBomb;
 
 				if (_playerBomb == obj)
-					obj->setItemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				break;
 			}
@@ -1248,8 +1252,8 @@ void player::drawEquipUI()
 				IMAGEMANAGER->findImage("equipUI_shovel")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
 			else if (_inven[i].UIKey == "equipUI_weapon")
 				IMAGEMANAGER->findImage("equipUI_weapon")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
-			else if (_inven[i].UIKey == "equipUI_body")
-				IMAGEMANAGER->findImage("equipUI_body")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
+			else if (_inven[i].UIKey == "equipUI_armor")
+				IMAGEMANAGER->findImage("equipUI_armor")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
 			else if (_inven[i].UIKey == "equipUI_head")
 				IMAGEMANAGER->findImage("equipUI_head")->render2(CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y);
 			else if (_inven[i].UIKey == "equipUI_feet")
@@ -1350,7 +1354,19 @@ void player::addInven(parentObj * obj)
 		{
 			case ITEM_TYPE_SHOVEL:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				_putObj = _playerShovel;
 				_playerShovel = obj;
 
@@ -1361,7 +1377,7 @@ void player::addInven(parentObj * obj)
 			}
 			case ITEM_TYPE_WEAPON:
 			{
-				//사운드 적용
+				SOUNDMANAGER->play("sound_pickup_weapon");
 				_putObj = _playerWeapon;
 				_playerWeapon = obj;
 
@@ -1371,14 +1387,26 @@ void player::addInven(parentObj * obj)
 			}
 			case ITEM_TYPE_TORCH:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				_putObj = _playerTorch;
 				_playerTorch = obj;
 				break;
 			}
 			case ITEM_TYPE_ARMOR:
 			{
-				//사운드 적용
+				SOUNDMANAGER->play("sound_pickup_armor");
 				_putObj = _playerArmor;
 				_playerArmor = obj;
 				_curArmor = _playerArmor->getImgName();
@@ -1386,28 +1414,76 @@ void player::addInven(parentObj * obj)
 			}
 			case ITEM_TYPE_HEADWEAR:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				_putObj = _playerShovel;
 				_playerShovel = obj;
 				break;
 			}
 			case ITEM_TYPE_FOOTWEAR:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				_putObj = _playerFootWear;
 				_playerFootWear = obj;
 				break;
 			}
 			case ITEM_TYPE_CONSUMABLE:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				_putObj = _playerItem;
 				_playerItem = obj;
 				break;
 			}
 			case ITEM_TYPE_HEART:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				//하트증가시키자
 				//_playerStat.heart += 
 				OBJECTMANAGER->deleteObject(obj);
@@ -1415,7 +1491,19 @@ void player::addInven(parentObj * obj)
 			}
 			case ITEM_TYPE_COIN:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				//코인증가시키자
 				//_playerStat.coin += obj
 				OBJECTMANAGER->deleteObject(obj);
@@ -1423,7 +1511,19 @@ void player::addInven(parentObj * obj)
 			}
 			case ITEM_TYPE_BOMB:
 			{
-				//사운드 적용
+				int random = RND->getFromIntTo(1, 3);
+				switch (random)
+				{
+				case 1:
+					SOUNDMANAGER->play("sound_pickup_gold_01");
+					break;
+				case 2:
+					SOUNDMANAGER->play("sound_pickup_gold_02");
+					break;
+				case 3:
+					SOUNDMANAGER->play("sound_pickup_gold_03");
+					break;
+				}
 				_putObj = _playerBomb;
 				_playerBomb = obj;
 				break;
@@ -1452,35 +1552,41 @@ void player::drawItemHint()
 
 void player::hitPlayer(int damage)
 {
-	if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_GLASS])	//갑옷이 유리갑옷일때
+	if (_playerArmor != NULL)
 	{
-		_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
-
-		playerAniStart_Head("right_head");
-		playerAniStart_Body(_curArmor);
-
-		//적용값설정
-		//_playerStat.defence -= _playerArmor.방어력
-
-		_playerArmor = NULL;
-
-		SOUNDMANAGER->play("sound_glass_break");
+		if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_GLASS])	//갑옷이 유리갑옷일때
 		{
-			brokenItemEquipUI();
+			_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
+
+			playerAniStart_Head("right_head");
+			playerAniStart_Body(_curArmor);
+
+			//적용값설정
+			//_playerStat.defence -= _playerArmor.방어력
+
+			_playerArmor = NULL;
+
+			SOUNDMANAGER->play("sound_glass_break");
+			{
+				brokenItemEquipUI();
+			}
 		}
 	}
-	else if (_playerHeadWear->getImgName() == HEADWEAR_NAME[ITEM_HEADWEAR_TELEPORT])
-	{
-		SOUNDMANAGER->play("sound_teleport");
-		_playerHeadWear = NULL;
-		/*_indX =
-		_indY =
-		_tileX =				//상점주인이 있는 곳으로
-		_tileY =*/
-		_posX = _idxX * 52 + 26;
-		_posY = _idxY * 52 + 26;
+	else if (_playerHeadWear != NULL)
+	{	
+		if (_playerHeadWear->getImgName() == HEADWEAR_NAME[ITEM_HEADWEAR_TELEPORT])
 		{
-			brokenItemEquipUI();
+			SOUNDMANAGER->play("sound_teleport");
+			_playerHeadWear = NULL;
+			/*_indX =
+			_indY =
+			_tileX =				//상점주인이 있는 곳으로
+			_tileY =*/
+			_posX = _idxX * 52 + 26;
+			_posY = _idxY * 52 + 26;
+			{
+				brokenItemEquipUI();
+			}
 		}
 	}
 	else
@@ -1499,41 +1605,53 @@ void player::hitPlayer(int damage)
 
 		int hurt;
 
-		if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_KARADE])	hurt = (damage * 2 - _playerStat.defence) * 2;	//(적공격력 - 내방어력) X 2;
+		if (_playerArmor != NULL)
+		{
+			if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_KARADE])	hurt = (damage * 2 - _playerStat.defence) * 2;	//(적공격력 - 내방어력) X 2;
+		}
 		else																hurt = damage * 2 - _playerStat.defence;	//플레이어가 입은 데미지 = 적데미지 * 2 - 플레이어 방어력
 
 		if (hurt < 0) hurt = 0;
 
 		_playerStat.heart -= hurt;
 
-		if (_playerTorch->getImgName() == TORCH_NAME[ITEM_TORCH_GLASS])
+		if (_playerTorch != NULL)
 		{
-			SOUNDMANAGER->play("sound_glass_break");
-			_playerTorch = NULL;
+			if (_playerTorch->getImgName() == TORCH_NAME[ITEM_TORCH_GLASS])
 			{
-				brokenItemEquipUI();
+				SOUNDMANAGER->play("sound_glass_break");
+				_playerTorch = NULL;
+				{
+					brokenItemEquipUI();
+				}
 			}
 		}
-		if (_playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_DAGGER_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BROADSWORD_GLASS]
-		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_RAPIER_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_SPEAR_GLASS]
-		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_LONGSWORD_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_WHIP_GLASS]
-		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BOW_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_GLASS]
-		|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_NINETAILS_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_FIAIL_GLASS])
+		if (_playerWeapon != NULL)
 		{
-			SOUNDMANAGER->play("sound_glass_break");
-			_playerWeapon = NULL;
-			//바닥에 유리조각 떨어져야 한다.
+			if (_playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_DAGGER_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BROADSWORD_GLASS]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_RAPIER_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_SPEAR_GLASS]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_LONGSWORD_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_WHIP_GLASS]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_BOW_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_CROSSBOW_GLASS]
+				|| _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_NINETAILS_GLASS] || _playerWeapon->getImgName() == WEAPON_NAME[ITEM_WEAPON_FIAIL_GLASS])
 			{
-				brokenItemEquipUI();
+				SOUNDMANAGER->play("sound_glass_break");
+				_playerWeapon = NULL;
+				//바닥에 유리조각 떨어져야 한다.
+				{
+					brokenItemEquipUI();
+				}
 			}
 		}
-		if (_playerShovel->getImgName() == SHOVEL_NAME[ITEM_SHOVEL_GLASS])
+		if (_playerShovel != NULL)
 		{
-			SOUNDMANAGER->play("sound_glass_break");
-			_playerShovel = NULL;
-			//바닥에 유리조각 떨어져야 한다.
+			if (_playerShovel->getImgName() == SHOVEL_NAME[ITEM_SHOVEL_GLASS])
 			{
-				brokenItemEquipUI();
+				SOUNDMANAGER->play("sound_glass_break");
+				_playerShovel = NULL;
+				//바닥에 유리조각 떨어져야 한다.
+				{
+					brokenItemEquipUI();
+				}
 			}
 		}
 	}

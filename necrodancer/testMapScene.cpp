@@ -22,7 +22,7 @@ HRESULT testMapScene::init()
 	_jjMax = 0;
 
 	OBJECTMANAGER->initBeat("sound/music/zone1.txt", "test_music");
-
+	SOUNDMANAGER->setShopBgmKey("test_music");
 
 	return S_OK;
 }
@@ -39,6 +39,8 @@ void testMapScene::update()
 	OBJECTMANAGER->deleteBeat();
 	OBJECTMANAGER->allObjectUpdate();
 	OBJECTMANAGER->update();
+
+	if (KEYMANAGER->isStayKeyDown(VK_F2)) OBJECTMANAGER->grooveChain();
 
 }
 

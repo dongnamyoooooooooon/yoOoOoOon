@@ -70,6 +70,7 @@ public:
 	virtual void setIsMoveInven(bool check) { _isMoveInven = check; }
 	virtual void setItemInven(int x, int y) {};	//바닥에서 인벤으로
 	virtual void drawHint() {};
+	virtual void itemInven(int moveX, int moveY) {};
 
 	//벽
 	virtual bool wallBroken(int power) { return false; }
@@ -142,8 +143,8 @@ public:
 	bool getIsThrow() { return _isThrow;}
 	void setIsThrow(bool check) { _isThrow = check; }
 
-	bool getIsTorch() { return _isTorch; }
-	void setIsTorch(bool check) { _isTorch = check; }
+	virtual bool getIsTorch() { return _isTorch; }
+	virtual void setIsTorch(bool check) { _isTorch = check; }
 
 	bool getIsBeat() { return _isBeat; }
 	void setIsBeat(bool check) { _isBeat = check; }

@@ -319,7 +319,17 @@ HRESULT playGround::init()
 
 		//아이템설명
 		IMAGEMANAGER->addImage("hint_dagger_basic", L"image/hint/hint_daggerthrowable.png", 140, 18);
+		IMAGEMANAGER->addImage("hint_broadsword_basic", L"image/hint/hint_widerattack.png", 97, 18);
 		IMAGEMANAGER->addImage("hint_shovel_basic", L"image/hint/hint_1dig.png", 85, 18);
+		IMAGEMANAGER->addImage("hint_armor_gi", L"image/hint/hint_takeanddealdoubledamage.png", 223, 18);
+		IMAGEMANAGER->addImage("hint_armor_leather", L"image/hint/hint_0-5defense.png", 95, 18);
+		IMAGEMANAGER->addImage("hint_armorchainmail", L"image/hint/hint_1defense.png", 81, 18);
+		IMAGEMANAGER->addImage("hint_armor_platemail", L"image/hint/hint_1-5defense.png", 95, 18);
+		IMAGEMANAGER->addImage("hint_armor_heavyplate", L"image/hint/hint_2defenseheavy.png", 127, 18);
+		IMAGEMANAGER->addImage("hint_armor_obsidian", L"image/hint/hint_multiplierbaseddefense.png", 136, 18);
+		IMAGEMANAGER->addImage("hint_armor_glass", L"image/hint/hint_preventsdamagethenshatters.png", 169, 18);
+
+		IMAGEMANAGER->addImage("hint_torch_basic", L"image/hint/hint_1visionradius.png", 63, 18);
 
 		//음악
 		SOUNDMANAGER->addSound("mapTool", "sound/music/boss_10.ogg", true, true);
@@ -345,6 +355,10 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_hurt_player_06", "sound/effect/vo_cad_hurt_06.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_pickup_armor", "sound/effect/sfx_pickup_armor.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_pickup_weapon", "sound/effect/sfx_pickup_weapon.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_pickup_gold_01", "sound/effect/sfx_pickup_gold_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_pickup_gold_02", "sound/effect/sfx_pickup_gold_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_pickup_gold_03", "sound/effect/sfx_pickup_gold_03.ogg", false, false);
+	
 		SOUNDMANAGER->addSound("sound_dig_brick", "sound/effect/mov_dig_brick.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dig_dirt", "sound/effect/mov_dig_dirt.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dig_stone", "sound/effect/mov_dig_stone.ogg", false, false);
