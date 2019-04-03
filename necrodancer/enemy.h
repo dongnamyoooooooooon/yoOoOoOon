@@ -129,9 +129,6 @@ public:
 	void calculateF();
 	void checkArrive();
 
-	void EffectAnim();
-	void EffectRender();
-
 	void soundAtt();
 	void soundHit();
 	void soundCry();

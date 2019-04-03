@@ -19,8 +19,8 @@ HRESULT enemy_bat::init(string imgName, int idxX, int idxY)
 	_heart = 1;
 	_maxHeart = 1;
 	_damage = 1;
-	_subX = 0;
-	_subY = 26;
+	_subX = 26;
+	_subY = 36;
 
 	aniSetUp();
 
@@ -63,11 +63,11 @@ void enemy_bat::render()
 	{
 		for (int i = _heart; i < _maxHeart; i++)
 		{
-			IMAGEMANAGER->findImage("enemy_heart_empty")->render((_posX + 26) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
+			IMAGEMANAGER->findImage("enemy_heart_empty")->render((_posX + 5) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
 		}
 		for (int i = 0; i < _heart; i++)
 		{
-			IMAGEMANAGER->findImage("enemy_heart")->render((_posX + 26) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
+			IMAGEMANAGER->findImage("enemy_heart")->render((_posX + 5) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
 		}
 	}
 }

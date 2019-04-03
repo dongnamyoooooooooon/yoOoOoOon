@@ -351,6 +351,15 @@
     <ClInclude Include="enemyInfomation.h">
       <Filter>PlayGround\dataInfo</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_skeleton_black.h">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_skeleton_yellow.h">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_zombie.h">
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -568,6 +577,15 @@
     </ClCompile>
     <ClCompile Include="enemy_slime_green.cpp">
       <Filter>PlayGround\enemy\slime</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton_black.cpp">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton_yellow.cpp">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_zombie.cpp">
+      <Filter>PlayGround\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

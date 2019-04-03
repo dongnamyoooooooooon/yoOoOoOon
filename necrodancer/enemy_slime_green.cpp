@@ -19,8 +19,8 @@ HRESULT enemy_slime_green::init(string imgName, int idxX, int idxY)
 	_subX = 26;
 	_subY = 36;
 	_damage = 500;
-	_heart = 1;
-	_maxHeart = 1;
+	_heart = RND->getInt(3);
+	_maxHeart = _heart;
 
 	aniSetUp();
 
@@ -75,11 +75,11 @@ void enemy_slime_green::render()
 	{
 		for (int i = _heart; i < _maxHeart; i++)
 		{
-			IMAGEMANAGER->findImage("enemy_heart_empty")->render((_posX + 26) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
+			IMAGEMANAGER->findImage("enemy_heart_empty")->render((_posX + 5) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
 		}
 		for (int i = 0; i < _heart; i++)
 		{
-			IMAGEMANAGER->findImage("enemy_heart")->render((_posX + 26) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
+			IMAGEMANAGER->findImage("enemy_heart")->render((_posX + 5) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
 		}
 	}
 }

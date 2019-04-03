@@ -157,6 +157,9 @@ public:
 	int getPlayerPosX() { return _posX; }
 	int getPlayerPosY() { return _posY; }
 
+	PLAYER_STATE getPlayerState() { return _playerState; }
+	void setPlayerState(PLAYER_STATE state) { _playerState = state; }
+
 	bool getIsMove();
 
 };

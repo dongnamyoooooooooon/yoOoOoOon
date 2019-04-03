@@ -16,11 +16,11 @@ HRESULT enemy_bat_red::init(string imgName, int idxX, int idxY)
 	enemy::init(imgName, idxX, idxY);
 
 	_moveBeat = 1;
-	_heart = 4;
-	_maxHeart = 4;
+	_heart = 1;
+	_maxHeart = 1;
 	_damage = 2;
-	_subX = 0;
-	_subY = 26;
+	_subX = 26;
+	_subY = 46;
 
 	aniSetUp();
 

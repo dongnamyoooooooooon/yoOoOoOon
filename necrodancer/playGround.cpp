@@ -484,6 +484,10 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_dragon_walk_02", "sound/effect/en_dragon_walk_02.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dragon_walk_03", "sound/effect/en_dragon_walk_03.ogg", false, false);
 
+		SOUNDMANAGER->addSound("sound_skel_head_loss_01", "sound/effect/en_skel_head_loss_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_head_loss_02", "sound/effect/en_skel_head_loss_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_skel_head_loss_03", "sound/effect/en_skel_head_loss_03.ogg", false, false);
+
 		SOUNDMANAGER->addSound("sound_armadillo_shielded", "sound/effect/en_armadillo_shielded.ogg", false, false);
 
 		SOUNDMANAGER->addSound("sound_armadillo_wallimpact", "sound/effect/en_armadillo_wallimpact.ogg", false, false);

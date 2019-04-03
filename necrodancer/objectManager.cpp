@@ -35,6 +35,9 @@
 #include "wallDoor_side.h"
 
 #include "enemy_skeleton.h"
+#include "enemy_skeleton_yellow.h"
+#include "enemy_skeleton_black.h"
+#include "enemy_zombie.h"
 #include "enemy_slime_blue.h"
 #include "enemy_slime_green.h"
 #include "enemy_bat.h"
@@ -231,7 +234,10 @@ void objectManager::allObjectUpdate()
 	}
 	KEYANIMANAGER->update("enemy_slime_blue");
 	KEYANIMANAGER->update("enemy_slime_green");
+	KEYANIMANAGER->update("enemy_zombie");
 	KEYANIMANAGER->update("enemy_skeleton");
+	KEYANIMANAGER->update("enemy_skeleton_yellow");
+	KEYANIMANAGER->update("enemy_skeleton_black");
 	KEYANIMANAGER->update("enemy_bat");
 	KEYANIMANAGER->update("enemy_bat_red");
 	KEYANIMANAGER->update("enemy_bat_miniboss");
@@ -1031,11 +1037,15 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_YELLOW])
 	{
-
+		enemy_skeleton_yellow* tempObj = new enemy_skeleton_yellow;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_BLACK])
 	{
-
+		enemy_skeleton_black* tempObj = new enemy_skeleton_black;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_WHITE])
 	{
@@ -1067,7 +1077,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_ZOMBIE])
 	{
-
+		enemy_zombie* tempObj = new enemy_zombie;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT])
 	{

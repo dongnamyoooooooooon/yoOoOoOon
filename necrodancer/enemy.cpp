@@ -206,11 +206,6 @@ void enemy::jumpMoveEnemy()
 			{
 				_posZ -= _jumpPower;
 				_jumpPower -= 1.2f;
-				/*if (_moveDistance > TILE_SIZE / 2)
-				{
-					_jumpPower -= _jumpPower;
-				}
-				else _jumpPower += _jumpPower;*/
 			}
 			if (_moveDistance <= 0)
 			{
@@ -268,6 +263,119 @@ void enemy::jumpMoveEnemy()
 				_posZ = 0;
 				_jumpPower = 0;
 				verticalSet();
+			}
+			break;
+		}
+	}
+	else
+	{
+		switch (_direction)
+		{
+		case DIRECTION_LEFT:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posX -= _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posX += _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
+				_isHalfMove = false;
+			}
+
+			break;
+		case DIRECTION_RIGHT:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posX += _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posX -= _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
+				_isHalfMove = false;
+			}
+			break;
+		case DIRECTION_UP:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posY -= _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posY += _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
+				_isHalfMove = false;
+			}
+
+			break;
+		case DIRECTION_DOWN:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posY += _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posY -= _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			}
+			if (_moveDistance <= 0)
+			{
+				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
+				_isHalfMove = false;
 			}
 			break;
 		}
@@ -671,36 +779,6 @@ bool enemy::aStarLoad()
 		attackEnemy(_direction);
 		return true;
 	}
-
-	//if (direction_X == -1)
-	//{
-	//	direction_X = DIRECTION_LEFT;
-	//	this->_direction = (DIRECTION)direction_X;
-	//	attackEnemy(_direction);
-	//	return true;
-	//}
-	//else if (direction_X == 1)
-	//{
-	//	direction_X = DIRECTION_RIGHT;
-	//	this->_direction = (DIRECTION)direction_X;
-	//	attackEnemy(_direction);
-	//	return true;
-	//}
-	//else if (direction_Y == -1)
-	//{
-	//	direction_Y = DIRECTION_UP;
-	//	this->_direction = (DIRECTION)direction_Y;
-	//	attackEnemy(_direction);
-	//	return true;
-	//}
-	//else if (direction_Y == 1)
-	//{
-	//	direction_Y = DIRECTION_DOWN;
-	//	this->_direction = (DIRECTION)direction_Y;
-	//	attackEnemy(_direction);
-	//	return true;
-	//}
-
 
 	_startPoint = false;
 	_endPoint = false;
