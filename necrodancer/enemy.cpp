@@ -23,8 +23,8 @@ HRESULT enemy::init(string imgName, int idxX, int idxY)
 	_idxX = idxX;
 	_idxY = idxY;
 
-	_posX = _idxX * TILE_SIZE;
-	_posY = _idxY * TILE_SIZE;
+	_posX = _idxX * TILE_SIZE + 26;
+	_posY = _idxY * TILE_SIZE + 26;
 
 	_subX = 0;
 	_subY = 0;
@@ -77,6 +77,7 @@ void enemy::release()
 
 void enemy::update()
 {
+
 	aniEnemy();
 	moveEnemy();
 
@@ -128,12 +129,6 @@ void enemy::render()
 			IMAGEMANAGER->findImage("enemy_heart")->render((_posX + 26) - (_maxHeart / 2) * 24 + 24 * i - 7, _posY - _subY - 24);
 		}
 	}
-
-	WCHAR temp[128];
-	swprintf_s(temp, L"%d", _moveDistance);
-	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 100, 30, RGB(0,255,255));
-	swprintf_s(temp, L"%.1f", _speed);
-	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 120, 30, RGB(0, 255, 255));
 }
 
 void enemy::aniEnemy()
@@ -149,44 +144,45 @@ void enemy::aniEnemy()
 
 void enemy::moveEnemy()
 {
-	
+
 	//_moveDistance = TILE_SIZE;
+	_speed = 4;
 
 	switch (_direction)
 	{
 	case DIRECTION_LEFT:
 		_posX -= _speed;
 		_moveDistance -= _speed;
-		if (_moveDistance < _speed)
+		if (_moveDistance <= 0)
 		{
-			horizonSet();
+			//horizonSet();
 			_direction = DIRECITON_NONE;
 		}
 		break;
 	case DIRECTION_RIGHT:
 		_posX += _speed;
 		_moveDistance -= _speed;
-		if (_moveDistance < _speed)
+		if (_moveDistance <= 0)
 		{
-			horizonSet();
+			//horizonSet();
 			_direction = DIRECITON_NONE;
 		}
 		break;
 	case DIRECTION_UP:
 		_posY -= _speed;
 		_moveDistance -= _speed;
-		if (_moveDistance < _speed)
+		if (_moveDistance <= 0)
 		{
-			verticalSet();
+			//verticalSet();
 			_direction = DIRECITON_NONE;
 		}
 		break;
 	case DIRECTION_DOWN:
 		_posY += _speed;
 		_moveDistance -= _speed;
-		if (_moveDistance < _speed)
+		if (_moveDistance <= 0)
 		{
-			verticalSet();
+			//verticalSet();
 			_direction = DIRECITON_NONE;
 		}
 		break;
@@ -196,11 +192,10 @@ void enemy::moveEnemy()
 void enemy::jumpMoveEnemy()
 {
 	//_jumpPower = TIMEMANAGER->getElapsedTime() * JUMPPOWER;
-	//_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
-	_jumpPower = 10;
-	_speed = 4;
+	_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
 
-//	if (!_isHalfMove)
+	
+	if (!_isHalfMove)
 	{
 		switch (_direction)
 		{
@@ -209,15 +204,20 @@ void enemy::jumpMoveEnemy()
 			_posX -= _speed;
 			if (_moveDistance)
 			{
-				if (_moveDistance > TILE_SIZE / 2)
+				_posZ -= _jumpPower;
+				_jumpPower -= 1.2f;
+				/*if (_moveDistance > TILE_SIZE / 2)
 				{
 					_jumpPower -= _jumpPower;
 				}
-				else _jumpPower += _jumpPower;
+				else _jumpPower += _jumpPower;*/
 			}
 			if (_moveDistance <= 0)
 			{
 				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
 			}
 
 			break;
@@ -226,15 +226,15 @@ void enemy::jumpMoveEnemy()
 			_posX += _speed;
 			if (_moveDistance)
 			{
-				if (_moveDistance > TILE_SIZE / 2)
-				{
-					_jumpPower -= _jumpPower;
-				}
-				else _jumpPower += _jumpPower;
+				_posZ -= _jumpPower;
+				_jumpPower -= 1.2f;
 			}
 			if (_moveDistance <= 0)
 			{
 				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
 			}
 			break;
 		case DIRECTION_UP:
@@ -242,15 +242,15 @@ void enemy::jumpMoveEnemy()
 			_posY -= _speed;
 			if (_moveDistance)
 			{
-				if (_moveDistance > TILE_SIZE / 2)
-				{
-					_jumpPower -= _jumpPower;
-				}
-				else _jumpPower += _jumpPower;
+				_posZ += _jumpPower;
+				_jumpPower -= 1.2f;
 			}
 			if (_moveDistance <= 0)
 			{
 				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
 			}
 
 			break;
@@ -259,15 +259,15 @@ void enemy::jumpMoveEnemy()
 			_posY += _speed;
 			if (_moveDistance)
 			{
-				if (_moveDistance > TILE_SIZE / 2)
-				{
-					_jumpPower -= _jumpPower;
-				}
-				else _jumpPower += _jumpPower;
+				_posZ += _jumpPower;
+				_jumpPower -= 1.2f;
 			}
 			if (_moveDistance <= 0)
 			{
 				_direction = DIRECITON_NONE;
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
 			}
 			break;
 		}
@@ -414,8 +414,8 @@ void enemy::attackEnemy(DIRECTION dir)
 	_direction = dir;
 	player* tempPlayer = OBJECTMANAGER->getPlayer();
 
-	_posX = tempPlayer->getPosX();
-	_posY = tempPlayer->getPosY();
+	//_posX = tempPlayer->getPosX();
+	//_posY = tempPlayer->getPosY();
 	tempPlayer->hitPlayer(_damage);
 
 }
@@ -480,9 +480,19 @@ void enemy::rendomMove()
 				_direction = DIRECITON_NONE;
 				_moveDistance = 0;
 			}
+			else if (objType == OBJECT_TYPE_WALL)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+			else if (objType == OBJECT_TYPE_ENEMY)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
 		}
-
-		OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
+		else
+			OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
 	}
 	else if (_direction == DIRECTION_RIGHT)
 	{
@@ -498,9 +508,19 @@ void enemy::rendomMove()
 				_direction = DIRECITON_NONE;
 				_moveDistance = 0;
 			}
+			else if (objType == OBJECT_TYPE_WALL)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+			else if (objType == OBJECT_TYPE_ENEMY)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
 		}
-
-		OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
+		else
+			OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
 	}
 	else if (_direction == DIRECTION_UP)
 	{
@@ -516,9 +536,19 @@ void enemy::rendomMove()
 				_direction = DIRECITON_NONE;
 				_moveDistance = 0;
 			}
+			else if (objType == OBJECT_TYPE_WALL)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+			else if (objType == OBJECT_TYPE_ENEMY)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
 		}
-
-		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+		else
+			OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
 	}
 	else if (_direction == DIRECTION_DOWN)
 	{
@@ -534,9 +564,19 @@ void enemy::rendomMove()
 				_direction = DIRECITON_NONE;
 				_moveDistance = 0;
 			}
+			else if (objType == OBJECT_TYPE_WALL)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
+			else if (objType == OBJECT_TYPE_ENEMY)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
 		}
-
-		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+		else
+			OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
 	}
 }
 
@@ -568,9 +608,15 @@ void enemy::patternMove()
 				_direction = DIRECITON_NONE;
 				_moveDistance = 0;
 			}
-		}
+			else if (objType == OBJECT_TYPE_WALL)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
 
-		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+		}
+		else
+			OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
 	}
 	else if (_direction == DIRECTION_DOWN)
 	{
@@ -586,9 +632,14 @@ void enemy::patternMove()
 				_direction = DIRECITON_NONE;
 				_moveDistance = 0;
 			}
+			else if (objType == OBJECT_TYPE_WALL)
+			{
+				_direction = DIRECITON_NONE;
+				_moveDistance = 0;
+			}
 		}
-
-		OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+		else
+			OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
 	}
 
 }
@@ -616,7 +667,7 @@ bool enemy::aStarLoad()
 	if ((direction_X == -1 && direction_Y == 0) || (direction_X == 0 && direction_Y == -1)
 		|| (direction_X == 1 && direction_Y == 0) || (direction_X == 0 && direction_Y == 1))
 	{
-			
+
 		attackEnemy(_direction);
 		return true;
 	}
@@ -702,6 +753,8 @@ bool enemy::aStarLoad()
 					this->_direction = (DIRECTION)direction_X;
 					_isLeft = true;
 					_moveDistance = TILE_SIZE;
+					_posZ = 0;
+					_jumpPower = 7.0f;
 					OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
 				}
 				else if (direction_X == 1)
@@ -710,6 +763,8 @@ bool enemy::aStarLoad()
 					this->_direction = (DIRECTION)direction_X;
 					_isLeft = false;
 					_moveDistance = TILE_SIZE;
+					_posZ = 0;
+					_jumpPower = 7.0f;
 					OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
 				}
 				else if (direction_Y == -1)
@@ -717,6 +772,8 @@ bool enemy::aStarLoad()
 					direction_Y = DIRECTION_UP;
 					this->_direction = (DIRECTION)direction_Y;
 					_moveDistance = TILE_SIZE;
+					_posZ = 0;
+					_jumpPower = 3.0f;
 					OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
 				}
 				else if (direction_Y == 1)
@@ -724,9 +781,11 @@ bool enemy::aStarLoad()
 					direction_Y = DIRECTION_DOWN;
 					this->_direction = (DIRECTION)direction_Y;
 					_moveDistance = TILE_SIZE;
+					_posZ = 0;
+					_jumpPower = 3.0f;
 					OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
 				}
-				
+
 			}
 			else if (tempObj->getObjType() == OBJECT_TYPE_ENEMY)
 			{
@@ -762,6 +821,8 @@ bool enemy::aStarLoad()
 					}
 					_moveDistance = TILE_SIZE;
 					_isHalfMove = true;
+					_posZ = 0;
+					_jumpPower = 6.0f;
 				}
 			}
 			return true;
@@ -843,79 +904,90 @@ void enemy::addOpenList()
 	_closeJ = _closeList[_lastIndex]->j;
 	_closeGoal = _closeList[_lastIndex]->G;
 
-
-	if (_vvTile[_closeI - 1][_closeJ].isWalk)
+	if (_closeI - 1 >= 0)
 	{
-		if (!_vvTile[_closeI - 1][_closeJ].listOn)
+		if (_vvTile[_closeI - 1][_closeJ].isWalk)
 		{
-			_vvTile[_closeI - 1][_closeJ].listOn = true;
-			_vvTile[_closeI - 1][_closeJ].G = _closeGoal + 10;
-			_vvTile[_closeI - 1][_closeJ].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI - 1][_closeJ]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI - 1][_closeJ].G)
+			if (!_vvTile[_closeI - 1][_closeJ].listOn)
 			{
+				_vvTile[_closeI - 1][_closeJ].listOn = true;
 				_vvTile[_closeI - 1][_closeJ].G = _closeGoal + 10;
 				_vvTile[_closeI - 1][_closeJ].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI - 1][_closeJ]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI - 1][_closeJ].G)
+				{
+					_vvTile[_closeI - 1][_closeJ].G = _closeGoal + 10;
+					_vvTile[_closeI - 1][_closeJ].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
 
-	if (_vvTile[_closeI + 1][_closeJ].isWalk)
+	if (_closeI + 1 <= _vvTile.size() - 1)
 	{
-		if (!_vvTile[_closeI + 1][_closeJ].listOn)
+		if (_vvTile[_closeI + 1][_closeJ].isWalk)
 		{
-			_vvTile[_closeI + 1][_closeJ].listOn = true;
-			_vvTile[_closeI + 1][_closeJ].G = _closeGoal + 10;
-			_vvTile[_closeI + 1][_closeJ].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI + 1][_closeJ]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI + 1][_closeJ].G)
+			if (!_vvTile[_closeI + 1][_closeJ].listOn)
 			{
+				_vvTile[_closeI + 1][_closeJ].listOn = true;
 				_vvTile[_closeI + 1][_closeJ].G = _closeGoal + 10;
 				_vvTile[_closeI + 1][_closeJ].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI + 1][_closeJ]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI + 1][_closeJ].G)
+				{
+					_vvTile[_closeI + 1][_closeJ].G = _closeGoal + 10;
+					_vvTile[_closeI + 1][_closeJ].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
 
-	if (_vvTile[_closeI][_closeJ - 1].isWalk)
+	if (_closeJ - 1 >= 0)
 	{
-		if (!_vvTile[_closeI][_closeJ - 1].listOn)
+		if (_vvTile[_closeI][_closeJ - 1].isWalk)
 		{
-			_vvTile[_closeI][_closeJ - 1].listOn = true;
-			_vvTile[_closeI][_closeJ - 1].G = _closeGoal + 10;
-			_vvTile[_closeI][_closeJ - 1].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI][_closeJ - 1]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI][_closeJ - 1].G)
+			if (!_vvTile[_closeI][_closeJ - 1].listOn)
 			{
+				_vvTile[_closeI][_closeJ - 1].listOn = true;
 				_vvTile[_closeI][_closeJ - 1].G = _closeGoal + 10;
 				_vvTile[_closeI][_closeJ - 1].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI][_closeJ - 1]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI][_closeJ - 1].G)
+				{
+					_vvTile[_closeI][_closeJ - 1].G = _closeGoal + 10;
+					_vvTile[_closeI][_closeJ - 1].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
 
-	if (_vvTile[_closeI][_closeJ + 1].isWalk)
+	if (_closeJ + 1 <= _vvTile[0].size() - 1)
 	{
-		if (!_vvTile[_closeI][_closeJ + 1].listOn)
+		if (_vvTile[_closeI][_closeJ + 1].isWalk)
 		{
-			_vvTile[_closeI][_closeJ + 1].listOn = true;
-			_vvTile[_closeI][_closeJ + 1].G = _closeGoal + 10;
-			_vvTile[_closeI][_closeJ + 1].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI][_closeJ + 1]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI][_closeJ + 1].G)
+			if (!_vvTile[_closeI][_closeJ + 1].listOn)
 			{
+				_vvTile[_closeI][_closeJ + 1].listOn = true;
 				_vvTile[_closeI][_closeJ + 1].G = _closeGoal + 10;
 				_vvTile[_closeI][_closeJ + 1].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI][_closeJ + 1]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI][_closeJ + 1].G)
+				{
+					_vvTile[_closeI][_closeJ + 1].G = _closeGoal + 10;
+					_vvTile[_closeI][_closeJ + 1].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
@@ -1354,7 +1426,7 @@ void enemy::soundDie()
 
 void enemy::horizonSet()
 {
-	_posX = (int)_posX / TILE_SIZE * TILE_SIZE + 26;
+	_posX = (int)(_posX / TILE_SIZE) * TILE_SIZE + 26;
 	_moveDistance = 0;
 	_idxX = _posX / TILE_SIZE;
 }

@@ -35,6 +35,11 @@
 #include "wallDoor_side.h"
 
 #include "enemy_skeleton.h"
+#include "enemy_slime_blue.h"
+#include "enemy_slime_green.h"
+#include "enemy_bat.h"
+#include "enemy_bat_red.h"
+#include "enemy_bat_boss.h"
 #include "enemy_shopkeeper.h"
 
 
@@ -175,6 +180,13 @@ void objectManager::render()
 	_player->drawEquipUI();
 	_player->drawPlayerUI();
 
+
+	//WCHAR str[128];
+	//swprintf_s(str, L"%d", _time);
+	//D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 200, 50, RGB(255, 0, 255));
+	//swprintf_s(str, L"%d", SOUNDMANAGER->getPosition(_musicKey));
+	//D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 270, 50, RGB(255, 0, 255));
+
 }
 
 void objectManager::vectorClear()
@@ -217,6 +229,12 @@ void objectManager::allObjectUpdate()
 			}
 		}
 	}
+	KEYANIMANAGER->update("enemy_slime_blue");
+	KEYANIMANAGER->update("enemy_slime_green");
+	KEYANIMANAGER->update("enemy_skeleton");
+	KEYANIMANAGER->update("enemy_bat");
+	KEYANIMANAGER->update("enemy_bat_red");
+	KEYANIMANAGER->update("enemy_bat_miniboss");
 }
 
 void objectManager::deleteObject(parentObj * obj)
@@ -255,7 +273,7 @@ void objectManager::initBeat(const char * fileName, string musicKey)
 	if (_musicKey == "boss")
 		SOUNDMANAGER->playBossZone(_musicKey, _volume);
 	else
-		SOUNDMANAGER->playZone(_musicKey, 0.1f);
+		SOUNDMANAGER->playZone(_musicKey, 1.0f);
 
 	_vBeat = SOUNDMANAGER->getVBeat();
 	_viBeat = SOUNDMANAGER->getVIBeat();
@@ -267,6 +285,7 @@ void objectManager::createBeat()
 {
 
 	_playTime = SOUNDMANAGER->getPosition(_musicKey);
+	_time = SOUNDMANAGER->getLength(_musicKey);
 
 	//RECT rc;
 	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
@@ -283,10 +302,10 @@ void objectManager::createBeat()
 							  (float)WINSIZEY - 42 };
 
 
-		if (_viBeat->beat >= (SOUNDMANAGER->getLength(_musicKey) - (SOUNDMANAGER->getLength(_musicKey) / 6)))
-			_viBeat->img = IMAGEMANAGER->findImage("ui_beat_marker_red");
-		else
+		if ((_vBeat.back().beat - 30000) > _viBeat->beat)
 			_viBeat->img = IMAGEMANAGER->findImage("ui_beat_marker");
+		else
+			_viBeat->img = IMAGEMANAGER->findImage("ui_beat_marker_red");
 
 		if (_viBeat->left_RC.left >= 0) _viBeat->alpha += 0.03f;
 
@@ -1036,11 +1055,15 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SLIME_GREEN])
 	{
-
+		enemy_slime_green* tempObj = new enemy_slime_green;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SLIME_BLUE])
 	{
-
+		enemy_slime_blue* tempObj = new enemy_slime_blue;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_ZOMBIE])
 	{
@@ -1048,11 +1071,15 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT])
 	{
-
+		enemy_bat* tempObj = new enemy_bat;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT_RED])
 	{
-
+		enemy_bat_red* tempObj = new enemy_bat_red;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CLONE])
 	{
@@ -1060,7 +1087,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT_MINIBOSS])
 	{
-
+		enemy_bat_boss* tempObj = new enemy_bat_boss;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BANSHEE])
 	{

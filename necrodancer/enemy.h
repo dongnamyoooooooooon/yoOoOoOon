@@ -54,6 +54,8 @@ protected:
 	DIRECTION _direction;
 	DIRECTION _move;
 
+	animation* _ani;
+
 	int _heart;						//체력
 	int _maxHeart;					//최대체력
 	int _damage;					//공격력
@@ -69,7 +71,7 @@ protected:
 
 	int _posX;
 	int _posY;
-	int _posZ;
+	float _posZ;
 	int _subX;						//위치보정용X
 	int _subY;						//위치보정용Y
 	int _moveLoad;					//다음위치
@@ -138,7 +140,7 @@ public:
 	void horizonSet();
 	void verticalSet();
 
-	virtual void SetFirstSight() {
+	virtual void setIsSaw() {
 
 		if (_isSaw == false)
 		{

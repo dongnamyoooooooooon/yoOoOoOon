@@ -272,9 +272,10 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addFrameImage("attack_dagger_basic", L"image/effect/swipe_dagger.png", 144, 48, 3, 1);
 	
 
-		//몬스터
+		//몬스터(잡잡잡)
 		IMAGEMANAGER->addImage("enemy_heart_empty", L"image/enemy/heart_empty_small.png", 24, 24);
 		IMAGEMANAGER->addImage("enemy_heart", L"image/enemy/heart_small.png", 24, 24);
+		IMAGEMANAGER->addImage("enemy_shadow", L"image/enemy/shadow_standard.png", 48, 54);
 
 		//아이템
 		IMAGEMANAGER->addFrameImage("shovel_basic", L"image/items/shovel_basic.png", 48, 96, 1, 2);
@@ -387,9 +388,6 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_cad_melee_4_04", "sound/effect/vo_cad_melee_4_04.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_cad_melee_4_05", "sound/effect/vo_cad_melee_4_05.ogg", false, false);
 
-
-		
-
 		SOUNDMANAGER->addSound("sound_zombie_attack", "sound/effect/en_zombie_attack.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_armadillo_attack", "sound/effect/en_armadillo_attack.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_bat_attack", "sound/effect/en_bat_attack.ogg", false, false);
@@ -438,7 +436,6 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_03", "sound/effect/en_shopkeep_norm_death_03.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_04", "sound/effect/en_shopkeep_norm_death_04.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_shopkeep_norm_death_05", "sound/effect/en_shopkeep_norm_death_05.ogg", false, false);
-
 
 		SOUNDMANAGER->addSound("sound_armadillo_hit", "sound/effect/en_armadillo_hit.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_bat_hit", "sound/effect/en_bat_hit.ogg", false, false);
@@ -498,7 +495,6 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_chain_groove", "sound/effect/sfx_chain_groove.ogg", false, false);
 
 		SOUNDMANAGER->addSound("sound_announcer_coralriff", "sound/effect/vo_announcer_coralriff.ogg", false, false);
-
 
 		//이펙트
 		EFFECTMANAGER->addEffect("effect_dagger_basic", "image/effect/swipe_dagger.png", 144, 48, 48, 48, 8, 1, 50);

@@ -1,23 +1,19 @@
 #pragma once
 #include "enemy.h"
-class enemy_skeleton : public enemy
+class enemy_bat_boss : public enemy
 {
-private:
-
 public:
-	enemy_skeleton();
-	~enemy_skeleton();
+	enemy_bat_boss();
+	~enemy_bat_boss();
 
 	HRESULT init(string imgName, int idxX, int idxY);
 	void release();
 	void update();
 	void render();
 
-	void aniPlay();
-
 	void aniSetUp();
-
-	void aniPlay_Attack();
 	void aniPlay_Stand();
+
+
 };
 

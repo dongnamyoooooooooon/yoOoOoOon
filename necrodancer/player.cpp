@@ -285,20 +285,20 @@ void player::playerAniStart_Body(string keyName)
 
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 26, _playerBody_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
 }
 
 void player::drawHead()
 {
 
-	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
-	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ - 26, _playerHead_Ani);
+	if (_isLeft)	IMAGEMANAGER->findImage("player_head")->aniRenderReverseX(_posX - 26, _posY + _posZ - 36, _playerHead_Ani);
+	else			IMAGEMANAGER->findImage("player_head")->aniRender(_posX - 26, _posY + _posZ - 36, _playerHead_Ani);
 }
 
 void player::drawShadow()
 {
-	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY - 26);
+	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY - 36);
 }
 
 void player::keyUpdate()
@@ -874,8 +874,8 @@ void player::setEquipUI(parentObj* obj)
 				_inven[i].UIKey = "equipUI_armor";
 				_inven[i].object = _playerArmor;
 
-				if (_playerArmor == obj)
-					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+				//if (_playerArmor == obj)
+				//	obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
 
 				_curArmor = _playerArmor->getImgName();
 				playerAniStart_Head("right_head");
@@ -1379,6 +1379,7 @@ void player::addInven(parentObj * obj)
 			{
 				SOUNDMANAGER->play("sound_pickup_weapon");
 				_putObj = _playerWeapon;
+				_putObj->setIsSight(true);
 				_playerWeapon = obj;
 
 				//Àû¿ë°ª
@@ -1408,6 +1409,8 @@ void player::addInven(parentObj * obj)
 			{
 				SOUNDMANAGER->play("sound_pickup_armor");
 				_putObj = _playerArmor;
+				if(_playerArmor != NULL)
+					_putObj->setIsSight(true);
 				_playerArmor = obj;
 				_curArmor = _playerArmor->getImgName();
 				break;

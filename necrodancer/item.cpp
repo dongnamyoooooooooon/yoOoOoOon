@@ -69,7 +69,16 @@ void item::render()
 		}
 	}
 	else if (_isMoveInven)	_img->frameRender(_posX, _posY - _jumpPower, _frameX, _frameY);
-
+	/*else if (!_isCurInven)
+		{
+			if (_isSaw)
+			{
+				if (_hasLight)	_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 0);
+				else			_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 1);
+			}
+			else	_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 1);
+		}
+*/
 }
 
 void item::itemInven(int moveX, int moveY)
@@ -108,8 +117,8 @@ void item::moveItem()
 
 		if (_posX <= CAMERA->getPosX() + _moveX && _posY <= CAMERA->getPosY() + _moveY)
 		{
-			_isMoveInven = false;
-			_isCurInven = true;
+			_isMoveInven = true;
+			_isCurInven = false;
 		}
 	}
 }

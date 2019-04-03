@@ -297,6 +297,7 @@ int soundManager::getLength(string keyName)
 			return start;
 		}
 	}
+
 }
 
 int soundManager::getPosition(string keyName)
@@ -445,6 +446,10 @@ void soundManager::release()
 	SAFE_RELEASE(_bgmSoundGroup);
 	SAFE_RELEASE(_effectSoundGroup);
 
+	delete[] _spec;
+	delete[] _specLeft;
+	delete[] _specRight;
+
 	_effectGroup = nullptr;
 	_bgmGroup = nullptr;
 	_bgmSoundGroup = nullptr;
@@ -471,31 +476,55 @@ void soundManager::update()
 
 void soundManager::addSound(string keyName, string soundName, bool bgm, bool loop)
 {
-	// 사운드는 TOTALSOUNDBUFFER개 까지만 추가 할 수 있다.
-	if (TOTALSOUNDBUFFER <= _mTotalSounds.size())
-		return;
-
-	// 루프재생?
-	FMOD_MODE mode = NULL;
 	if (loop)
-		mode = FMOD_LOOP_NORMAL;
-	else
-		mode = FMOD_DEFAULT;
-
-	// 비어있는 사운드칸에 새로운 사운드를 할당
-	int useSoundIdx = static_cast<int>(_mTotalSounds.size());
-	if (bgm)
 	{
-		_system->createStream(soundName.c_str(), mode, NULL, &_sound[useSoundIdx]);
-		_sound[useSoundIdx]->setSoundGroup(_bgmSoundGroup);
+		if (bgm)
+		{
+			_system->createStream(soundName.c_str(), FMOD_LOOP_NORMAL, NULL, &_sound[_mTotalSounds.size()]);
+		}
+		else
+		{
+			_system->createSound(soundName.c_str(), FMOD_LOOP_NORMAL, NULL, &_sound[_mTotalSounds.size()]);
+		}
 	}
 	else
 	{
-		_system->createSound(soundName.c_str(), mode, NULL, &_sound[useSoundIdx]);
-		_sound[useSoundIdx]->setSoundGroup(_effectSoundGroup);
+		if (bgm)
+		{
+			_system->createStream(soundName.c_str(), FMOD_DEFAULT, NULL, &_sound[_mTotalSounds.size()]);
+		}
+		else
+		{
+			_system->createSound(soundName.c_str(), FMOD_DEFAULT, NULL, &_sound[_mTotalSounds.size()]);
+		}
 	}
 
-	_mTotalSounds.insert(make_pair(keyName, &_sound[useSoundIdx]));
+	_mTotalSounds.insert(make_pair(keyName, &_sound[_mTotalSounds.size()]));
+	//// 사운드는 TOTALSOUNDBUFFER개 까지만 추가 할 수 있다.
+	//if (TOTALSOUNDBUFFER <= _mTotalSounds.size())
+	//	return;
+
+	//// 루프재생?
+	//FMOD_MODE mode = NULL;
+	//if (loop)
+	//	mode = FMOD_LOOP_NORMAL;
+	//else
+	//	mode = FMOD_DEFAULT;
+
+	//// 비어있는 사운드칸에 새로운 사운드를 할당
+	//int useSoundIdx = static_cast<int>(_mTotalSounds.size());
+	//if (bgm)
+	//{
+	//	_system->createStream(soundName.c_str(), mode, NULL, &_sound[useSoundIdx]);
+	//	_sound[useSoundIdx]->setSoundGroup(_bgmSoundGroup);
+	//}
+	//else
+	//{
+	//	_system->createSound(soundName.c_str(), mode, NULL, &_sound[useSoundIdx]);
+	//	_sound[useSoundIdx]->setSoundGroup(_effectSoundGroup);
+	//}
+
+	//_mTotalSounds.insert(make_pair(keyName, &_sound[useSoundIdx]));
 }
 
 void soundManager::play(string keyName, float volume)// 0.0 ~ 1.0f -> 0 ~ 255

@@ -90,150 +90,6 @@ public:
 		{
 			switch (type_obj)
 			{
-				case OBJECT_TYPE_WALL:
-				{	
-					temp = new parentObj;
-					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
-					wall = temp;
-					break;
-				}
-				case OBJECT_TYPE_ITEM:
-				{
-					temp = new parentObj;
-					temp->init(objName, objPosX, objPosY, type_obj, imgKey, itemType);
-					item = temp;
-					break;
-				}
-				case OBJECT_TYPE_TRAP:
-				{
-					temp = new parentObj;
-					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
-					trap = temp;
-					break;
-				}
-				case OBJECT_TYPE_ENEMY:
-				{
-					temp = new parentObj;
-					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
-					enemy = temp;
-					break;
-				}
-				case OBJECT_TYPE_PLAYER:
-				{
-					temp = new parentObj;
-					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
-					player = temp;
-					break;
-				}
-				case OBJECT_TYPE_ETC:
-				{
-					temp = new parentObj;
-					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
-					objETC = temp;
-				}
-				if (isTorch)
-					temp->setTorch(true);
-			}
-		}
-	}
-	tagPack makeSave()
-	{
-		tagPack* pack = new tagPack;
-
-		pack->floorName = floorKey;
-		pack->floorPosX = floorPosX;
-		pack->floorPosY = floorPosY;
-		pack->type_floor = type_floor;
-
-		pack->objName = objKey;
-		pack->objPosX = objPosX;
-		pack->objPosY = objPosY;
-		pack->type_obj = type_obj;
-		pack->imgKey = imgKey;
-
-		pack->isTorch = isTorch;
-
-		pack->terrain_frameX = terrain_frameX;										//타일프레임 X
-		pack->terrain_frameY = terrain_frameY;										//타일프레임 Y
-		pack->object_frameX = object_frameX;										//오브젝트프레임 X
-		pack->object_frameY = object_frameY;										//오브젝트프레임 Y
-
-		//if (type_obj == OBJECT_TYPE_ITEM)
-			pack->itemType = itemType;
-		
-		if (floor)
-			pack->floor = floor->makeSave();
-		else
-			pack->floor = {0, };
-		if (wall)
-			pack->wall = wall->makeSave();
-		if (objETC)
-			pack->objETC = objETC->makeSave();
-		if (trap)
-			pack->trap = trap->makeSave();
-		if (item)
-			pack->item = item->makeSave();
-		if (enemy)
-			pack->enemy = enemy->makeSave();
-		if (player)
-			pack->player = player->makeSave();
-
-		return *pack;
-	}
-
-	void makeLoad(tagPack* pack)
-	{
-		floorKey = (IMAGE_NAME_INFO)pack->floorName;
-		floorPosX = pack->floorPosX;
-		floorPosY = pack->floorPosY;
-		type_floor = pack->type_floor;
-		floorName = IMAGE_NAME[floorKey];
-
-		objKey = (IMAGE_NAME_INFO)pack->objName;
-		objPosX = pack->objPosX;
-		objPosY = pack->objPosY;
-		type_obj = pack->type_obj;
-		objName = IMAGE_NAME[objKey];
-		imgKey = pack->imgKey;
-		
-		if (pack->type_obj == OBJECT_TYPE_ITEM)
-		{
-			itemType = pack->itemType;
-			switch (itemType)
-			{
-				case 0: objName = SHOVEL_NAME[imgKey]; break;
-				case 1: objName = WEAPON_NAME[imgKey]; break;
-				case 2: objName = TORCH_NAME[imgKey]; break;
-				case 3: objName = ARMOR_NAME[imgKey]; break;
-				case 4: objName = HEADWEAR_NAME[imgKey]; break;
-				case 5: objName = FOOTWEAR_NAME[imgKey]; break;
-				case 6: objName = CONSUMABLE_NAME[imgKey]; break;
-				case 7: objName = HEART_NAME[imgKey]; break;
-				case 8: objName = COIN_NAME[imgKey]; break;
-				case 9: objName = BOMB_NAME[imgKey]; break;
-			}
-		}
-		else
-			objName = IMAGE_NAME[imgKey];
-
-		isTorch = pack->isTorch;
-
-		terrain_frameX = pack->terrain_frameX;
-		terrain_frameY = pack->terrain_frameY;
-		object_frameX = pack->object_frameX;
-		object_frameY = pack->object_frameY;
-
-		parentObj* temp;
-		if (type_floor == OBJECT_TYPE_FLOOR)
-		{
-			temp = new parentObj;
-			temp->init(floorName, floorPosX, floorPosY, type_floor, imgKey);
-			floor = temp;
-		}
-		if (type_obj != OBJECT_TYPE_NONE)
-		{
-			switch (type_obj)
-			{
 			case OBJECT_TYPE_WALL:
 			{
 				temp = new parentObj;
@@ -265,7 +121,7 @@ public:
 			case OBJECT_TYPE_PLAYER:
 			{
 				temp = new parentObj;
-				temp->init("", objPosX, objPosY, type_obj, 0);
+				temp->init(objName, objPosX, objPosY, type_obj, imgKey);
 				player = temp;
 				break;
 			}
@@ -279,8 +135,156 @@ public:
 				temp->setTorch(true);
 			}
 		}
+	}
+	tagPack makeSave()
+	{
+		tagPack* pack = new tagPack;
 
-		if(floor != NULL)
+		pack->floorName = floorKey;
+		pack->floorPosX = floorPosX;
+		pack->floorPosY = floorPosY;
+		pack->type_floor = type_floor;
+
+		pack->objName = objKey;
+		pack->objPosX = objPosX;
+		pack->objPosY = objPosY;
+		pack->type_obj = type_obj;
+		pack->imgKey = imgKey;
+
+		pack->isTorch = isTorch;
+
+		pack->terrain_frameX = terrain_frameX;										//타일프레임 X
+		pack->terrain_frameY = terrain_frameY;										//타일프레임 Y
+		pack->object_frameX = object_frameX;										//오브젝트프레임 X
+		pack->object_frameY = object_frameY;										//오브젝트프레임 Y
+
+		//if (type_obj == OBJECT_TYPE_ITEM)
+		pack->itemType = itemType;
+
+		if (floor)
+			pack->floor = floor->makeSave();
+		else
+			pack->floor = { 0, };
+		if (wall)
+			pack->wall = wall->makeSave();
+		if (objETC)
+			pack->objETC = objETC->makeSave();
+		if (trap)
+			pack->trap = trap->makeSave();
+		if (item)
+			pack->item = item->makeSave();
+		if (enemy)
+			pack->enemy = enemy->makeSave();
+		if (player)
+			pack->player = player->makeSave();
+
+		return *pack;
+	}
+
+	void makeLoad(tagPack* pack)
+	{
+		floorKey = (IMAGE_NAME_INFO)pack->floorName;
+		floorPosX = pack->floorPosX;
+		floorPosY = pack->floorPosY;
+		type_floor = pack->type_floor;
+		floorName = IMAGE_NAME[floorKey];
+
+		isTorch = pack->isTorch;
+
+		objKey = (IMAGE_NAME_INFO)pack->objName;
+		objPosX = pack->objPosX;
+		objPosY = pack->objPosY;
+		type_obj = pack->type_obj;
+		objName = IMAGE_NAME[objKey];
+		imgKey = pack->imgKey;
+
+		if (pack->type_obj == OBJECT_TYPE_ITEM)
+		{
+			itemType = pack->itemType;
+			switch (itemType)
+			{
+			case 0: objName = SHOVEL_NAME[imgKey]; break;
+			case 1: objName = WEAPON_NAME[imgKey]; break;
+			case 2: objName = TORCH_NAME[imgKey]; break;
+			case 3: objName = ARMOR_NAME[imgKey]; break;
+			case 4: objName = HEADWEAR_NAME[imgKey]; break;
+			case 5: objName = FOOTWEAR_NAME[imgKey]; break;
+			case 6: objName = CONSUMABLE_NAME[imgKey]; break;
+			case 7: objName = HEART_NAME[imgKey]; break;
+			case 8: objName = COIN_NAME[imgKey]; break;
+			case 9: objName = BOMB_NAME[imgKey]; break;
+			}
+		}
+		else
+			objName = IMAGE_NAME[imgKey];
+
+		isTorch = pack->isTorch;
+
+		terrain_frameX = pack->terrain_frameX;
+		terrain_frameY = pack->terrain_frameY;
+		object_frameX = pack->object_frameX;
+		object_frameY = pack->object_frameY;
+
+		parentObj* temp;
+		if (type_floor == OBJECT_TYPE_FLOOR)
+		{
+			temp = new parentObj;
+			temp->init(floorName, floorPosX, floorPosY, type_floor, imgKey);
+			floor = temp;
+		}
+		if (type_obj != OBJECT_TYPE_NONE)
+		{
+			switch (type_obj)
+			{
+				case OBJECT_TYPE_WALL:
+				{
+					temp = new parentObj;
+					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
+					wall = temp;
+					
+					break;
+				}
+				case OBJECT_TYPE_ITEM:
+				{
+					temp = new parentObj;
+					temp->init(objName, objPosX, objPosY, type_obj, imgKey, itemType);
+					item = temp;
+					break;
+				}
+				case OBJECT_TYPE_TRAP:
+				{
+					temp = new parentObj;
+					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
+					trap = temp;
+					break;
+				}
+				case OBJECT_TYPE_ENEMY:
+				{
+					temp = new parentObj;
+					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
+					enemy = temp;
+					break;
+				}
+				case OBJECT_TYPE_PLAYER:
+				{
+					temp = new parentObj;
+					temp->init("", objPosX, objPosY, type_obj, 0);
+					player = temp;
+					break;
+				}
+				case OBJECT_TYPE_ETC:
+				{
+					temp = new parentObj;
+					temp->init(objName, objPosX, objPosY, type_obj, imgKey);
+					objETC = temp;
+					break;
+				}
+			}
+
+		}
+
+
+		if (floor != NULL)
 			floor->makeLoad(&pack->floor);
 		if (wall != NULL)
 			wall->makeLoad(&pack->wall);
@@ -294,6 +298,9 @@ public:
 			enemy->makeLoad(&pack->enemy);
 		if (player != NULL)
 			player->makeLoad(&pack->player);
+
+		if (isTorch)
+			wall->setTorch(true);
 	}
 
 }TILE;

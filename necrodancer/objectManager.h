@@ -37,6 +37,11 @@ class wallEnd;
 class wallDoor_front;
 class wallDoor_side;
 class enemy_skeleton;
+class enemy_slime_blue;
+class enemy_slime_green;
+class enemy_bat;
+class enemy_bat_red;
+class enemy_bat_boss;
 class enemy_shopkeeper;
 
 class parentObj;
@@ -80,6 +85,7 @@ private:
 	D2D1_RECT_F								_successBeat;		//¼º°ø
 	const char*								_beatFile;
 	int										_playTime;
+	int										_time;
 	float									_beatAlpha;
 
 

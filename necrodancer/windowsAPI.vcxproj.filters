@@ -103,6 +103,15 @@
     <Filter Include="PlayGround\item\getherItem\torch">
       <UniqueIdentifier>{29938fdd-6f51-4b7c-8584-bc78f9a19bec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\enemy\skeleton">
+      <UniqueIdentifier>{ffdef65c-450a-4eee-85ba-723163f9daaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\enemy\bat">
+      <UniqueIdentifier>{b291c244-10ef-4deb-aa50-69e9bde506b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\enemy\slime">
+      <UniqueIdentifier>{8f166819-ab92-4ca7-99f2-d97db9b37f90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -192,9 +201,6 @@
     <ClInclude Include="mapTool.h">
       <Filter>PlayGround\mapTool</Filter>
     </ClInclude>
-    <ClInclude Include="enemyInfomation.h">
-      <Filter>PlayGround\enemy</Filter>
-    </ClInclude>
     <ClInclude Include="objectManager.h">
       <Filter>2DFramework\Manager</Filter>
     </ClInclude>
@@ -232,9 +238,6 @@
       <Filter>PlayGround\object\wall</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>PlayGround\enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy_skeleton.h">
       <Filter>PlayGround\enemy</Filter>
     </ClInclude>
     <ClInclude Include="wallZone_02.h">
@@ -309,9 +312,6 @@
     <ClInclude Include="torch_basic.h">
       <Filter>PlayGround\item\getherItem\torch</Filter>
     </ClInclude>
-    <ClInclude Include="enemy_shopkeeper.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="floorZone_02.h">
       <Filter>PlayGround\object\floor</Filter>
     </ClInclude>
@@ -324,8 +324,32 @@
     <ClInclude Include="floorWater.h">
       <Filter>PlayGround\object\floor</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_shopkeeper.h">
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
     <ClInclude Include="weapon_broadsword_basic.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_skeleton.h">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_bat.h">
+      <Filter>PlayGround\enemy\bat</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_bat_boss.h">
+      <Filter>PlayGround\enemy\bat</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_bat_red.h">
+      <Filter>PlayGround\enemy\bat</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_slime_blue.h">
+      <Filter>PlayGround\enemy\slime</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_slime_green.h">
+      <Filter>PlayGround\enemy\slime</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyInfomation.h">
+      <Filter>PlayGround\dataInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -437,9 +461,6 @@
     <ClCompile Include="enemy.cpp">
       <Filter>PlayGround\enemy</Filter>
     </ClCompile>
-    <ClCompile Include="enemy_skeleton.cpp">
-      <Filter>PlayGround\enemy</Filter>
-    </ClCompile>
     <ClCompile Include="wallZone_02.cpp">
       <Filter>PlayGround\object\wall</Filter>
     </ClCompile>
@@ -512,9 +533,6 @@
     <ClCompile Include="torch_basic.cpp">
       <Filter>PlayGround\item\getherItem\torch</Filter>
     </ClCompile>
-    <ClCompile Include="enemy_shopkeeper.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="floorZone_02.cpp">
       <Filter>PlayGround\object\floor</Filter>
     </ClCompile>
@@ -527,8 +545,29 @@
     <ClCompile Include="floorWater.cpp">
       <Filter>PlayGround\object\floor</Filter>
     </ClCompile>
+    <ClCompile Include="enemy_shopkeeper.cpp">
+      <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
     <ClCompile Include="weapon_broadsword_basic.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton.cpp">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_bat.cpp">
+      <Filter>PlayGround\enemy\bat</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_bat_boss.cpp">
+      <Filter>PlayGround\enemy\bat</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_bat_red.cpp">
+      <Filter>PlayGround\enemy\bat</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_slime_blue.cpp">
+      <Filter>PlayGround\enemy\slime</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_slime_green.cpp">
+      <Filter>PlayGround\enemy\slime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

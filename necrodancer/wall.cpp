@@ -46,7 +46,7 @@ void wall::update()
 	_frameCount++;
 	if (_isTorch)
 	{
-		if (_frameCount % 10 == 0)
+		if (_frameCount % 5 == 0)
 		{
 			_torchFrameX++;
 			if (_torchFrameX >= 4) _torchFrameX = 0;
@@ -73,7 +73,7 @@ void wall::render()
 		_img->frameRender(_posX, _posY, _frameX, _frameY);
 		
 		if (_isTorch)	
-			IMAGEMANAGER->findImage("frame_fire")->frameRender(_posX + 13, _posY, _torchFrameX, 0);
+			IMAGEMANAGER->findImage("frame_fire")->frameRender(_posX, _posY - 13, _torchFrameX, 0);
 
 		if (_isSight)
 		{
@@ -215,16 +215,19 @@ void wall::rayCast()
 	}
 	else
 	{
-		if ((obj2 = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 2)) != NULL)
+		if (_idxY - 2 >= 0)
 		{
-			obj2->setHasLight(true);
-			if (obj2->getIsSight() == true) obj2->setIsSaw();
-		}
+			if ((obj2 = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 2)) != NULL)
+			{
+				obj2->setHasLight(true);
+				if (obj2->getIsSight() == true) obj2->setIsSaw();
+			}
 
-		if ((floorObj2 = OBJECTMANAGER->getCheckFloor(_idxX, _idxY - 2)) != NULL)
-		{
-			floorObj2->setHasLight(true);
-			if (floorObj2->getIsSight() == true) floorObj2->setIsSaw();
+			if ((floorObj2 = OBJECTMANAGER->getCheckFloor(_idxX, _idxY - 2)) != NULL)
+			{
+				floorObj2->setHasLight(true);
+				if (floorObj2->getIsSight() == true) floorObj2->setIsSaw();
+			}
 		}
 	}
 
@@ -306,16 +309,19 @@ void wall::rayCast()
 	}
 	else
 	{
-		if ((obj2 = OBJECTMANAGER->getCheckObj(_idxX - 2, _idxY)) != NULL)
+		if (_idxX - 2 >= 0)
 		{
-			obj2->setHasLight(true);
-			if (obj2->getIsSight() == true) obj2->setIsSaw();
-		}
+			if ((obj2 = OBJECTMANAGER->getCheckObj(_idxX - 2, _idxY)) != NULL)
+			{
+				obj2->setHasLight(true);
+				if (obj2->getIsSight() == true) obj2->setIsSaw();
+			}
 
-		if ((floorObj2 = OBJECTMANAGER->getCheckFloor(_idxX - 2, _idxY)) != NULL)
-		{
-			floorObj2->setHasLight(true);
-			if (floorObj2->getIsSight() == true) floorObj2->setIsSaw();
+			if ((floorObj2 = OBJECTMANAGER->getCheckFloor(_idxX - 2, _idxY)) != NULL)
+			{
+				floorObj2->setHasLight(true);
+				if (floorObj2->getIsSight() == true) floorObj2->setIsSaw();
+			}
 		}
 	}
 

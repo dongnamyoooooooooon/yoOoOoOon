@@ -49,9 +49,9 @@ bool weapon_broadsword_basic::useItem(int idxX, int idxY, int way)
 	switch (way)
 	{
 	case 2:
-		tempObj[0] = OBJECTMANAGER->getCheckObj(idxX - 1, idxY + 1);
-		tempObj[1] = OBJECTMANAGER->getCheckObj(idxX, idxY + 1);
-		tempObj[2] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY + 1);
+		tempObj[0] = OBJECTMANAGER->getCheckObj(idxX - 1, idxY);
+		tempObj[1] = OBJECTMANAGER->getCheckObj(idxX, idxY);
+		tempObj[2] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY);
 
 		_posX -= 52;
 		_posY += 52;
@@ -67,18 +67,18 @@ bool weapon_broadsword_basic::useItem(int idxX, int idxY, int way)
 		break;
 
 	case 6:
-		tempObj[0] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY - 1);
-		tempObj[1] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY);
-		tempObj[2] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY + 1);
+		tempObj[0] = OBJECTMANAGER->getCheckObj(idxX, idxY - 1);
+		tempObj[1] = OBJECTMANAGER->getCheckObj(idxX, idxY);
+		tempObj[2] = OBJECTMANAGER->getCheckObj(idxX, idxY + 1);
 
 		_posX += 52;
 		_posY -= 52;
 		break;
 
 	case 8:
-		tempObj[0] = OBJECTMANAGER->getCheckObj(idxX - 1, idxY - 1);
-		tempObj[1] = OBJECTMANAGER->getCheckObj(idxX, idxY - 1);
-		tempObj[2] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY - 1);
+		tempObj[0] = OBJECTMANAGER->getCheckObj(idxX - 1, idxY);
+		tempObj[1] = OBJECTMANAGER->getCheckObj(idxX, idxY);
+		tempObj[2] = OBJECTMANAGER->getCheckObj(idxX + 1, idxY);
 
 		_posX -= 52;
 		_posY -= 52;

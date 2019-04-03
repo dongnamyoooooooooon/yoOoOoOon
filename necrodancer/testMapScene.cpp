@@ -40,7 +40,8 @@ void testMapScene::update()
 	OBJECTMANAGER->allObjectUpdate();
 	OBJECTMANAGER->update();
 
-	if (KEYMANAGER->isStayKeyDown(VK_F2)) OBJECTMANAGER->grooveChain();
+	if (KEYMANAGER->isStayKeyDown(VK_F2)) SOUNDMANAGER->setPitch(2.0f);
+	if (KEYMANAGER->isStayKeyDown(VK_F3)) SOUNDMANAGER->setPitch(1.0f);
 
 }
 

@@ -128,21 +128,77 @@ void enemy_shopkeeper::aStarLoad()
 
 			float size = (float)_closeList.size();
 
-			if (size < 13)
+			if (size < 16)
 			{
 				string song = SOUNDMANAGER->getShopBgmKey();
 
 				float volume = SOUNDMANAGER->getVolume();
 
-				volume = SOUNDMANAGER->getVolume() * ((13.0f - volume) / 12.0f / size);
+				volume = SOUNDMANAGER->getVolume();// * ((13.0f - volume) / 12.0f / size);
 
-				SOUNDMANAGER->ShopVolume(song, volume);
+				//SOUNDMANAGER->ShopVolume(song, volume);
 
 				if (size < 5)
 				{
-					volume = 1.0f;
+					volume *= 1.0f;
 					SOUNDMANAGER->ShopVolume(song, volume);
 				}
+				else if (size < 6)
+				{
+					volume *= 0.9f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 7)
+				{
+					volume *= 0.8f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 8)
+				{
+					volume *= 0.7f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 9)
+				{
+					volume *= 0.6f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 10)
+				{
+					volume *= 0.5;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 11)
+				{
+					volume *= 0.4f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 12)
+				{
+					volume *= 0.3f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 13)
+				{
+					volume *= 0.2f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 14)
+				{
+					volume *= 0.1f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else if (size < 15)
+				{
+					volume *= 0.1f;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+				else
+				{
+					volume *= 0;
+					SOUNDMANAGER->ShopVolume(song, volume);
+				}
+
 
 			}
 			else
@@ -236,7 +292,7 @@ void enemy_shopkeeper::initTile()
 					}
 					else
 					{
-						_vvTile[i][j].isWalk = false;
+						_vvTile[i][j].isWalk = true;
 						_vvTile[i][j].listOn = false;
 					}
 				}
@@ -260,79 +316,90 @@ void enemy_shopkeeper::addOpenList()
 	_closeJ = _closeList[_lastIndex]->j;
 	_closeGoal = _closeList[_lastIndex]->G;
 
-
-	if (_vvTile[_closeI - 1][_closeJ].isWalk)
+	if (_closeI - 1 >= 0)
 	{
-		if (!_vvTile[_closeI - 1][_closeJ].listOn)
+		if (_vvTile[_closeI - 1][_closeJ].isWalk)
 		{
-			_vvTile[_closeI - 1][_closeJ].listOn = true;
-			_vvTile[_closeI - 1][_closeJ].G = _closeGoal + 10;
-			_vvTile[_closeI - 1][_closeJ].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI - 1][_closeJ]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI - 1][_closeJ].G)
+			if (!_vvTile[_closeI - 1][_closeJ].listOn)
 			{
+				_vvTile[_closeI - 1][_closeJ].listOn = true;
 				_vvTile[_closeI - 1][_closeJ].G = _closeGoal + 10;
 				_vvTile[_closeI - 1][_closeJ].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI - 1][_closeJ]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI - 1][_closeJ].G)
+				{
+					_vvTile[_closeI - 1][_closeJ].G = _closeGoal + 10;
+					_vvTile[_closeI - 1][_closeJ].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
 
-	if (_vvTile[_closeI + 1][_closeJ].isWalk)
+	if (_closeI + 1 <= _vvTile.size() - 1)
 	{
-		if (!_vvTile[_closeI + 1][_closeJ].listOn)
+		if (_vvTile[_closeI + 1][_closeJ].isWalk)
 		{
-			_vvTile[_closeI + 1][_closeJ].listOn = true;
-			_vvTile[_closeI + 1][_closeJ].G = _closeGoal + 10;
-			_vvTile[_closeI + 1][_closeJ].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI + 1][_closeJ]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI + 1][_closeJ].G)
+			if (!_vvTile[_closeI + 1][_closeJ].listOn)
 			{
+				_vvTile[_closeI + 1][_closeJ].listOn = true;
 				_vvTile[_closeI + 1][_closeJ].G = _closeGoal + 10;
 				_vvTile[_closeI + 1][_closeJ].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI + 1][_closeJ]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI + 1][_closeJ].G)
+				{
+					_vvTile[_closeI + 1][_closeJ].G = _closeGoal + 10;
+					_vvTile[_closeI + 1][_closeJ].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
 
-	if (_vvTile[_closeI][_closeJ - 1].isWalk)
+	if (_closeJ - 1 >= 0)
 	{
-		if (!_vvTile[_closeI][_closeJ - 1].listOn)
+		if (_vvTile[_closeI][_closeJ - 1].isWalk)
 		{
-			_vvTile[_closeI][_closeJ - 1].listOn = true;
-			_vvTile[_closeI][_closeJ - 1].G = _closeGoal + 10;
-			_vvTile[_closeI][_closeJ - 1].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI][_closeJ - 1]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI][_closeJ - 1].G)
+			if (!_vvTile[_closeI][_closeJ - 1].listOn)
 			{
+				_vvTile[_closeI][_closeJ - 1].listOn = true;
 				_vvTile[_closeI][_closeJ - 1].G = _closeGoal + 10;
 				_vvTile[_closeI][_closeJ - 1].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI][_closeJ - 1]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI][_closeJ - 1].G)
+				{
+					_vvTile[_closeI][_closeJ - 1].G = _closeGoal + 10;
+					_vvTile[_closeI][_closeJ - 1].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
 
-	if (_vvTile[_closeI][_closeJ + 1].isWalk)
+	if (_closeJ + 1 <= _vvTile[0].size() - 1)
 	{
-		if (!_vvTile[_closeI][_closeJ + 1].listOn)
+		if (_vvTile[_closeI][_closeJ + 1].isWalk)
 		{
-			_vvTile[_closeI][_closeJ + 1].listOn = true;
-			_vvTile[_closeI][_closeJ + 1].G = _closeGoal + 10;
-			_vvTile[_closeI][_closeJ + 1].parent = _closeList[_lastIndex];
-			_openList.push_back(&_vvTile[_closeI][_closeJ + 1]);
-		}
-		else
-		{
-			if (_closeGoal + 10 < _vvTile[_closeI][_closeJ + 1].G)
+			if (!_vvTile[_closeI][_closeJ + 1].listOn)
 			{
+				_vvTile[_closeI][_closeJ + 1].listOn = true;
 				_vvTile[_closeI][_closeJ + 1].G = _closeGoal + 10;
 				_vvTile[_closeI][_closeJ + 1].parent = _closeList[_lastIndex];
+				_openList.push_back(&_vvTile[_closeI][_closeJ + 1]);
+			}
+			else
+			{
+				if (_closeGoal + 10 < _vvTile[_closeI][_closeJ + 1].G)
+				{
+					_vvTile[_closeI][_closeJ + 1].G = _closeGoal + 10;
+					_vvTile[_closeI][_closeJ + 1].parent = _closeList[_lastIndex];
+				}
 			}
 		}
 	}
