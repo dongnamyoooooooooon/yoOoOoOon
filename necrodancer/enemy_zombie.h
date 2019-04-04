@@ -2,6 +2,9 @@
 #include "enemy.h"
 class enemy_zombie : public enemy
 {
+private:
+	DIRECTION _tempDir;
+
 public:
 	enemy_zombie();
 	~enemy_zombie();
@@ -17,5 +20,7 @@ public:
 	void aniPlay_Up();
 	void aniPlay_Down();
 	void aniPlay_Side();
+	
+	void jumpMoveEnemy();
 };
 

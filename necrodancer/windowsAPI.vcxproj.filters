@@ -360,6 +360,15 @@
     <ClInclude Include="enemy_zombie.h">
       <Filter>PlayGround\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_skeleton_mage.h">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_skeleton_mage_yellow.h">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_skeleton_mage_black.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -586,6 +595,15 @@
     </ClCompile>
     <ClCompile Include="enemy_zombie.cpp">
       <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton_mage.cpp">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton_mage_yellow.cpp">
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_skeleton_mage_black.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

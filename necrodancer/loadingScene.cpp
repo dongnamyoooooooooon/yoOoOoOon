@@ -141,6 +141,7 @@ DWORD ThreadFunction(LPVOID lpParameter)
 
 	while (loadHelper->_curCount != LOADINGMAX)
 	{
+		if(loadHelper->_curCount != 0)
 		{
 			//¸ÊÅø¹è°æ
 			IMAGEMANAGER->addImage("maptoolbackground", L"image/mapTool/maptoolBackground.png", 240, 540);

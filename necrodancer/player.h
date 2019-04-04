@@ -157,6 +157,12 @@ public:
 	int getPlayerPosX() { return _posX; }
 	int getPlayerPosY() { return _posY; }
 
+	void setPlayerPosX(int posX) { _posX = posX; }
+	void setPlayerPosY(int posY) { _posY = posY; }
+	void setPlayerPos(int posX, int posY) { _posX = posX, _posY = posY; }
+
+
+
 	PLAYER_STATE getPlayerState() { return _playerState; }
 	void setPlayerState(PLAYER_STATE state) { _playerState = state; }
 

@@ -169,6 +169,9 @@
     <ClInclude Include="enemy_shopkeeper.h" />
     <ClInclude Include="enemy_skeleton.h" />
     <ClInclude Include="enemy_skeleton_black.h" />
+    <ClInclude Include="enemy_skeleton_mage.h" />
+    <ClInclude Include="enemy_skeleton_mage_black.h" />
+    <ClInclude Include="enemy_skeleton_mage_yellow.h" />
     <ClInclude Include="enemy_skeleton_yellow.h" />
     <ClInclude Include="enemy_slime_blue.h" />
     <ClInclude Include="enemy_slime_green.h" />
@@ -252,6 +255,9 @@
     <ClCompile Include="enemy_shopkeeper.cpp" />
     <ClCompile Include="enemy_skeleton.cpp" />
     <ClCompile Include="enemy_skeleton_black.cpp" />
+    <ClCompile Include="enemy_skeleton_mage.cpp" />
+    <ClCompile Include="enemy_skeleton_mage_black.cpp" />
+    <ClCompile Include="enemy_skeleton_mage_yellow.cpp" />
     <ClCompile Include="enemy_skeleton_yellow.cpp" />
     <ClCompile Include="enemy_slime_blue.cpp" />
     <ClCompile Include="enemy_slime_green.cpp" />

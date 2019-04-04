@@ -37,6 +37,9 @@
 #include "enemy_skeleton.h"
 #include "enemy_skeleton_yellow.h"
 #include "enemy_skeleton_black.h"
+#include "enemy_skeleton_mage.h"
+#include "enemy_skeleton_mage_yellow.h"
+#include "enemy_skeleton_mage_black.h"
 #include "enemy_zombie.h"
 #include "enemy_slime_blue.h"
 #include "enemy_slime_green.h"
@@ -128,6 +131,7 @@ void objectManager::render()
 
 	_viObj = _vObj.begin();
 
+	
 	for (_viObj; _viObj != _vObj.end(); ++_viObj)
 	{
 		//POINTF temp = (*_viObj)->getPos();
@@ -160,6 +164,8 @@ void objectManager::render()
 		}
 	}
 
+	mageMagic();
+
 	//ºñÆ®
 	//RECT rc;
 	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
@@ -182,6 +188,8 @@ void objectManager::render()
 
 	_player->drawEquipUI();
 	_player->drawPlayerUI();
+
+	
 
 
 	//WCHAR str[128];
@@ -238,6 +246,9 @@ void objectManager::allObjectUpdate()
 	KEYANIMANAGER->update("enemy_skeleton");
 	KEYANIMANAGER->update("enemy_skeleton_yellow");
 	KEYANIMANAGER->update("enemy_skeleton_black");
+	KEYANIMANAGER->update("enemy_skeleton_mage");
+	KEYANIMANAGER->update("enemy_skeleton_mage_yellow");
+	KEYANIMANAGER->update("enemy_skeleton_mage_black");
 	KEYANIMANAGER->update("enemy_bat");
 	KEYANIMANAGER->update("enemy_bat_red");
 	KEYANIMANAGER->update("enemy_bat_miniboss");
@@ -267,6 +278,25 @@ void objectManager::deleteObject(parentObj * obj)
 			_viObj++;
 	}
 	_vvObjTile[tempY][tempX] = nullptr;
+}
+
+void objectManager::mageMagic()
+{
+	if (_isMagic)
+	{
+		_isMagic++;
+		if (_isMagic < 2)
+			IMAGEMANAGER->findImage("alpha_black")->render(0, 0, WINSIZEX, WINSIZEY);
+		else if (_isMagic < 4)
+			IMAGEMANAGER->findImage("magic_red")->render(0, 0, WINSIZEX, WINSIZEY);
+		else if (_isMagic < 6)
+			IMAGEMANAGER->findImage("magic_white")->render(0, 0, WINSIZEX, WINSIZEY, 0.3f);
+		else if (_isMagic < 8)
+			IMAGEMANAGER->findImage("magic_gray")->render(0, 0, WINSIZEX, WINSIZEY);
+		else
+			_isMagic = 0;
+	}
+
 }
 
 void objectManager::initBeat(const char * fileName, string musicKey)
@@ -1049,15 +1079,21 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_WHITE])
 	{
-
+		enemy_skeleton_mage* tempObj = new enemy_skeleton_mage;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_YELLOW])
 	{
-
+		enemy_skeleton_mage_yellow* tempObj = new enemy_skeleton_mage_yellow;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_BLACK])
 	{
-
+		enemy_skeleton_mage_black* tempObj = new enemy_skeleton_mage_black;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_ARMADILLO])
 	{

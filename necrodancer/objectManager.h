@@ -39,6 +39,9 @@ class wallDoor_side;
 class enemy_skeleton;
 class enemy_skeleton_yellow;
 class enemy_skeleton_black;
+class enemy_skeleton_mage;
+class enemy_skeleton_mage_yellow;
+class enemy_skeleton_mage_black;
 class enemy_slime_blue;
 class enemy_slime_green;
 class enemy_zombie;
@@ -102,6 +105,8 @@ private:
 
 	int		_chainCount;
 
+	int _isMagic;
+
 public:
 	objectManager();
 	~objectManager();
@@ -120,6 +125,8 @@ public:
 	void allObjectUpdate();
 	void deleteObject(parentObj* obj);
 
+	void mageMagic();
+
 	//비트
 	void initBeat(const char* fileName, string musicKey);
 	void createBeat();
@@ -135,15 +142,13 @@ public:
 	parentObj* createTrap(parentObj obj);
 	parentObj* createPlayer(parentObj obj);
 
-	//카메라
-	
-	
 	void setTileX(UINT x) { _tileX = x; }
 	void setTileY(UINT y) { _tileY = y; }
 
 	UINT getTileX() { return _tileX; }
 	UINT getTileY() { return _tileY; }
 
+	void magicOn() { _isMagic = 1; }
 
 	void setIsPlayerAlive() { _isPlayerAlive = false; }
 

@@ -304,6 +304,9 @@ HRESULT playGround::init()
 
 		//기타(알파블렌딩용)
 		IMAGEMANAGER->addImage("alpha_black", L"image/black.png", 100, 100);
+		IMAGEMANAGER->addImage("magic_white", L"image/white.png", 100, 100);
+		IMAGEMANAGER->addImage("magic_red", L"image/red.png", 100, 100);
+		IMAGEMANAGER->addImage("magic_gray", L"image/gray.png", 100, 100);
 
 		//UI(장비)
 		IMAGEMANAGER->addImage("equipUI_shovel", L"image/ui/ui_slot_1.png", 60, 66);
@@ -495,13 +498,13 @@ HRESULT playGround::init()
 
 		SOUNDMANAGER->addSound("sound_minotaur_charge", "sound/effect/en_minotaur_charge.ogg", false, false);
 
+		SOUNDMANAGER->addSound("sound_spell_wind", "sound/effect/wep_spell_wind.ogg", false, false);
+
 		SOUNDMANAGER->addSound("sound_chain_break", "sound/effect/sfx_chain_break.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_chain_groove", "sound/effect/sfx_chain_groove.ogg", false, false);
 
 		SOUNDMANAGER->addSound("sound_announcer_coralriff", "sound/effect/vo_announcer_coralriff.ogg", false, false);
 
-		//이펙트
-		EFFECTMANAGER->addEffect("effect_dagger_basic", "image/effect/swipe_dagger.png", 144, 48, 48, 48, 8, 1, 50);
 	}
 
 	SCENEMANAGER->addScene("맵툴", new mapToolScene);

@@ -22,9 +22,12 @@ HRESULT enemy_zombie::init(string imgName, int idxX, int idxY)
 	_heart = 1;
 	_maxHeart = 1;
 
-	_direction = (DIRECTION)RND->getFromIntTo(1, 4);
-	if (_direction == DIRECTION_LEFT) _isLeft = true;
-	else if (_direction == DIRECTION_RIGHT) _isLeft = false;
+	
+	////_direction = ;
+	
+	_tempDir = (DIRECTION)RND->getFromIntTo(1, 4);
+	if (_tempDir == DIRECTION_LEFT) _isLeft = true;
+	else if (_tempDir == DIRECTION_RIGHT) _isLeft = false;
 
 	aniSetUp();
 
@@ -41,15 +44,16 @@ void enemy_zombie::update()
 
 	if (_isBeat)
 	{
+		_direction = _tempDir;
 		_curMoveBeat++;
-		
+		//_direction = _tempDir;
 		if (_moveBeat == _curMoveBeat)
 		{
 			_curMoveBeat = 0;
-			
-			_moveDistance = TILE_SIZE;
+			//_moveDistance = TILE_SIZE;
 
 			OBJECT_TYPE objType;
+			
 			if (_direction == DIRECTION_LEFT)
 			{
 				parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
@@ -64,7 +68,7 @@ void enemy_zombie::update()
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
-						_direction = DIRECTION_RIGHT;
+						_tempDir = DIRECTION_RIGHT;
 						_isLeft = false;
 						_isHalfMove = true;
 						_moveDistance = TILE_SIZE;
@@ -94,7 +98,7 @@ void enemy_zombie::update()
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
-						_direction = DIRECTION_LEFT;
+						_tempDir = DIRECTION_LEFT;
 						_isLeft = true;
 						_isHalfMove = true;
 						_moveDistance = TILE_SIZE;
@@ -124,7 +128,7 @@ void enemy_zombie::update()
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
-						_direction = DIRECTION_DOWN;
+						_tempDir = DIRECTION_DOWN;
 						_isHalfMove = true;
 						_moveDistance = TILE_SIZE;
 						aniPlay_Down();
@@ -152,7 +156,7 @@ void enemy_zombie::update()
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
-						_direction = DIRECTION_UP;
+						_tempDir = DIRECTION_UP;
 						_isHalfMove = true;
 						_moveDistance = TILE_SIZE;
 						aniPlay_Up();
@@ -179,11 +183,11 @@ void enemy_zombie::render()
 {
 	if (_isSaw)
 	{
-		IMAGEMANAGER->findImage("enemy_shadow")->render(_posX - _subX, _posY - _subY + _posZ);
+		IMAGEMANAGER->findImage("enemy_shadow")->render(_posX - _subX, _posY - _subY - _posZ);
 		if (!_isLeft)
-			_img->aniRenderReverseX(_posX - _subX, _posY - _subY + _posZ, _ani);
+			_img->aniRenderReverseX(_posX - _subX, _posY - _subY - _posZ, _ani);
 		else
-			_img->aniRender(_posX - _subX, _posY - _subY + _posZ, _ani);
+			_img->aniRender(_posX - _subX, _posY - _subY - _posZ, _ani);
 	}
 
 	if (_isDrawHP && _heart != _maxHeart)
@@ -221,7 +225,7 @@ void enemy_zombie::aniSetUp()
 	int down_shadow[] = { 40,41,42,43,44,45,46,47 };
 	KEYANIMANAGER->addArrayFrameAnimation("enemy_zombie", "zombie_down_shadow", "enemy_zombie", down_shadow, 8, ANISPEED, true);
 
-	if (_direction == DIRECTION_LEFT || _direction == DIRECTION_RIGHT)
+	/*if (_direction == DIRECTION_LEFT || _direction == DIRECTION_RIGHT)
 	{
 		_ani = KEYANIMANAGER->findAnimation("enemy_zombie", "zombie_side");
 		_ani->start();
@@ -232,6 +236,22 @@ void enemy_zombie::aniSetUp()
 		_ani->start();
 	}
 	else if (_direction == DIRECTION_DOWN)
+	{
+		_ani = KEYANIMANAGER->findAnimation("enemy_zombie", "zombie_down");
+		_ani->start();
+	}*/
+
+	if (_tempDir == DIRECTION_LEFT || _tempDir == DIRECTION_RIGHT)
+	{
+		_ani = KEYANIMANAGER->findAnimation("enemy_zombie", "zombie_side");
+		_ani->start();
+	}
+	else if (_tempDir == DIRECTION_UP)
+	{
+		_ani = KEYANIMANAGER->findAnimation("enemy_zombie", "zombie_up");
+		_ani->start();
+	}
+	else if (_tempDir == DIRECTION_DOWN)
 	{
 		_ani = KEYANIMANAGER->findAnimation("enemy_zombie", "zombie_down");
 		_ani->start();
@@ -312,6 +332,198 @@ void enemy_zombie::aniPlay_Side()
 		{
 			_ani = KEYANIMANAGER->findAnimation("enemy_zombie", "zombie_side_shadow");
 			_ani->start();
+		}
+	}
+}
+
+void enemy_zombie::jumpMoveEnemy()
+{
+	//_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
+	_speed = 8.0f;
+
+	if (!_isHalfMove)
+	{
+		switch (_direction)
+		{
+		case DIRECTION_LEFT:
+			_moveDistance -= _speed;
+			_posX -= _speed;
+			if (_moveDistance)
+			{
+				_posZ -= _jumpPower;
+				_jumpPower -= 1.2f;
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
+			}
+
+			break;
+		case DIRECTION_RIGHT:
+			_moveDistance -= _speed;
+			_posX += _speed;
+			if (_moveDistance)
+			{
+				_posZ -= _jumpPower;
+				_jumpPower -= 1.2f;
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
+			}
+			break;
+		case DIRECTION_UP:
+			_moveDistance -= _speed;
+			_posY -= _speed;
+			if (_moveDistance)
+			{
+				_posZ += _jumpPower;
+				_jumpPower -= 1.2f;
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
+			}
+
+			break;
+		case DIRECTION_DOWN:
+			_moveDistance -= _speed;
+			_posY += _speed;
+			if (_moveDistance)
+			{
+				_posZ += _jumpPower;
+				_jumpPower -= 1.2f;
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
+			}
+			break;
+		}
+	}
+	else
+	{
+		switch (_direction)
+		{
+		case DIRECTION_LEFT:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posX -= _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posX += _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
+				_isHalfMove = false;
+			}
+
+			break;
+		case DIRECTION_RIGHT:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posX += _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posX -= _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				horizonSet();
+				_isHalfMove = false;
+			}
+			break;
+		case DIRECTION_UP:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posY -= _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posY += _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
+				_isHalfMove = false;
+			}
+
+			break;
+		case DIRECTION_DOWN:
+			_moveDistance -= _speed;
+			if (_moveDistance)
+			{
+				if (_moveDistance > TILE_SIZE / 2)
+				{
+					_posY += _speed;
+					_posZ += _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+				else
+				{
+					_posY -= _speed;
+					_posZ -= _jumpPower;
+					_jumpPower -= 1.2f;
+				}
+			}
+			if (_moveDistance <= 0)
+			{
+				
+				_posZ = 0;
+				_jumpPower = 0;
+				verticalSet();
+				_isHalfMove = false;
+			}
+			break;
 		}
 	}
 }
