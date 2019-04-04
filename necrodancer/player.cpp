@@ -362,9 +362,6 @@ void player::keyUpdate()
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
 			_isLeft = true;
-		/*	_playerState = PLAYER_STATE_JUMP_LEFT;
-			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
@@ -436,9 +433,6 @@ void player::keyUpdate()
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
 			_isLeft = false;
-			/*_playerState = PLAYER_STATE_JUMP_RIGHT;
-			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
@@ -509,9 +503,6 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			/*_playerState = PLAYER_STATE_JUMP_UP;
-			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
@@ -582,9 +573,6 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
-			/*_playerState = PLAYER_STATE_JUMP_DOWN;
-			_moveDistance = TILE_SIZE;
-			_jumpPower = JUMPPOWER;*/
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
@@ -675,6 +663,8 @@ void player::playerStateUpdate(bool check)
 					horizonSet();
 					_jumpPower = 0;
 					_posZ = 0;
+					_isArrive = true;
+					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
 			}
@@ -690,6 +680,8 @@ void player::playerStateUpdate(bool check)
 					horizonSet();
 					_jumpPower = 0;
 					_posZ = 0;
+					_isArrive = true;
+					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
 			}
@@ -705,6 +697,8 @@ void player::playerStateUpdate(bool check)
 					verticalSet();
 					_jumpPower = 0;
 					_posZ = 0;
+					_isArrive = true;
+					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
 			}
@@ -720,6 +714,8 @@ void player::playerStateUpdate(bool check)
 					verticalSet();
 					_jumpPower = 0;
 					_posZ = 0;
+					_isArrive = true;
+					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
 			}
@@ -740,6 +736,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
+				_isArrive = true;
 			}
 			break;
 		}
@@ -753,6 +750,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
+				_isArrive = true;
 			}
 			break;
 		}
@@ -766,6 +764,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
+				_isArrive = true;
 			}
 			break;
 		}
@@ -779,6 +778,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
+				_isArrive = true;
 			}
 			break;
 		}

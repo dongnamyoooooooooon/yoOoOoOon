@@ -41,6 +41,7 @@
 #include "enemy_skeleton_mage_yellow.h"
 #include "enemy_skeleton_mage_black.h"
 #include "enemy_zombie.h"
+#include "enemy_clone.h"
 #include "enemy_slime_blue.h"
 #include "enemy_slime_green.h"
 #include "enemy_bat.h"
@@ -249,6 +250,7 @@ void objectManager::allObjectUpdate()
 	KEYANIMANAGER->update("enemy_skeleton_mage");
 	KEYANIMANAGER->update("enemy_skeleton_mage_yellow");
 	KEYANIMANAGER->update("enemy_skeleton_mage_black");
+	KEYANIMANAGER->update("enemy_clone");
 	KEYANIMANAGER->update("enemy_bat");
 	KEYANIMANAGER->update("enemy_bat_red");
 	KEYANIMANAGER->update("enemy_bat_miniboss");
@@ -1131,7 +1133,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CLONE])
 	{
-
+		enemy_clone* tempObj = new enemy_clone;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT_MINIBOSS])
 	{

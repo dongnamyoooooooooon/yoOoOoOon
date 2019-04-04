@@ -367,7 +367,10 @@
       <Filter>PlayGround\enemy\skeleton</Filter>
     </ClInclude>
     <ClInclude Include="enemy_skeleton_mage_black.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_clone.h">
+      <Filter>PlayGround\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -603,7 +606,10 @@
       <Filter>PlayGround\enemy\skeleton</Filter>
     </ClCompile>
     <ClCompile Include="enemy_skeleton_mage_black.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>PlayGround\enemy\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_clone.cpp">
+      <Filter>PlayGround\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

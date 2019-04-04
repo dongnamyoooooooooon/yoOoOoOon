@@ -45,6 +45,7 @@ class enemy_skeleton_mage_black;
 class enemy_slime_blue;
 class enemy_slime_green;
 class enemy_zombie;
+class enemy_clone;
 class enemy_bat;
 class enemy_bat_red;
 class enemy_bat_boss;

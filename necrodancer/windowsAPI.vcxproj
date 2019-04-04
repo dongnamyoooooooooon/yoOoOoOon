@@ -166,6 +166,7 @@
     <ClInclude Include="enemy_bat.h" />
     <ClInclude Include="enemy_bat_boss.h" />
     <ClInclude Include="enemy_bat_red.h" />
+    <ClInclude Include="enemy_clone.h" />
     <ClInclude Include="enemy_shopkeeper.h" />
     <ClInclude Include="enemy_skeleton.h" />
     <ClInclude Include="enemy_skeleton_black.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="enemy_bat.cpp" />
     <ClCompile Include="enemy_bat_boss.cpp" />
     <ClCompile Include="enemy_bat_red.cpp" />
+    <ClCompile Include="enemy_clone.cpp" />
     <ClCompile Include="enemy_shopkeeper.cpp" />
     <ClCompile Include="enemy_skeleton.cpp" />
     <ClCompile Include="enemy_skeleton_black.cpp" />

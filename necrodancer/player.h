@@ -52,6 +52,8 @@ private:
 	animation*				_playerBody_Ani;
 	bool					_isLeft;						//왼쪽보니?
 	bool					_isMove;						//움직이는지?
+	bool					_isArrive;						//도착했는지?
+	
 
 	D2D1_RECT_F				_rc;
 	int						_posX;							//플레이어위치
@@ -161,12 +163,18 @@ public:
 	void setPlayerPosY(int posY) { _posY = posY; }
 	void setPlayerPos(int posX, int posY) { _posX = posX, _posY = posY; }
 
+	//bool getIsMove() { return _isMove; }
+	void setIsMove(bool check) { _isMove = check; }
 
+	bool getIsArrive() { return _isArrive; }
+	void setIsArrive(bool check) { _isArrive = check; }
 
 	PLAYER_STATE getPlayerState() { return _playerState; }
 	void setPlayerState(PLAYER_STATE state) { _playerState = state; }
 
 	bool getIsMove();
+
+	int getMoveDistance() { return _moveDistance; }
 
 };
 
