@@ -469,7 +469,7 @@ static string IMAGE_NAME[IMAGE_NAME_COUNT] = { "none","floor_01","floor_02","flo
 											"enemy_skeleton_mage_white","enemy_skeleton_mage_yellow","enemy_skeleton_mage_black",
 											"enemy_armadillo","enemy_slime_green","enemy_slime_blue","enemy_zombie",
 											"enemy_bat","enemy_bat_red","enemy_clone","enemy_bat_miniboss","enemy_banshee",
-											"enemy_dragon_green","enemy_minitaur","enemy_coralriff_drums","enemy_coralriff_head","enemy_coralriff_horns","enemy_coralriff_keytar",
+											"enemy_dragon_green","enemy_minotaur","enemy_coralriff_drums","enemy_coralriff_head","enemy_coralriff_horns","enemy_coralriff_keytar",
 											"enemy_coralriff_strings","enemy_shopkeeper",
 											"chest_01" ,"trap_bounce","trap_slowdown","trap_speedup","trap_spike","shrine_01","shrine_02" ,"shrine_03","shrine_04","shrine_05",
 											"shrine_06","torch_01"

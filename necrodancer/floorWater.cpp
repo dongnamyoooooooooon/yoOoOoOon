@@ -99,6 +99,11 @@ void floorWater::render()
 			}
 		}
 	}
+
+	WCHAR str[128];
+
+	swprintf_s(str, L"%d", _frameX);
+	D2DMANAGER->drawText(str, CAMERA->getPosX() + 10, CAMERA->getPosY() + 400, 50, RGB(0, 255, 255));
 }
 
 void floorWater::checkFever(int idxX, int idxY)

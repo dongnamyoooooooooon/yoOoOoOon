@@ -80,11 +80,19 @@ protected:
 	int _moveBeat;					//움직임가능비트
 	int _curMoveBeat;				//현재비트
 
+	int _saveX;
+	int _saveY;
+
 	int _startX;
 	int _startY;
 	int _endX;
 	int _endY;
 	int _lastIndex;
+
+	int _beatCount;
+	int _shakeVal;
+	int _shakeCount;
+	bool _isShowShadow;
 
 	bool _isDrawHP;
 	bool _isHalfMove;

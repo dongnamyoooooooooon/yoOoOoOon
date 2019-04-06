@@ -38,5 +38,5 @@ static string ENEMY_NAME[ENEMY_TYPE_COUNT] = { "enemy_none", "enemy_skeleton", "
 "enemy_skeleton_black", "enemy_skeleton_mage_white", "enemy_skeleton_mage_yellow", "enemy_skeleton_mage_black",
 "enemy_armadillo",  "enemy_slime_green", "enemy_slime_blue", "enemy_zombie",
 "enemy_bat", "enemy_bat_red", "enemy_clone", "enemy_bat_miniboss", "enemy_banshee", "enemy_dragon_green",
-"enemy_minitaur", "enemy_coralriff_drums", "enemy_coralriff_head", "enemy_coralriff_horns", "enemy_coralriff_keytar",
+"enemy_minotaur", "enemy_coralriff_drums", "enemy_coralriff_head", "enemy_coralriff_horns", "enemy_coralriff_keytar",
 "enemy_coralriff_strings", "enemy_shopkeeper"};

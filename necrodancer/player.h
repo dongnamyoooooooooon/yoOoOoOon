@@ -46,13 +46,15 @@ private:
 	UINT					_tempX;
 	UINT					_tempY;
 	PLAYER_STATE			_playerState;					//플레이어 상태
+	PLAYER_STATE			_attDir;
 
 
 	animation*				_playerHead_Ani;				//애니메이션
 	animation*				_playerBody_Ani;
 	bool					_isLeft;						//왼쪽보니?
 	bool					_isMove;						//움직이는지?
-	bool					_isArrive;						//도착했는지?
+	bool					_isPress;						//눌렀는지?
+	bool					_isHit;							//맞았는지?
 	
 
 	D2D1_RECT_F				_rc;
@@ -166,8 +168,8 @@ public:
 	//bool getIsMove() { return _isMove; }
 	void setIsMove(bool check) { _isMove = check; }
 
-	bool getIsArrive() { return _isArrive; }
-	void setIsArrive(bool check) { _isArrive = check; }
+	bool getIsPress() { return _isPress; }
+	void setIsPress(bool check) { _isPress = check; }
 
 	PLAYER_STATE getPlayerState() { return _playerState; }
 	void setPlayerState(PLAYER_STATE state) { _playerState = state; }
@@ -175,6 +177,12 @@ public:
 	bool getIsMove();
 
 	int getMoveDistance() { return _moveDistance; }
+
+	PLAYER_STATE getAttDir() { return _attDir; }
+	void setAttDir(PLAYER_STATE state) { _attDir = state; }
+
+	bool getIsHit() { return _isHit; }
+	void setIsHit(bool check) { _isHit = check; }
 
 };
 

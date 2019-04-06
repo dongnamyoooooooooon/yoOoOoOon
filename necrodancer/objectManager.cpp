@@ -44,9 +44,15 @@
 #include "enemy_clone.h"
 #include "enemy_slime_blue.h"
 #include "enemy_slime_green.h"
+#include "enemy_dragon_green.h"
+#include "enemy_banshee.h"
+#include "enemy_armadillo.h"
 #include "enemy_bat.h"
 #include "enemy_bat_red.h"
 #include "enemy_bat_boss.h"
+#include "enemy_minotaur.h"
+#include "enemy_coralriff_drums.h"
+#include "enemy_coralriff_horns.h"
 #include "enemy_shopkeeper.h"
 
 
@@ -132,7 +138,7 @@ void objectManager::render()
 
 	_viObj = _vObj.begin();
 
-	
+
 	for (_viObj; _viObj != _vObj.end(); ++_viObj)
 	{
 		//POINTF temp = (*_viObj)->getPos();
@@ -165,6 +171,15 @@ void objectManager::render()
 		}
 	}
 
+	_viObj = _vObj.begin();
+	for (_viObj; _viObj != _vObj.end(); ++_viObj)
+	{
+		if ((*_viObj)->getObjType() == OBJECT_TYPE_ENEMY)
+		{
+			(*_viObj)->render();
+		}
+	}
+
 	mageMagic();
 
 	//ºñÆ®
@@ -190,7 +205,7 @@ void objectManager::render()
 	_player->drawEquipUI();
 	_player->drawPlayerUI();
 
-	
+
 
 
 	//WCHAR str[128];
@@ -250,10 +265,16 @@ void objectManager::allObjectUpdate()
 	KEYANIMANAGER->update("enemy_skeleton_mage");
 	KEYANIMANAGER->update("enemy_skeleton_mage_yellow");
 	KEYANIMANAGER->update("enemy_skeleton_mage_black");
+	KEYANIMANAGER->update("enemy_dragon_green");
+	KEYANIMANAGER->update("enemy_banshee");
+	KEYANIMANAGER->update("enemy_armadillo");
 	KEYANIMANAGER->update("enemy_clone");
 	KEYANIMANAGER->update("enemy_bat");
 	KEYANIMANAGER->update("enemy_bat_red");
 	KEYANIMANAGER->update("enemy_bat_miniboss");
+	KEYANIMANAGER->update("enemy_minotaur");
+	KEYANIMANAGER->update("enemy_coralriff_drums");
+	KEYANIMANAGER->update("enemy_coralriff_horns");
 }
 
 void objectManager::deleteObject(parentObj * obj)
@@ -280,6 +301,32 @@ void objectManager::deleteObject(parentObj * obj)
 			_viObj++;
 	}
 	_vvObjTile[tempY][tempX] = nullptr;
+}
+
+void objectManager::deleteFloorTile(parentObj * obj)
+{
+	int tempX = obj->getIdxX();
+	int tempY = obj->getIdxY();
+
+	_viObj = _vObj.begin();
+
+	for (_viObj; _viObj != _vObj.end();)
+	{
+		if ((*_viObj)->getObjType() != obj->getObjType())
+		{
+			_viObj++;
+			continue;
+		}
+		if ((*_viObj)->getIdxX() == tempX && (*_viObj)->getIdxY() == tempY)
+		{
+			delete(*_viObj);
+			_viObj = _vObj.erase(_viObj);
+			break;
+		}
+		else
+			_viObj++;
+	}
+	_vvFloorTile[tempY][tempX] = nullptr;
 }
 
 void objectManager::mageMagic()
@@ -1099,7 +1146,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_ARMADILLO])
 	{
-
+		enemy_armadillo* tempObj = new enemy_armadillo;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SLIME_GREEN])
 	{
@@ -1145,19 +1194,27 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_BANSHEE])
 	{
-
+		enemy_banshee* tempObj = new enemy_banshee;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_DRAGON_GREEN])
 	{
-
+		enemy_dragon_green* tempObj = new enemy_dragon_green;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_MINOTAUR])
 	{
-
+		enemy_minotaur* tempObj = new enemy_minotaur;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_DRUMS])
 	{
-
+		enemy_coralriff_drums* tempObj = new enemy_coralriff_drums;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_HEAD])
 	{
@@ -1165,7 +1222,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_HORNS])
 	{
-
+		enemy_coralriff_horns* tempObj = new enemy_coralriff_horns;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_KEYTAR])
 	{

@@ -34,7 +34,7 @@ void enemy_clone::update()
 {
 	player* tempPlayer = OBJECTMANAGER->getPlayer();
 
-	if (tempPlayer->getIsMove())
+	if (tempPlayer->getIsMove() && tempPlayer->getIsPress())
 	{
 		switch (tempPlayer->getPlayerState())
 		{
@@ -57,15 +57,19 @@ void enemy_clone::update()
 			break;
 		}
 	}
-	
-	OBJECT_TYPE objType;
+
+	int idxAdd = 1;
 
 	if (_isBeat)
 	{
+		aniPlay_Stand();
+
+		OBJECT_TYPE objType;
+
 		if (_attDir == DIRECTION_LEFT)
 		{
-			parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
-			
+			parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX - idxAdd, _idxY);
+
 			if (tempObj != NULL)
 			{
 				objType = tempObj->getObjType();
@@ -76,170 +80,134 @@ void enemy_clone::update()
 					_attDir = DIRECITON_NONE;
 					_direction = DIRECITON_NONE;
 				}
+				if (objType == OBJECT_TYPE_WALL)
+				{
+					_isHalfMove = true;
+					_direction = _attDir;
+					_attDir = DIRECITON_NONE;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = 150.0f;
+					_gravity = GRAVETY;
+				}
 			}
 			else
 			{
 				_direction = _attDir;
+				_attDir = DIRECITON_NONE;
+				OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
 				_moveDistance = TILE_SIZE;
+				_jumpPower = 150.0f;
+				_gravity = GRAVETY;
 			}
 		}
-		if(_direction != DIRECITON_NONE)
+		else if (_attDir == DIRECTION_RIGHT)
 		{
-			if (_direction == DIRECTION_LEFT)
+			parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX + idxAdd, _idxY);
+
+			if (tempObj != NULL)
 			{
-				parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
+				objType = tempObj->getObjType();
 
-				if (tempObj != NULL)
+				if (objType == OBJECT_TYPE_PLAYER)
 				{
-					objType = tempObj->getObjType();
-
-					if (objType == OBJECT_TYPE_WALL)
-					{
-						_isHalfMove = true;
-					}
+					attackEnemy(_attDir);
+					_attDir = DIRECITON_NONE;
+					_direction = DIRECITON_NONE;
 				}
-				else
+				if (objType == OBJECT_TYPE_WALL)
 				{
-					OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
+					_isHalfMove = true;
+					_direction = _attDir;
+					_attDir = DIRECITON_NONE;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = 150.0f;
+					_gravity = GRAVETY;
 				}
 			}
+			else
+			{
+				_direction = _attDir;
+				_attDir = DIRECITON_NONE;
+				OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
+				_moveDistance = TILE_SIZE;
+				_jumpPower = 150.0f;
+				_gravity = GRAVETY;
+			}
 		}
+		else if (_attDir == DIRECTION_UP)
+		{
+			parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - idxAdd);
+
+			if (tempObj != NULL)
+			{
+				objType = tempObj->getObjType();
+
+				if (objType == OBJECT_TYPE_PLAYER)
+				{
+					attackEnemy(_attDir);
+					_attDir = DIRECITON_NONE;
+					_direction = DIRECITON_NONE;
+				}
+				if (objType == OBJECT_TYPE_WALL)
+				{
+					_isHalfMove = true;
+					_direction = _attDir;
+					_attDir = DIRECITON_NONE;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = 150.0f;
+					_gravity = GRAVETY;
+				}
+			}
+			else
+			{
+				_direction = _attDir;
+				_attDir = DIRECITON_NONE;
+				OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
+				_moveDistance = TILE_SIZE;
+				_jumpPower = 150.0f;
+				_gravity = GRAVETY;
+			}
+		}
+		else if (_attDir == DIRECTION_DOWN)
+		{
+			parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX, _idxY + idxAdd);
+
+			if (tempObj != NULL)
+			{
+				objType = tempObj->getObjType();
+
+				if (objType == OBJECT_TYPE_PLAYER)
+				{
+					attackEnemy(_attDir);
+					_attDir = DIRECITON_NONE;
+					_direction = DIRECITON_NONE;
+				}
+				if (objType == OBJECT_TYPE_WALL)
+				{
+					_isHalfMove = true;
+					_direction = _attDir;
+					_attDir = DIRECITON_NONE;
+					_moveDistance = TILE_SIZE;
+					_jumpPower = 150.0f;
+					_gravity = GRAVETY;
+				}
+			}
+			else
+			{
+				_direction = _attDir;
+				_attDir = DIRECITON_NONE;
+				OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
+				_moveDistance = TILE_SIZE;
+				_jumpPower = 150.0f;
+				_gravity = GRAVETY;
+			}
+		}
+
+
 		_isBeat = false;
 	}
 
-
-	//if (tempPlayer->getIsMove())
-	//{
-	//	_moveDistance = tempPlayer->getMoveDistance();
-	//	_jumpPower = 150.0f;
-	//	_gravity = GRAVETY;
-	//	switch (tempPlayer->getPlayerState())
-	//	{
-	//		case PLAYER_STATE_JUMP_LEFT:
-	//			_direction = DIRECTION_RIGHT;
-	//			_attDir = DIRECTION_RIGHT;
-	//			_isLeft = true;
-	//			break;
-
-	//		case PLAYER_STATE_JUMP_RIGHT:
-	//			_direction = DIRECTION_LEFT;
-	//			_attDir = DIRECTION_LEFT;
-	//			_isLeft = false;
-	//			break;
-
-	//		case PLAYER_STATE_JUMP_UP:
-	//			_direction = DIRECTION_DOWN;
-	//			_attDir = DIRECTION_DOWN;
-	//			break;
-
-	//		case PLAYER_STATE_JUMP_DOWN:
-	//			_direction = DIRECTION_UP;
-	//			_attDir = DIRECTION_UP;
-	//			break;
-	//	}
-	//}
-
-	//
-
-	//if (_isBeat)
-	//{
-	//	aniPlay_Stand();
-	//	
-	//	OBJECT_TYPE objType;
-	//	if (_direction == DIRECTION_LEFT)
-	//	{
-	//		parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
-
-	//		if (tempObj != NULL)
-	//		{
-	//			objType = tempObj->getObjType();
-	//			if (objType == OBJECT_TYPE_PLAYER)
-	//			{
-	//				attackEnemy(_direction);
-	//			}
-	//			else if (objType == OBJECT_TYPE_WALL)
-	//			{
-	//				_isHalfMove = true;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
-	//			_moveDistance = 0;
-	//			_jumpPower = 0;
-	//			_posZ = 0;
-	//		}
-	//	}
-	//	else if (_direction == DIRECTION_RIGHT)
-	//	{
-	//		parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
-
-	//		if (tempObj != NULL)
-	//		{
-	//			objType = tempObj->getObjType();
-
-	//			if (objType == OBJECT_TYPE_WALL)
-	//			{
-	//				_isHalfMove = true;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			OBJECTMANAGER->setTileIdx(this, _idxX + 1, _idxY);
-	//			_moveDistance = 0;
-	//			_jumpPower = 0;
-	//			_posZ = 0;
-	//		}
-	//	}
-	//	else if (_direction == DIRECTION_UP)
-	//	{
-	//		parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
-
-	//		if (tempObj != NULL)
-	//		{
-	//			objType = tempObj->getObjType();
-
-	//			if (objType == OBJECT_TYPE_WALL)
-	//			{
-	//				_isHalfMove = true;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			OBJECTMANAGER->setTileIdx(this, _idxX, _idxY - 1);
-	//			_moveDistance = 0;
-	//			_jumpPower = 0;
-	//			_posZ = 0;
-	//		}
-	//	}
-	//	else if (_direction == DIRECTION_DOWN)
-	//	{
-	//		parentObj* tempObj = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
-
-	//		if (tempObj != NULL)
-	//		{
-	//			objType = tempObj->getObjType();
-
-	//			if (objType == OBJECT_TYPE_WALL)
-	//			{
-	//				_isHalfMove = true;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			OBJECTMANAGER->setTileIdx(this, _idxX, _idxY + 1);
-	//			_moveDistance = 0;
-	//			_jumpPower = 0;
-	//			_posZ = 0;
-	//		}
-	//	}
-	//	
-
-	//}
-
 	jumpMoveEnemy();
-
-
 }
 
 void enemy_clone::render()
@@ -497,29 +465,3 @@ void enemy_clone::jumpMoveEnemy()
 		}
 	}
 }
-
-
-	/*int direction_X = tempPlayer->getIdxX() - _idxX;
-	int direction_Y = tempPlayer->getIdxY() - _idxY;
-
-	if ((direction_X == -1 && direction_Y == 0) && _attDir == DIRECTION_LEFT)
-	{
-		
-		_attDir = DIRECITON_NONE;
-	}
-	else if ((direction_X == 0 && direction_Y == -1) && _attDir == DIRECTION_UP)
-	{
-		attackEnemy(_direction);
-		_attDir = DIRECITON_NONE;
-	}
-	else if ((direction_X == 1 && direction_Y == 0) && _attDir == DIRECTION_RIGHT)
-	{
-		attackEnemy(_direction);
-		_attDir = DIRECITON_NONE;
-	}
-	else if ((direction_X == 0 && direction_Y == 1) && _attDir == DIRECTION_DOWN)
-	{
-		attackEnemy(_direction);
-		_attDir = DIRECITON_NONE;
-	}*/
-

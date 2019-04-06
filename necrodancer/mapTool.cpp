@@ -1385,31 +1385,6 @@ void mapTool::drawMap()
 			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
 			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
 
-			if (_vvTile[i][j]->wall != NULL)
-			{
-				if (_vvTile[i][j]->wall->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
-				{
-					_vvTile[i][j]->wall->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 28, _vvTile[i][j]->terrain_frameX);
-				}
-				if (_vvTile[i][j]->isTorch)
-					IMAGEMANAGER->frameRender(IMAGE_NAME[IMAGE_NAME_ETC_01], _vvRECT[i][j].left, _vvRECT[i][j].top - 46, 0, 0);
-			}
-
-			if (_vvTile[i][j]->player != NULL)
-			{
-				IMAGEMANAGER->frameRender("player_body", _vvRECT[i][j].left, _vvRECT[i][j].top, 0, 0);
-				IMAGEMANAGER->frameRender("player_head", _vvRECT[i][j].left, _vvRECT[i][j].top, 0, 0);
-			}
-		}
-	}
-
-	for (UINT i = 0; i < _tileY; i++)
-	{
-		for (UINT j = 0; j < _tileX; j++)
-		{
-			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
-			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
-
 			if (_vvTile[i][j]->item != NULL)
 			{
 				if (_vvTile[i][j]->item->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
@@ -1424,7 +1399,6 @@ void mapTool::drawMap()
 			}
 		}
 	}
-
 
 	for (UINT i = 0; i < _tileY; i++)
 	{
@@ -1505,6 +1479,113 @@ void mapTool::drawMap()
 			}
 		}
 	}
+
+	for (UINT i = 0; i < _tileY; i++)
+	{
+		for (UINT j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->wall != NULL)
+			{
+				if (_vvTile[i][j]->wall->getObjType() != OBJECT_TYPE_NONE && _vvTile[i][j]->objName != "")
+				{
+					_vvTile[i][j]->wall->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 28, _vvTile[i][j]->terrain_frameX);
+				}
+				if (_vvTile[i][j]->isTorch)
+					IMAGEMANAGER->frameRender(IMAGE_NAME[IMAGE_NAME_ETC_01], _vvRECT[i][j].left, _vvRECT[i][j].top - 46, 0, 0);
+			}
+
+			if (_vvTile[i][j]->player != NULL)
+			{
+				IMAGEMANAGER->frameRender("player_body", _vvRECT[i][j].left, _vvRECT[i][j].top, 0, 0);
+				IMAGEMANAGER->frameRender("player_head", _vvRECT[i][j].left, _vvRECT[i][j].top, 0, 0);
+			}
+		}
+	}
+
+	for (UINT i = 0; i < _tileY; i++)
+	{
+		for (UINT j = 0; j < _tileX; j++)
+		{
+			if (_vvRECT[i][j].left - (CAMERA->getPosX() - 10) < 0)			continue;
+			if (_vvRECT[i][j].right - CAMERA->getPosX() > 13 * TILE_SIZE)	continue;
+
+			if (_vvTile[i][j]->enemy != NULL)
+			{
+				if (_vvTile[i][j]->enemy->getObjType() != OBJECT_TYPE_NONE)
+				{
+
+					//int correctX;
+					//int correctY;
+					string imgName = _vvTile[i][j]->objName;
+
+					if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON] || imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_YELLOW]
+						|| imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_BLACK] || imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_WHITE]
+						|| imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_YELLOW] || imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SKELETON_MAGE_BLACK])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_ARMADILLO])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left + 2, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SLIME_GREEN] || imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SLIME_BLUE]
+						|| imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_ZOMBIE] || imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_CLONE])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT] || imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT_RED])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_BAT_MINIBOSS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 10, _vvRECT[i][j].top - 26);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_BANSHEE])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 12, _vvRECT[i][j].top - 52);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_DRAGON_GREEN])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 27, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_MINOTAUR])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 24, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_DRUMS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 10, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_HEAD])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 16, _vvRECT[i][j].top - 84);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_HORNS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 16, _vvRECT[i][j].top - 76);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_KEYTAR])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 6, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_STRINGS])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 30, _vvRECT[i][j].top - 72);
+					}
+					else if (imgName == IMAGE_NAME[IMAGE_NAME_ENEMY_SHOPKEEPER])
+					{
+						_vvTile[i][j]->enemy->render(_vvRECT[i][j].left - 22, _vvRECT[i][j].top - 40);
+					}
+				}
+			}
+		}
+	}
+
+
 	if (coorMouse[0] != -1)
 	{
 		IMAGEMANAGER->findImage("mapTool_cursor")->render(_vvRECT[coorMouse[0]][coorMouse[1]].left + 2, _vvRECT[coorMouse[0]][coorMouse[1]].top + 2);

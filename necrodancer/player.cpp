@@ -354,6 +354,7 @@ void player::keyUpdate()
 
 	if (_playerState != PLAYER_STATE_NONE)
 	{
+		_isPress = false;
 		playerStateUpdate(true);
 	}
 
@@ -361,12 +362,14 @@ void player::keyUpdate()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			_attDir = PLAYER_STATE_JUMP_LEFT;
 			_isLeft = true;
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX - 1, _idxY, 4))
 				{
+					
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -404,6 +407,7 @@ void player::keyUpdate()
 					_playerState = PLAYER_STATE_JUMP_LEFT;
 					_moveDistance = TILE_SIZE;
 					_jumpPower = JUMPPOWER;
+					_isPress = true;
 
 					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
 					{
@@ -432,12 +436,14 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			_attDir = PLAYER_STATE_JUMP_RIGHT;
 			_isLeft = false;
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX + 1, _idxY, 6))
 				{
+					
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -475,6 +481,7 @@ void player::keyUpdate()
 					_playerState = PLAYER_STATE_JUMP_RIGHT;
 					_moveDistance = TILE_SIZE;
 					_jumpPower = JUMPPOWER;
+					_isPress = true;
 
 					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
 					{
@@ -503,11 +510,13 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
+			_attDir = PLAYER_STATE_JUMP_UP;
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY - 1, 8))
 				{
+					
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -545,6 +554,7 @@ void player::keyUpdate()
 					_playerState = PLAYER_STATE_JUMP_UP;
 					_moveDistance = TILE_SIZE;
 					_jumpPower = JUMPPOWER;
+					_isPress = true;
 
 					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
 					{
@@ -573,11 +583,13 @@ void player::keyUpdate()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
+			_attDir = PLAYER_STATE_JUMP_DOWN;
 			if (_isBeat)
 			{
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY + 1, 2))
 				{
+				
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -615,6 +627,7 @@ void player::keyUpdate()
 					_playerState = PLAYER_STATE_JUMP_DOWN;
 					_moveDistance = TILE_SIZE;
 					_jumpPower = JUMPPOWER;
+					_isPress = true;
 
 					if (target != NULL && target->getObjType() == OBJECT_TYPE_ITEM)
 					{
@@ -663,7 +676,7 @@ void player::playerStateUpdate(bool check)
 					horizonSet();
 					_jumpPower = 0;
 					_posZ = 0;
-					_isArrive = true;
+					_isPress = true;
 					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
@@ -680,7 +693,7 @@ void player::playerStateUpdate(bool check)
 					horizonSet();
 					_jumpPower = 0;
 					_posZ = 0;
-					_isArrive = true;
+					_isPress = true;
 					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
@@ -697,7 +710,7 @@ void player::playerStateUpdate(bool check)
 					verticalSet();
 					_jumpPower = 0;
 					_posZ = 0;
-					_isArrive = true;
+					_isPress = true;
 					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
@@ -714,7 +727,7 @@ void player::playerStateUpdate(bool check)
 					verticalSet();
 					_jumpPower = 0;
 					_posZ = 0;
-					_isArrive = true;
+					_isPress = true;
 					_playerState = PLAYER_STATE_NONE;
 				}
 				break;
@@ -736,7 +749,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
-				_isArrive = true;
+				_isPress = true;
 			}
 			break;
 		}
@@ -750,7 +763,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
-				_isArrive = true;
+				_isPress = true;
 			}
 			break;
 		}
@@ -764,7 +777,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
-				_isArrive = true;
+				_isPress = true;
 			}
 			break;
 		}
@@ -778,7 +791,7 @@ void player::playerStateUpdate(bool check)
 				_jumpPower = 0;
 				_posZ = 0;
 				_playerState = PLAYER_STATE_NONE;
-				_isArrive = true;
+				_isPress = true;
 			}
 			break;
 		}
@@ -1612,7 +1625,7 @@ void player::hitPlayer(int damage)
 		{
 			if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_KARADE])	hurt = (damage * 2 - _playerStat.defence) * 2;	//(적공격력 - 내방어력) X 2;
 		}
-		else																hurt = damage * 2 - _playerStat.defence;	//플레이어가 입은 데미지 = 적데미지 * 2 - 플레이어 방어력
+		else																hurt = damage - _playerStat.defence;	//플레이어가 입은 데미지 = 적데미지 * 2 - 플레이어 방어력
 
 		if (hurt < 0) hurt = 0;
 

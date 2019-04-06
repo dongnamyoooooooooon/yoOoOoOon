@@ -2,6 +2,8 @@
 #include "singletonBase.h"
 #include "gameNode.h"
 #include "parentObj.h"
+#include "floorWater.h"
+#include "floorBoss.h"
 #include "player.h"
 #include <algorithm>
 
@@ -44,11 +46,17 @@ class enemy_skeleton_mage_yellow;
 class enemy_skeleton_mage_black;
 class enemy_slime_blue;
 class enemy_slime_green;
+class enemy_dragon_green;
+class enemy_banshee;
 class enemy_zombie;
 class enemy_clone;
+class enemy_armadillo;
+class enemy_minotaur;
 class enemy_bat;
 class enemy_bat_red;
 class enemy_bat_boss;
+class enemy_coralriff_drums;
+class enemy_coralriff_horns;
 class enemy_shopkeeper;
 
 class parentObj;
@@ -106,7 +114,7 @@ private:
 
 	int		_chainCount;
 
-	int _isMagic;
+	int		_isMagic;
 
 public:
 	objectManager();
@@ -125,6 +133,7 @@ public:
 	void objectSort_IndexX();			//오브젝트정렬(X)
 	void allObjectUpdate();
 	void deleteObject(parentObj* obj);
+	void deleteFloorTile(parentObj* obj);
 
 	void mageMagic();
 
@@ -160,7 +169,6 @@ public:
 	void grooveChain();
 	void breakChain();
 
-
 	//플레이어
 	player* getPlayer() { return _player; }
 
@@ -176,6 +184,36 @@ public:
 		obj->setIdxX(idxX);
 		obj->setIdxY(idxY);
 		_vvObjTile[idxY][idxX] = obj;
+	}
+
+	void setTileFloor(UINT idxX, UINT idxY)
+	{
+		parentObj* deleteFloor;
+		deleteFloor = _vvFloorTile[idxY][idxX];
+		deleteFloorTile(deleteFloor);
+
+		parentObj* tempObj;
+		tempObj = createWater(idxX, idxY);
+		_vvFloorTile[idxY][idxX] = tempObj;
+		_vObj.push_back(tempObj);
+	}
+
+	parentObj* createWater(UINT idxX, UINT idxY)
+	{
+		floorWater* tempObj = new floorWater;
+		tempObj->init(idxX, idxY);
+		tempObj->setObjType(OBJECT_TYPE_FLOOR);
+		
+		return tempObj;
+	}
+
+	parentObj* createFloor(UINT idxX, UINT idxY)
+	{
+		floorBoss* tempObj = new floorBoss;
+		tempObj->init(idxX, idxY);
+		tempObj->setObjType(OBJECT_TYPE_FLOOR);
+
+		return tempObj;
 	}
 
 	//시야

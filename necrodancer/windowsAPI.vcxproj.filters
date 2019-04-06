@@ -112,6 +112,12 @@
     <Filter Include="PlayGround\enemy\slime">
       <UniqueIdentifier>{8f166819-ab92-4ca7-99f2-d97db9b37f90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\enemy\bossLine">
+      <UniqueIdentifier>{952338c6-a350-4548-bee4-c988618f1949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\enemy\버그투성이ㅠㅠ">
+      <UniqueIdentifier>{93b861b3-e04b-4bb5-af05-2e31838d6819}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -372,6 +378,33 @@
     <ClInclude Include="enemy_clone.h">
       <Filter>PlayGround\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_dragon_green.h">
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_banshee.h">
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_armadillo.h">
+      <Filter>PlayGround\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_minotaur.h">
+      <Filter>PlayGround\enemy\버그투성이ㅠㅠ</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_coralriff_drums.h">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_coralriff_head.h">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_coralriff_horns.h">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_coralriff_keytar.h">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_coralriff_strings.h">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -610,6 +643,33 @@
     </ClCompile>
     <ClCompile Include="enemy_clone.cpp">
       <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_dragon_green.cpp">
+      <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_banshee.cpp">
+      <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_armadillo.cpp">
+      <Filter>PlayGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_minotaur.cpp">
+      <Filter>PlayGround\enemy\버그투성이ㅠㅠ</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_coralriff_drums.cpp">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_coralriff_head.cpp">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_coralriff_horns.cpp">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_coralriff_keytar.cpp">
+      <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_coralriff_strings.cpp">
+      <Filter>PlayGround\enemy\bossLine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

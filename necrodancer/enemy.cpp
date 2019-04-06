@@ -46,6 +46,11 @@ HRESULT enemy::init(string imgName, int idxX, int idxY)
 	_isDrawHP = false;
 	_isSaw = false;
 
+	_beatCount = 0;
+	_shakeVal = 0;
+	_shakeCount = 0;
+	_isShowShadow = false;
+
 	_gravity = GRAVETY;
 	_jumpPower = 0;
 
@@ -522,8 +527,6 @@ void enemy::attackEnemy(DIRECTION dir)
 	_direction = dir;
 	player* tempPlayer = OBJECTMANAGER->getPlayer();
 
-	//_posX = tempPlayer->getPosX();
-	//_posY = tempPlayer->getPosY();
 	tempPlayer->hitPlayer(_damage);
 
 }

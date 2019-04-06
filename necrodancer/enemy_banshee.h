@@ -1,14 +1,13 @@
 #pragma once
 #include "enemy.h"
-class enemy_clone : public enemy
+class enemy_banshee : public enemy
 {
 private:
-	DIRECTION _attDir;
 
 
 public:
-	enemy_clone();
-	~enemy_clone();
+	enemy_banshee();
+	~enemy_banshee();
 
 	HRESULT init(string imgName, int idxX, int idxY);
 	void release();
@@ -18,8 +17,8 @@ public:
 	void aniSetUp();
 
 	void aniPlay_Stand();
+	void aniPlay_Attack();
 
-	void jumpMoveEnemy();
-
+	void hitEnemy(int damage);
 };
 
