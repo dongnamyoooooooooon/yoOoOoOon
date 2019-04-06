@@ -14,14 +14,14 @@ testMapScene::~testMapScene()
 HRESULT testMapScene::init()
 {
 
-	load("map/testMapSize.map", "map/testMapData.map");
+	load("map/bossMapSize.map", "map/bossMapData.map");
 
 	_ii = 0;
 	_jj = 0;
 	_iiMax = 0;
 	_jjMax = 0;
 
-	OBJECTMANAGER->initBeat("sound/music/zone1.txt", "test_music");
+	OBJECTMANAGER->initBeat("sound/music/boss.txt", "boss");
 	SOUNDMANAGER->setShopBgmKey("test_music");
 
 	return S_OK;
@@ -131,7 +131,7 @@ void testMapScene::load(const char * size, const char * data)
 		for (UINT j = 0; j < _tileX; ++j)
 		{
 			_vvTile[i][j] = new tagTile;
-			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
+			_vvTile[i][j]->makeLoad(&pack[j + i * _tileX]);
 
 			if (_vvTile[i][j]->type_floor == OBJECT_TYPE_FLOOR)
 				OBJECTMANAGER->objectPush(*_vvTile[i][j]->floor);

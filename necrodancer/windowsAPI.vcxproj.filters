@@ -405,6 +405,12 @@
     <ClInclude Include="enemy_coralriff_strings.h">
       <Filter>PlayGround\enemy\bossLine</Filter>
     </ClInclude>
+    <ClInclude Include="bossIntroScene.h">
+      <Filter>PlayGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="item_coin.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -670,6 +676,12 @@
     </ClCompile>
     <ClCompile Include="enemy_coralriff_strings.cpp">
       <Filter>PlayGround\enemy\bossLine</Filter>
+    </ClCompile>
+    <ClCompile Include="bossIntroScene.cpp">
+      <Filter>PlayGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="item_coin.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include "parentObj.h"
 #include "floorWater.h"
 #include "floorBoss.h"
+#include "wallBoss.h"
 #include "player.h"
 #include <algorithm>
 
@@ -25,6 +26,7 @@ class armor_heavyplate;
 class armor_obsidian;
 class armor_glass;
 class torch_basic;
+class item_coin;
 class wallZone_01;
 class wallZone_02;
 class wallShop;
@@ -57,6 +59,9 @@ class enemy_bat_red;
 class enemy_bat_boss;
 class enemy_coralriff_drums;
 class enemy_coralriff_horns;
+class enemy_coralriff_keytar;
+class enemy_coralriff_strings;
+class enemy_coralriff_head;
 class enemy_shopkeeper;
 
 class parentObj;
@@ -116,6 +121,9 @@ private:
 
 	int		_isMagic;
 
+	bool	_bossAlive = true;
+	bool	_isEnter = false;
+
 public:
 	objectManager();
 	~objectManager();
@@ -141,6 +149,7 @@ public:
 	void initBeat(const char* fileName, string musicKey);
 	void createBeat();
 	void deleteBeat();
+	void replaySong();
 
 
 	//오브젝트생성
@@ -173,9 +182,9 @@ public:
 	player* getPlayer() { return _player; }
 
 	//타일
-	parentObj* getCheckObj(int x, int y) 
-	{ 
-		return _vvObjTile[y][x]; 
+	parentObj* getCheckObj(int x, int y)
+	{
+		return _vvObjTile[y][x];
 	}
 	parentObj* getCheckFloor(int x, int y) { return _vvFloorTile[y][x]; }
 	void setTileIdx(parentObj* obj, UINT idxX, UINT idxY)
@@ -198,12 +207,26 @@ public:
 		_vObj.push_back(tempObj);
 	}
 
+	void setBossFloor(UINT idxX, UINT idxY)
+	{
+
+		parentObj* deleteFloor;
+		deleteFloor = _vvFloorTile[idxY][idxX];
+		deleteFloorTile(deleteFloor);
+
+		parentObj* tempObj;
+		tempObj = createFloor(idxX, idxY);
+		_vvFloorTile[idxY][idxX] = tempObj;
+		_vObj.push_back(tempObj);
+
+	}
+
 	parentObj* createWater(UINT idxX, UINT idxY)
 	{
 		floorWater* tempObj = new floorWater;
 		tempObj->init(idxX, idxY);
 		tempObj->setObjType(OBJECT_TYPE_FLOOR);
-		
+
 		return tempObj;
 	}
 
@@ -216,9 +239,44 @@ public:
 		return tempObj;
 	}
 
+	parentObj* createWall(UINT idxX, UINT idxY)
+	{
+		wallBoss* tempObj = new wallBoss;
+		tempObj->init("wall_08",idxX, idxY,false);
+		tempObj->setObjType(OBJECT_TYPE_WALL);
+		tempObj->setIsSight(true);
+		tempObj->setIsSaw();
+		tempObj->setHasLight(true);
+
+		return tempObj;
+	}
+
+	void setBossWall(UINT idxX, UINT idxY)
+	{
+		parentObj* tempObj;
+		tempObj = createWall(idxX, idxY);
+		_vvObjTile[idxY][idxX] = tempObj;
+		_vObj.push_back(tempObj);
+
+	}
+
+	void pushObj(parentObj* obj)
+	{
+		_vObj.push_back(obj);
+		setTileIdx(obj, obj->getIdxX(), obj->getIdxY());
+	}
+
 	//시야
 	void initLight();
 	void initSight();
+
+	//보스
+
+	bool getBossAlive() { return _bossAlive; }
+	void setBossAlive(bool check) { _bossAlive = check; }
+
+	bool getIsEnter() { return _isEnter; }
+	void setIsEnter(bool check) { _isEnter = check; }
 
 };
 

@@ -156,6 +156,7 @@
     <ClInclude Include="armor_leather.h" />
     <ClInclude Include="armor_obsidian.h" />
     <ClInclude Include="armor_platemail.h" />
+    <ClInclude Include="bossIntroScene.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="d2dManager.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="Infomation.h" />
     <ClInclude Include="item.h" />
+    <ClInclude Include="item_coin.h" />
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="loadingScene.h" />
@@ -253,6 +255,7 @@
     <ClCompile Include="armor_leather.cpp" />
     <ClCompile Include="armor_obsidian.cpp" />
     <ClCompile Include="armor_platemail.cpp" />
+    <ClCompile Include="bossIntroScene.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="d2dManager.cpp" />
@@ -295,6 +298,7 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="item.cpp" />
+    <ClCompile Include="item_coin.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="loadingScene.cpp" />

@@ -276,6 +276,8 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addImage("enemy_heart_empty", L"image/enemy/heart_empty_small.png", 24, 24);
 		IMAGEMANAGER->addImage("enemy_heart", L"image/enemy/heart_small.png", 24, 24);
 		IMAGEMANAGER->addImage("enemy_shadow", L"image/enemy/shadow_standard.png", 48, 54);
+		IMAGEMANAGER->addImage("boss_shadow", L"image/enemy/tentacle_tell.png", 30, 20);
+		IMAGEMANAGER->addFrameImage("boss_attack", L"image/enemy/boss_attack.png", 710, 145, 5, 1);
 
 		//아이템
 		IMAGEMANAGER->addFrameImage("shovel_basic", L"image/items/shovel_basic.png", 48, 96, 1, 2);
@@ -335,6 +337,15 @@ HRESULT playGround::init()
 
 		IMAGEMANAGER->addImage("hint_torch_basic", L"image/hint/hint_1visionradius.png", 63, 18);
 
+		//보스인트로
+		IMAGEMANAGER->addImage("boss_bottom", L"image/bossUI/bg_bottomblade.png", 728, 64);
+		IMAGEMANAGER->addImage("boss_background", L"image/bossUI/bg_gradient.png", 1920, 296);
+		IMAGEMANAGER->addImage("boss_top", L"image/bossUI/bg_topblade.png", 602, 68);
+		IMAGEMANAGER->addImage("boss_face", L"image/bossUI/bosscreen_coralriff.png", 960, 424);
+		IMAGEMANAGER->addImage("boss_name", L"image/bossUI/boss_coralriffsplash.png", 202, 48);
+
+
+
 		//음악
 		SOUNDMANAGER->addSound("mapTool", "sound/music/boss_10.ogg", true, true);
 		SOUNDMANAGER->addSound("test_music", "sound/music/zone1.ogg", true, true);
@@ -344,7 +355,6 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("boss_horn", "sound/music/boss4_horn.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_keytar", "sound/music/boss4_keytar.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_strings", "sound/music/boss4_strings.ogg", true, true);
-		SOUNDMANAGER->addSound("boss_all", "sound/music/boss4_all.mp3", true, true);
 
 		//사운드
 		SOUNDMANAGER->addSound("sound_dig_fail", "sound/effect/sfx_dig_fail.ogg", false, false);
@@ -505,13 +515,21 @@ HRESULT playGround::init()
 
 		SOUNDMANAGER->addSound("sound_announcer_coralriff", "sound/effect/vo_announcer_coralriff.ogg", false, false);
 
+		SOUNDMANAGER->addSound("sound_boss_wall", "sound/effect/boss_zone1_walls.ogg", false, false);
+
+		SOUNDMANAGER->addSound("sound_boss_intro", "sound/effect/vo_announcer_coralriff.ogg", false, false);
+
 	}
+	_bossIntro = new bossIntroScene;
+	_testMap = new testMapScene;
 
 	SCENEMANAGER->addScene("맵툴", new mapToolScene);
-	SCENEMANAGER->addScene("테슷흐", new testMapScene);
+	SCENEMANAGER->addScene("테슷흐", _testMap);
 	SCENEMANAGER->addScene("로딩", new loadingScene);
+	SCENEMANAGER->addScene("보스", _bossIntro);
 
-	SCENEMANAGER->changeScene("테슷흐");
+
+	SCENEMANAGER->changeScene("보스");
 	
 	//커서
 	initCursor();

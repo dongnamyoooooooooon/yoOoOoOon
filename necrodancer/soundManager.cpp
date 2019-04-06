@@ -130,6 +130,127 @@ void soundManager::ShopVolume(string keyName, float volume)
 
 }
 
+void soundManager::setBossVolume(string keyName, float volume)
+{
+	int count = 0;
+	int count_bass, count_drum, count_horn, count_keytar, count_strings;
+
+	string keyName_bass = keyName + "_bass";
+	string keyName_drum = keyName + "_drum";
+	string keyName_horn = keyName + "_horn";
+	string keyName_keytar = keyName + "_keytar";
+	string keyName_strings = keyName + "_strings";
+	arrSoundsIter iter_bass = _mTotalSounds.begin();
+	arrSoundsIter iter_drum = _mTotalSounds.begin();
+	arrSoundsIter iter_horn = _mTotalSounds.begin();
+	arrSoundsIter iter_keytar = _mTotalSounds.begin();
+	arrSoundsIter iter_strings = _mTotalSounds.begin();
+	arrSoundsIter iter = _mTotalSounds.begin();
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName_bass == iter->first)
+		{
+
+			iter_bass = iter;
+			count_bass = count;
+		}
+		else if (keyName_drum == iter->first)
+		{
+
+			iter_drum = iter;
+			count_drum = count;
+		}
+		else if (keyName_horn == iter->first)
+		{
+
+			iter_horn = iter;
+			count_horn = count;
+		}
+		else if (keyName_keytar == iter->first)
+		{
+
+			iter_keytar = iter;
+			count_keytar = count;
+		}
+		else if (keyName_strings == iter->first)
+		{
+
+			iter_strings = iter;
+			count_strings = count;
+		}
+	}
+	_channel[count_bass]->setVolume(volume);
+	_channel[count_drum]->setVolume(volume);
+	_channel[count_horn]->setVolume(volume);
+	_channel[count_keytar]->setVolume(volume);
+	_channel[count_strings]->setVolume(volume);
+}
+
+void soundManager::setDrumVolume(string keyName, float volume)
+{
+	int count = 0;
+	arrSoundsIter iter = _mTotalSounds.begin();
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_drumVolume -= volume;
+			if (_drumVolume <= 0) _drumVolume = 0;
+			_channel[count]->setVolume(_drumVolume);
+			break;
+		}
+	}
+}
+
+void soundManager::setHornVolume(string keyName, float volume)
+{
+	int count = 0;
+	arrSoundsIter iter = _mTotalSounds.begin();
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_hornVolume -= volume;
+			if (_hornVolume <= 0) _hornVolume = 0;
+			_channel[count]->setVolume(_hornVolume);
+			break;
+		}
+	}
+}
+
+void soundManager::setKeytarVolume(string keyName, float volume)
+{
+	int count = 0;
+	arrSoundsIter iter = _mTotalSounds.begin();
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_keytarVolume -= volume;
+			if (_keytarVolume <= 0) _keytarVolume = 0;
+			_channel[count]->setVolume(_keytarVolume);
+			break;
+		}
+	}
+}
+
+void soundManager::setStringsVolume(string keyName, float volume)
+{
+	int count = 0;
+	arrSoundsIter iter = _mTotalSounds.begin();
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_stringsVolume -= volume;
+			if (_stringsVolume <= 0) _stringsVolume = 0;
+			_channel[count]->setVolume(_stringsVolume);
+			break;
+		}
+	}
+}
+
 void soundManager::playBossZone(string keyName, float volume)
 {
 	int count = 0;
@@ -247,6 +368,21 @@ void soundManager::loadBeat(const char * fileName, string keyName)
 		}
 		_mBeat.insert(make_pair(keyName, _vBeat));								//맵에 키값과 비트벡터 넣어준다.
 
+		for (int i = 0; i < _vBeat.size(); i++)
+		{
+			if (keyName != "boss")
+			{
+				if ((_vBeat.back().beat - 30000) > _vBeat[i].beat)
+					_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
+				else
+					_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker_red");
+			}
+			else if (keyName == "boss")
+			{
+				_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
+			}
+		}
+
 	}
 	else																		//키값이 맵에 존재한다면(중복O)
 	{
@@ -255,6 +391,21 @@ void soundManager::loadBeat(const char * fileName, string keyName)
 			if (_miBeat->first == keyName)										//키값 찾았으면
 			{
 				_vBeat = _miBeat->second;										//맵에 저장된 값을 넣어준다.
+
+				for (int i = 0; i < _vBeat.size(); i++)
+				{
+					if (keyName != "boss")
+					{
+						if ((_vBeat.back().beat - 30000) > _vBeat[i].beat)
+							_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
+						else
+							_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker_red");
+					}
+					else if (keyName == "boss")
+					{
+						_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
+					}
+				}
 				break;
 			}
 

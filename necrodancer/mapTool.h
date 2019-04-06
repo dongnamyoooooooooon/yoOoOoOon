@@ -123,6 +123,7 @@ private:
 
 	//샘플배경이동용 포인트
 	POINT						_curPoint;
+	parentObj*					_tempPlayer;
 
 	//UINT
 	UINT						_tileX;				//맵크기X

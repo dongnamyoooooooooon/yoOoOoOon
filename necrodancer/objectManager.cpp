@@ -20,6 +20,7 @@
 #include "armor_obsidian.h"
 #include "armor_glass.h"
 #include "torch_basic.h"
+#include "item_coin.h"
 #include "wallZone_01.h"
 #include "wallZone_02.h"
 #include "wallShop.h"
@@ -53,6 +54,9 @@
 #include "enemy_minotaur.h"
 #include "enemy_coralriff_drums.h"
 #include "enemy_coralriff_horns.h"
+#include "enemy_coralriff_keytar.h"
+#include "enemy_coralriff_strings.h"
+#include "enemy_coralriff_head.h"
 #include "enemy_shopkeeper.h"
 
 
@@ -100,7 +104,7 @@ void objectManager::update()
 	SOUNDMANAGER->getSingShopkeeper(_musicKey);
 
 
-	if (_vBeat.begin()->beat <= _playTime + 300 && _vBeat.begin()->beat >= _playTime - 300 && !_player->getIsBeat() && !_isGiveBeatTime)
+	if (_vBeat.begin()->beat <= _playTime + 400 && _vBeat.begin()->beat >= _playTime - 400 && !_player->getIsBeat() && !_isGiveBeatTime)
 	{
 		_player->setIsBeat(true);
 		_isGiveBeatTime = true;
@@ -125,10 +129,13 @@ void objectManager::update()
 			_isGiveBeatTime = false;
 		}
 		_player->bounceHeart();
-		if (_musicKey != "¾îÂ¼°í ÀúÂ¼°í") _vBeat.erase(_vBeat.begin());
+		_vBeat.erase(_vBeat.begin());
 	}
 
-
+	if (_vBeat.size() <= 0)
+	{
+		replaySong();
+	}
 }
 
 void objectManager::render()
@@ -174,16 +181,26 @@ void objectManager::render()
 	_viObj = _vObj.begin();
 	for (_viObj; _viObj != _vObj.end(); ++_viObj)
 	{
-		if ((*_viObj)->getObjType() == OBJECT_TYPE_ENEMY)
+		if ((*_viObj)->getObjType() == OBJECT_TYPE_ENEMY && (*_viObj)->getImgName() != "enemy_coralriff_head")
 		{
 			(*_viObj)->render();
 		}
 	}
 
+	/*_viObj = _vObj.begin();
+	for (_viObj; _viObj != _vObj.end(); ++_viObj)
+	{
+		if ((*_viObj)->getObjType() == OBJECT_TYPE_PLAYER)
+		{
+			(*_viObj)->render();
+		}
+	}*/
+
 	mageMagic();
 
 	//ºñÆ®
 	//RECT rc;
+
 	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
 	{
 		if (_viBeat->beat < 1500)
@@ -197,6 +214,7 @@ void objectManager::render()
 			_viBeat->img->render(CAMERA->getPosX() + _viBeat->right_RC.left, CAMERA->getPosY() + _viBeat->right_RC.top, 10, 48, _viBeat->alpha);
 		}
 	}
+
 	if (_vBeat.begin()->left_RC.right <= WINSIZEX / 2)
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
 	else
@@ -275,10 +293,15 @@ void objectManager::allObjectUpdate()
 	KEYANIMANAGER->update("enemy_minotaur");
 	KEYANIMANAGER->update("enemy_coralriff_drums");
 	KEYANIMANAGER->update("enemy_coralriff_horns");
+	KEYANIMANAGER->update("enemy_coralriff_keytar");
+	KEYANIMANAGER->update("enemy_coralriff_strings");
+	KEYANIMANAGER->update("enemy_coralriff_head");
 }
 
 void objectManager::deleteObject(parentObj * obj)
 {
+	if (obj == NULL) return;
+
 	int tempX = obj->getIdxX();
 	int tempY = obj->getIdxY();
 
@@ -350,18 +373,19 @@ void objectManager::mageMagic()
 
 void objectManager::initBeat(const char * fileName, string musicKey)
 {
+	_beatKey = musicKey;
 	SOUNDMANAGER->loadBeat(fileName, _beatKey);
 
 	_beatFile = fileName;
 	_musicKey = musicKey;
 
 	if (_musicKey == "boss")
-		SOUNDMANAGER->playBossZone(_musicKey, _volume);
+		SOUNDMANAGER->playBossZone(_musicKey, 1.0f);
 	else
 		SOUNDMANAGER->playZone(_musicKey, 1.0f);
 
 	_vBeat = SOUNDMANAGER->getVBeat();
-	_viBeat = SOUNDMANAGER->getVIBeat();
+	_viBeat = _vBeat.begin();
 	_mBeat = SOUNDMANAGER->getMBeat();
 	_miBeat = SOUNDMANAGER->getMIBeat();
 }
@@ -369,30 +393,36 @@ void objectManager::initBeat(const char * fileName, string musicKey)
 void objectManager::createBeat()
 {
 
-	_playTime = SOUNDMANAGER->getPosition(_musicKey);
+	_playTime = SOUNDMANAGER->getPosition(_musicKey + "_bass");
 	_time = SOUNDMANAGER->getLength(_musicKey);
 
 	//RECT rc;
-	for (_viBeat = _vBeat.begin(); _viBeat != _vBeat.end(); _viBeat++)
+	for (int i = 0; i < _vBeat.size(); i++)
 	{
 
-		_viBeat->left_RC = { (float)(WINSIZEX / 2) - ((_viBeat->beat - _playTime) / 3.7f),
+		_vBeat[i].left_RC = { (float)(WINSIZEX / 2) - ((_vBeat[i].beat - _playTime) / 3.7f),
 							 (float)WINSIZEY - 90,
-							 (float)(WINSIZEX / 2) - ((_viBeat->beat - _playTime) / 3.7f) + 12,
+							 (float)(WINSIZEX / 2) - ((_vBeat[i].beat - _playTime) / 3.7f) + 12,
 							 (float)WINSIZEY - 42 };
 
-		_viBeat->right_RC = { (float)(WINSIZEX / 2) + ((_viBeat->beat - _playTime) / 3.7f),
+		_vBeat[i].right_RC = { (float)(WINSIZEX / 2) + ((_vBeat[i].beat - _playTime) / 3.7f),
 							  (float)WINSIZEY - 90,
-							  (float)(WINSIZEX / 2) + ((_viBeat->beat - _playTime) / 3.7f) + 12,
+							  (float)(WINSIZEX / 2) + ((_vBeat[i].beat - _playTime) / 3.7f) + 12,
 							  (float)WINSIZEY - 42 };
 
+		/*if (_musicKey != "boss")
+		{
+			if ((_vBeat.back().beat - 30000) > _vBeat[i].beat)
+				_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
+			else
+				_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker_red");
+		}
+		else if (_musicKey == "boss")
+		{
+			_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
+		}*/
 
-		if ((_vBeat.back().beat - 30000) > _viBeat->beat)
-			_viBeat->img = IMAGEMANAGER->findImage("ui_beat_marker");
-		else
-			_viBeat->img = IMAGEMANAGER->findImage("ui_beat_marker_red");
-
-		if (_viBeat->left_RC.left >= 0) _viBeat->alpha += 0.03f;
+		if (_vBeat[i].left_RC.left >= 0) _vBeat[i].alpha += 0.03f;
 
 	}
 
@@ -406,6 +436,7 @@ void objectManager::createBeat()
 					(float)(WINSIZEX / 2) + 70,
 					(float)WINSIZEY - 40 };
 
+	
 }
 
 void objectManager::deleteBeat()
@@ -414,6 +445,21 @@ void objectManager::deleteBeat()
 	{
 
 	}
+}
+
+void objectManager::replaySong()
+{
+	SOUNDMANAGER->loadBeat(_beatFile, _beatKey);
+
+	if (_musicKey == "boss")
+		SOUNDMANAGER->playBossZone(_musicKey, 1.0f);
+	else
+		SOUNDMANAGER->playZone(_musicKey, 1.0f);
+
+	_vBeat = SOUNDMANAGER->getVBeat();
+	_viBeat = SOUNDMANAGER->getVIBeat();
+	_mBeat = SOUNDMANAGER->getMBeat();
+	_miBeat = SOUNDMANAGER->getMIBeat();
 }
 
 parentObj* objectManager::objectPush(parentObj obj)
@@ -1046,58 +1092,6 @@ parentObj * objectManager::createItem(parentObj obj)
 	{
 
 	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_1])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_2])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_3])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_4])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_5])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_6])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_7])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_8])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_9])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_10])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_25])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_35])
-	{
-
-	}
-	else if (obj.getImgName() == COIN_NAME[ITEM_COIN_50])
-	{
-
-	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_CHEST])
 	{
 
@@ -1218,7 +1212,9 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_HEAD])
 	{
-
+		enemy_coralriff_head* tempObj = new enemy_coralriff_head;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_HORNS])
 	{
@@ -1228,11 +1224,15 @@ parentObj * objectManager::createEnemy(parentObj obj)
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_KEYTAR])
 	{
-
+		enemy_coralriff_keytar* tempObj = new enemy_coralriff_keytar;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_CORALRIFF_STRINGS])
 	{
-
+		enemy_coralriff_strings* tempObj = new enemy_coralriff_strings;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY());
+		return tempObj;
 	}
 	else if (obj.getImgName() == IMAGE_NAME[IMAGE_NAME_ENEMY_SHOPKEEPER])
 	{

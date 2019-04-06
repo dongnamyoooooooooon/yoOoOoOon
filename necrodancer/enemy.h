@@ -104,6 +104,9 @@ protected:
 	int _closeJ;
 	int _closeGoal;
 
+	float _volume;
+	bool _checkPos;
+
 
 
 

@@ -70,6 +70,14 @@ private:
 	float _volume = 1.0f;
 	float _effectVol = 1.0f;
 
+	float _bossVolume = 1.0f;
+	float _drumVolume = 1.0f;
+	float _hornVolume = 1.0f;
+	float _keytarVolume = 1.0f;
+	float _stringsVolume = 1.0f;
+
+
+
 	tagNote	_note;
 
 	string _shopBgmKey;
@@ -127,7 +135,14 @@ public:
 	int getBossPosition(string keyName);
 	int getLength(string keyName);								//노래 전체길이
 	void getSingShopkeeper(string keyName);						//상점주인 스펙트럼
-	void ShopVolume(string keyName, float volume);				//상점주인용 볼륨조절
+	void ShopVolume(string keyName, float volume);	//상점주인용 볼륨조절
+	
+	void setBossVolume(string keyName, float volume);	//보스용
+	void setDrumVolume(string keyName, float volume);	//보스용
+	void setHornVolume(string keyName, float volume);	//보스용
+	void setKeytarVolume(string keyName, float volume);	//보스용
+	void setStringsVolume(string keyName, float volume);	//보스용
+
 
 	void playBossZone(string keyName, float volume);
 

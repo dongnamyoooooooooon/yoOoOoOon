@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "enemy.h"
+#include "item_coin.h"
 
 
 enemy::enemy()
@@ -53,6 +54,10 @@ HRESULT enemy::init(string imgName, int idxX, int idxY)
 
 	_gravity = GRAVETY;
 	_jumpPower = 0;
+
+	_volume = 0.5f;
+
+	_checkPos = false;
 
 	_move = DIRECITON_NONE;
 	_direction = DIRECITON_NONE;
@@ -545,7 +550,11 @@ void enemy::dieEnemy()
 	soundDie();
 	OBJECTMANAGER->grooveChain();
 
+	item_coin* coin = new item_coin;
+	coin->init("", _idxX, _idxY, ITEM_TYPE_COIN);
+
 	OBJECTMANAGER->deleteObject(this);
+	OBJECTMANAGER->pushObj(coin);
 }
 
 

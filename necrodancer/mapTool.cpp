@@ -26,12 +26,12 @@ HRESULT mapTool::init()
 	_vvRECT.clear();
 	_vObj.clear();
 
-	SOUNDMANAGER->play("mapTool");
+	SOUNDMANAGER->play("mapTool", 0.5f);
 
 	_selectObj.init("", 0, 0, OBJECT_TYPE_NONE, 0);
 
 	//==================================================
-	
+
 	_idxY = 0;
 	_idxX = 0;
 
@@ -49,9 +49,9 @@ HRESULT mapTool::init()
 	initMapName();									//맵이름 초기설정
 	setTile();										//타일 초기설정
 
-	parentObj* player = new parentObj;
-	player->init("", 0, 0, OBJECT_TYPE_PLAYER, 0);
-	_vvTile[_idxY][_idxX]->player = player;
+	parentObj* _tempPlayer = new parentObj;
+	_tempPlayer->init("", 0, 0, OBJECT_TYPE_PLAYER, 0);
+	_vvTile[_idxY][_idxX]->player = _tempPlayer;
 	_vvTile[_idxY][_idxX]->type_obj = OBJECT_TYPE_PLAYER;
 	_vvTile[_idxY][_idxX]->objPosX = _idxX;
 	_vvTile[_idxY][_idxX]->objPosY = _idxY;
@@ -273,7 +273,7 @@ void mapTool::activeButton(int num)
 	else if (num == MAPTOOL_BUTTON_PLAY)			SCENEMANAGER->changeScene("testMapScene");				//씬변경하는데 외않되?
 	else if (num == MAPTOOL_BUTTON_PLAYER)
 	{
-		_selectObj.init("", -1, -1, OBJECT_TYPE_PLAYER, 0); 
+		_selectObj.init("", -1, -1, OBJECT_TYPE_PLAYER, 0);
 		return;
 	}
 
@@ -784,7 +784,7 @@ void mapTool::drawobject(int i, int j)
 			_vvTile[i][j]->imgKey = _selectObj.getImgKey();
 			_vvTile[i][j]->terrain_frameX = 0;
 
-			if(_rendomButton.curFrameY == 1 && IMAGEMANAGER->findImage(_selectObj.getImgName())->GetMaxFrameX() > 1)
+			if (_rendomButton.curFrameY == 1 && IMAGEMANAGER->findImage(_selectObj.getImgName())->GetMaxFrameX() > 1)
 				_vvTile[i][j]->terrain_frameX = RND->getFromIntTo(0, IMAGEMANAGER->findImage(_selectObj.getImgName())->GetMaxFrameX());
 
 			break;
@@ -872,38 +872,39 @@ void mapTool::drawobject(int i, int j)
 	{
 		switch (_selectObj.getObjType())
 		{
-			case OBJECT_TYPE_PLAYER:
-			{
-				_vvTile[i][j]->player = nullptr;
-				_vvTile[i][j]->objName = "";
-				_vvTile[i][j]->type_obj = OBJECT_TYPE_NONE;
-				_vvTile[i][j]->objPosX = -1;
-				_vvTile[i][j]->objPosY = -1;
-				break;
-			}
-			case OBJECT_TYPE_FLOOR:
-			{
-				_vvTile[i][j]->floor = nullptr;
-				_vvTile[i][j]->floorName = "";
-				_vvTile[i][j]->type_floor = OBJECT_TYPE_NONE;
-				_vvTile[i][j]->floorPosX = -1;
-				_vvTile[i][j]->floorPosY = -1;
+		case OBJECT_TYPE_PLAYER:
+		{
+			_vvTile[i][j]->player = nullptr;
+			_vvTile[i][j]->objName = "";
+			_vvTile[i][j]->type_obj = OBJECT_TYPE_NONE;
+			_vvTile[i][j]->objPosX = -1;
+			_vvTile[i][j]->objPosY = -1;
+			break;
+		}
+		case OBJECT_TYPE_FLOOR:
+		{
+			_vvTile[i][j]->floor = nullptr;
+			_vvTile[i][j]->floorName = "";
+			_vvTile[i][j]->type_floor = OBJECT_TYPE_NONE;
+			_vvTile[i][j]->floorPosX = -1;
+			_vvTile[i][j]->floorPosY = -1;
 
-				break;
-			}
-			default:
-			{
-				_vvTile[i][j]->wall = nullptr;
-				_vvTile[i][j]->item = nullptr;
-				_vvTile[i][j]->enemy = nullptr;
-				_vvTile[i][j]->trap = nullptr;
-				_vvTile[i][j]->objName = "";
-				_vvTile[i][j]->type_obj = OBJECT_TYPE_NONE;
-				_vvTile[i][j]->objPosX = -1;
-				_vvTile[i][j]->objPosY = -1;
+			break;
+		}
+		default:
+		{
+			_vvTile[i][j]->wall = nullptr;
+			_vvTile[i][j]->item = nullptr;
+			_vvTile[i][j]->enemy = nullptr;
+			_vvTile[i][j]->trap = nullptr;
+			_vvTile[i][j]->objName = "";
+			_vvTile[i][j]->type_obj = OBJECT_TYPE_NONE;
+			_vvTile[i][j]->objPosX = -1;
+			_vvTile[i][j]->objPosY = -1;
+			_vvTile[i][j]->isTorch = false;
 
-				break;
-			}
+			break;
+		}
 		}
 	}
 }
@@ -1034,7 +1035,7 @@ void mapTool::mapSizeChange()
 void mapTool::loadSetTile()
 {
 	_vvRECT.clear();
-	_vvTile.clear();
+	//_vvTile.clear();
 
 	//맵크기설정한 만큼 렉트와 타일세팅을 해준다.
 	for (UINT i = 0; i < _tileY; i++)
@@ -1046,31 +1047,31 @@ void mapTool::loadSetTile()
 		vector<D2D1_RECT_F> vRECT;
 		for (UINT j = 0; j < _tileX; j++)
 		{
-			tagTile* tempTile = new tagTile;
+			//tagTile* tempTile = new tagTile;
 			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
-			parentObj* floor = new parentObj;
-			tempTile->wall = nullptr;
+			//parentObj* floor = new parentObj;
+			/*tempTile->wall = nullptr;
 			tempTile->item = nullptr;
 			tempTile->enemy = nullptr;
 			tempTile->player = nullptr;
 			tempTile->objETC = nullptr;
-			tempTile->trap = nullptr;
-			tempTile->objName = "";
-			tempTile->objPosX = j;
-			tempTile->objPosY = i;
-			tempTile->type_obj = OBJECT_TYPE_NONE;
+			tempTile->trap = nullptr;*/
+			//tempTile->objPosX = j;
+			//tempTile->objPosY = i;
+			//tempTile->type_obj = OBJECT_TYPE_NONE;
+			//tempTile->objName = "";
 
-			tempTile->object_frameX = NULL;
-			tempTile->object_frameY = NULL;
-			tempTile->isTorch = false;
+			//tempTile->object_frameX = NULL;
+			//tempTile->object_frameY = NULL;
+			//tempTile->isTorch = false;
 
 			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
 						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
 
-			vTile.push_back(tempTile);
+			//vTile.push_back(tempTile);
 			vRECT.push_back(*tempRECT);
 		}
-		_vvTile.push_back(vTile);
+		//_vvTile.push_back(vTile);
 		_vvRECT.push_back(vRECT);
 	}
 }
@@ -1094,7 +1095,7 @@ void mapTool::mapSave(int mapNum)
 	{
 		for (UINT j = 0; j < _tileX; j++)
 		{
-			pack[i + j * _tileX] = _vvTile[i][j]->makeSave();
+			pack[j + i * _tileX] = _vvTile[i][j]->makeSave();
 		}
 	}
 
@@ -1182,7 +1183,7 @@ void mapTool::mapLoad()
 		for (UINT j = 0; j < _tileX; ++j)
 		{
 			_vvTile[i][j] = new tagTile;
-			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
+			_vvTile[i][j]->makeLoad(&pack[j + i * _tileX]);
 
 			if (_vvTile[i][j]->player != NULL)
 			{
@@ -1192,7 +1193,6 @@ void mapTool::mapLoad()
 				_idxY = i;
 				_vvTile[_idxY][_idxX]->player = player;
 			}
-
 			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
 			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
 						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
@@ -1221,79 +1221,79 @@ void mapTool::initMapLoad()
 	_vvTile.clear();
 
 
-HANDLE file;
-DWORD read;
-char mapSize[128] = { 0, };
+	HANDLE file;
+	DWORD read;
+	char mapSize[128] = { 0, };
 
-file = CreateFile(_mSizeMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-ReadFile(file, mapSize, 128, &read, NULL);
-CloseHandle(file);
+	file = CreateFile(_mSizeMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	ReadFile(file, mapSize, 128, &read, NULL);
+	CloseHandle(file);
 
-string mapX, mapY;
-mapX.clear();
-mapY.clear();
-bool x = true;
-for (int i = 0; i < strlen(mapSize); ++i)
-{
-	if (mapSize[i] == '/')
+	string mapX, mapY;
+	mapX.clear();
+	mapY.clear();
+	bool x = true;
+	for (int i = 0; i < strlen(mapSize); ++i)
 	{
-		x = false;
-		continue;
-	}
-	if (mapSize[i] == NULL)
-		break;
-	if (x)
-	{
-		mapX += mapSize[i];
-	}
-	else
-	{
-		mapY += mapSize[i];
-	}
-}
-
-_tileX = stoi(mapX);
-_tileY = stoi(mapY);
-_vvTile.resize(_tileY);
-
-for (UINT i = 0; i < _tileY; ++i)
-{
-	_vvTile[i].resize(_tileX);
-}
-
-tagPack* pack = new tagPack[_tileX * _tileY];
-
-HANDLE file2;
-DWORD read2;
-
-file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
-CloseHandle(file2);
-
-for (UINT i = 0; i < _tileY; ++i)
-{
-	vector<D2D1_RECT_F> vRECT;
-	for (UINT j = 0; j < _tileX; ++j)
-	{
-		_vvTile[i][j] = new tagTile;
-		_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
-
-		if (_vvTile[i][j]->player != NULL)
+		if (mapSize[i] == '/')
 		{
-			parentObj* player = new parentObj;
-			player->init("", j, i, OBJECT_TYPE_PLAYER, 0);
-			_vvTile[i][j]->player = nullptr;
-			_vvTile[_idxY][_idxX]->player = player;
-
+			x = false;
+			continue;
 		}
-		D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
-		*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
-					  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
-		vRECT.push_back(*tempRECT);
+		if (mapSize[i] == NULL)
+			break;
+		if (x)
+		{
+			mapX += mapSize[i];
+		}
+		else
+		{
+			mapY += mapSize[i];
+		}
 	}
-	_vvRECT.push_back(vRECT);
-}
+
+	_tileX = stoi(mapX);
+	_tileY = stoi(mapY);
+	_vvTile.resize(_tileY);
+
+	for (UINT i = 0; i < _tileY; ++i)
+	{
+		_vvTile[i].resize(_tileX);
+	}
+
+	tagPack* pack = new tagPack[_tileX * _tileY];
+
+	HANDLE file2;
+	DWORD read2;
+
+	file2 = CreateFile(_mDataMapNames[(MAP_NAME)_curMapNum].c_str(), GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file2, pack, sizeof(tagPack) * _tileX * _tileY, &read2, NULL);
+	CloseHandle(file2);
+
+	for (UINT i = 0; i < _tileY; ++i)
+	{
+		vector<D2D1_RECT_F> vRECT;
+		for (UINT j = 0; j < _tileX; ++j)
+		{
+			_vvTile[i][j] = new tagTile;
+			_vvTile[i][j]->makeLoad(&pack[i + j * _tileX]);
+
+			if (_vvTile[i][j]->player != NULL)
+			{
+				parentObj* player = new parentObj;
+				player->init("", j, i, OBJECT_TYPE_PLAYER, 0);
+				_vvTile[i][j]->player = nullptr;
+				_vvTile[_idxY][_idxX]->player = player;
+
+			}
+			D2D1_RECT_F* tempRECT = new D2D1_RECT_F;
+			*tempRECT = { (float)j * TILE_SIZE,			(float)i * TILE_SIZE,
+						  (float)(j + 1) * TILE_SIZE,	(float)(i + 1) * TILE_SIZE };
+			vRECT.push_back(*tempRECT);
+		}
+		_vvRECT.push_back(vRECT);
+	}
 }
 
 void mapTool::initMapName()
@@ -1921,7 +1921,7 @@ void mapTool::drawSample(int num)
 				_vObj[i].setRC(rc);
 				count++;
 
-					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
 				itemCount++;
 			}
@@ -1975,7 +1975,7 @@ void mapTool::drawSample(int num)
 				_vObj[i].setRC(rc);
 				count++;
 
-					IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
+				IMAGEMANAGER->findImage(imgName)->frameRender(rc.left, rc.top, 0, 0);
 
 				itemCount++;
 			}

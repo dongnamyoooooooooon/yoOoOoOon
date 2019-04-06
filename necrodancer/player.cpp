@@ -1313,7 +1313,7 @@ void player::initItem()
 
 	_playerWeapon = pTempObj;
 	_playerWeapon->setIsCurInven(true);
-	OBJECTMANAGER->setTileIdx(_playerWeapon, 39, 39);
+	OBJECTMANAGER->setTileIdx(_playerWeapon, 0, 0);
 	_playerWeapon->setIsMoveInven(false);
 	_playerWeapon->setIsThrow(true);
 
@@ -1324,7 +1324,7 @@ void player::initItem()
 
 	_playerShovel = pTempObj;
 	_playerShovel->setIsCurInven(true);
-	OBJECTMANAGER->setTileIdx(_playerShovel, 39, 39);
+	OBJECTMANAGER->setTileIdx(_playerShovel, 0, 0);
 	_playerShovel->setIsMoveInven(false);
 
 	
@@ -1521,7 +1521,7 @@ void player::addInven(parentObj * obj)
 					break;
 				}
 				//코인증가시키자
-				//_playerStat.coin += obj
+				_playerStat.coin += obj->getAppliedValue();
 				OBJECTMANAGER->deleteObject(obj);
 				break;
 			}
