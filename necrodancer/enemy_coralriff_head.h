@@ -4,6 +4,7 @@ class enemy_coralriff_head : public enemy
 {
 private:
 	bool  _isPlayerIn;
+	animation* _attackAni;
 
 public:
 	enemy_coralriff_head();
@@ -25,5 +26,7 @@ public:
 	void createWall();
 
 	void setFrame();
+
+	void dieEnemy();
 };
 

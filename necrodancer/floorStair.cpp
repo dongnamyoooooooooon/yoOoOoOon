@@ -34,6 +34,8 @@ void floorStair::update()
 	parentObj* tempPlayer = NULL;
 	vector<parentObj*> vTemp = OBJECTMANAGER->getVObj();
 	vector<parentObj*>::iterator viTemp = OBJECTMANAGER->getVIObj();
+	
+	player* _player = OBJECTMANAGER->getPlayer();
 
 	for (viTemp = vTemp.begin(); viTemp != vTemp.end(); viTemp++)
 	{
@@ -44,14 +46,14 @@ void floorStair::update()
 		}
 	}
 
-	if (tempPlayer != NULL)
+	if (_player != NULL)
 	{
-		if (nextScene == "로비")
+		/*if (nextScene == "로비")
 		{
 			int num = 5;
 			num++;
-		}
-		if (tempPlayer->getIdxX() == _idxX && tempPlayer->getIdxY() == _idxY && !tempPlayer->getIsMove())
+		}*/
+		if (_player->getIdxX() == _idxX && _player->getIdxY() == _idxY)
 		{
 			SOUNDMANAGER->allSoundStop();
 			SCENEMANAGER->changeScene(nextScene);

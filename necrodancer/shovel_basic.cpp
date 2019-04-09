@@ -15,7 +15,7 @@ HRESULT shovel_basic::init(string imgName, int idxX, int idxY, ITEM_TYPE type)
 {
 	item::init(imgName, idxX, idxY, type);
 
-	shovelPower = 1;
+	_shovelPower = 1;
 
 
 
@@ -45,32 +45,32 @@ bool shovel_basic::useItem(int idxX, int idxY, int way)
 {
 	parentObj* obj = OBJECTMANAGER->getCheckObj(idxX, idxY);
 
-	_posX = OBJECTMANAGER->getPlayer()->getPosX();
-	_posY = OBJECTMANAGER->getPlayer()->getPosY();
+	_drawX = OBJECTMANAGER->getPlayer()->getPlayerPosX();
+	_drawY = OBJECTMANAGER->getPlayer()->getPlayerPosY();
 
 	switch (way)
 	{
 		case 2:
 		{
-			_posY += TILE_SIZE;
+			_drawY += TILE_SIZE;
 			break;
 		}
 
 		case 4:
 		{
-			_posX -= TILE_SIZE;
+			_drawX -= TILE_SIZE;
 			break;
 		}
 
 		case 6:
 		{
-			_posX += TILE_SIZE;
+			_drawX += TILE_SIZE;
 			break;
 		}
 
 		case 8:
 		{
-			_posY -= TILE_SIZE;
+			_drawY -= TILE_SIZE;
 			break;
 		}
 	}
@@ -79,14 +79,17 @@ bool shovel_basic::useItem(int idxX, int idxY, int way)
 	{
 		if (obj->getObjType() == OBJECT_TYPE_WALL)
 		{
-			if (obj->wallBroken(shovelPower))
+			if (obj->wallBroken(_shovelPower))
 			{
 				OBJECTMANAGER->deleteObject(obj);
 				return true;
 			}
-			else 
+			else
+			{
 				OBJECTMANAGER->breakChain();
+			}
 		}
+		
 	}
 
 

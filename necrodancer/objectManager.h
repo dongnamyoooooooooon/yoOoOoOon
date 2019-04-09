@@ -17,7 +17,20 @@ class floorStair;
 class floorStair_nothing;
 class weapon_dagger_basic;
 class weapon_broadsword_basic;
+class weapon_rapier_basic;
+class weapon_spear_basic;
+class weapon_longsword_basic;
+class weapon_bow_basic;
+class weapon_fiail_basic;
+class weapon_blunderbuss;
+class weapon_golden_lute;
 class shovel_basic;
+class shovel_titanium;
+class shovel_glass;
+class shovel_obsidian;
+class shovel_blood;
+class shovel_crystal;
+class shovel_glass_shard;
 class armor_Gi;
 class armor_leather;
 class armor_chainmail;
@@ -26,7 +39,12 @@ class armor_heavyplate;
 class armor_obsidian;
 class armor_glass;
 class torch_basic;
+class torch_bright;
 class item_coin;
+class item_food_1;
+class item_food_2;
+class item_food_3;
+class item_food_4;
 class wallZone_01;
 class wallZone_02;
 class wallShop;
@@ -121,8 +139,24 @@ private:
 
 	int		_isMagic;
 
+	bool	_bossHit;
 	bool	_bossAlive = true;
 	bool	_isEnter = false;
+	
+	bool	_isEffectUse = false;
+	image*  _effectHImg;
+	image*  _effectVImg;
+	int		_effectCount;
+	int		_effectX;
+	int		_effectY;
+
+	int		_subX;
+	int		_subY;
+
+	int		_rangeVal;
+	float	_posZ = 0;
+	float   _ruteAlpha = 1.0f;
+
 
 public:
 	objectManager();
@@ -150,6 +184,8 @@ public:
 	void createBeat();
 	void deleteBeat();
 	void replaySong();
+
+	void weaponEff();
 
 
 	//오브젝트생성
@@ -278,5 +314,15 @@ public:
 	bool getIsEnter() { return _isEnter; }
 	void setIsEnter(bool check) { _isEnter = check; }
 
+	bool getIsEffectUse() { return _isEffectUse;}
+	void setIsEffectUse(bool check) { _isEffectUse = check; }
+
+	image* getEffectImg() { return _effectHImg; }
+
+	int getRangeVal() { return _rangeVal; }
+	void setRangeVal(int val) { _rangeVal = val; }
+
+	bool getBossHit() { return _bossHit; }
+	void setBossHit(bool check) { _bossHit = check; }
 };
 

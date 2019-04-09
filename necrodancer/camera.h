@@ -10,10 +10,17 @@ private:
 
 	float _posX;
 	float _posY;
+
+	float _quakeX;
+	float _quakeY;
+
 	int _maxX;
 	int _maxY;
 
+	int _count;
+
 	bool _isMove;
+	bool _isQuake;
 
 public:
 	camera();
@@ -27,6 +34,7 @@ public:
 	void move(int x, int y);
 	void mapToolMove();
 	void sampleToolMove();
+	void quakeCamera();
 
 	float getPosX() { return _posX; }
 	float getPosY() { return _posY; }
@@ -39,6 +47,8 @@ public:
 	void setMaxY(int y) { _maxY = y; }
 
 	bool getIsMove() { return _isMove; }
+
+	void isQuake() { _isQuake = true; }
 
 
 };

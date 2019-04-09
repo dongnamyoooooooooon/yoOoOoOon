@@ -89,8 +89,23 @@ void wall::render()
 
 bool wall::wallBroken(int power)
 {
+	player* tempPlayer = OBJECTMANAGER->getPlayer();
 	if (_wallPower > power)
 	{
+		if (tempPlayer->getPlayerShovel()->getImgName() == "shovel_blood")
+		{
+			if (_wallPower < 500)
+			{
+				tempPlayer->hitPlayer(1);
+				SOUNDMANAGER->play("sound_dig_dirt");
+				return true;
+			}
+			else
+			{
+				SOUNDMANAGER->play("sound_dig_fail");
+				return false;
+			}
+		}
 		SOUNDMANAGER->play("sound_dig_fail");
 		return false;
 	}
@@ -122,19 +137,20 @@ void wall::rayCast()
 	parentObj* obj2;
 	parentObj* floorObj2;
 
-	
-	obj = OBJECTMANAGER->getCheckObj(_idxX-1, _idxY-1);
-	floorObj = OBJECTMANAGER->getCheckFloor(_idxX-1, _idxY-1);
-
-	if (obj != NULL)
+	if (_idxY - 1 >= 0)
 	{
-		obj->setHasLight(true);
-		if (obj->getIsSight() == true) obj->setIsSaw();
-	}
-	if (floorObj != NULL)
-	{
-		floorObj->setHasLight(true);
-		if (floorObj->getIsSight() == true) floorObj->setIsSaw();
+		obj = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY - 1);
+		floorObj = OBJECTMANAGER->getCheckFloor(_idxX - 1, _idxY - 1);
+		if (obj != NULL)
+		{
+			obj->setHasLight(true);
+			if (obj->getIsSight() == true) obj->setIsSaw();
+		}
+		if (floorObj != NULL)
+		{
+			floorObj->setHasLight(true);
+			if (floorObj->getIsSight() == true) floorObj->setIsSaw();
+		}
 	}
 
 
@@ -152,19 +168,21 @@ void wall::rayCast()
 		if (floorObj->getIsSight() == true) floorObj->setIsSaw();
 	}
 
-
-	obj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY - 1);
-	floorObj = OBJECTMANAGER->getCheckFloor(_idxX + 1, _idxY - 1);
-
-	if (obj != NULL)
+	if (_idxY - 1 >= 0)
 	{
-		obj->setHasLight(true);
-		if (obj->getIsSight() == true) obj->setIsSaw();
-	}
-	if (floorObj != NULL)
-	{
-		floorObj->setHasLight(true);
-		if (floorObj->getIsSight() == true) floorObj->setIsSaw();
+		obj = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY - 1);
+		floorObj = OBJECTMANAGER->getCheckFloor(_idxX + 1, _idxY - 1);
+
+		if (obj != NULL)
+		{
+			obj->setHasLight(true);
+			if (obj->getIsSight() == true) obj->setIsSaw();
+		}
+		if (floorObj != NULL)
+		{
+			floorObj->setHasLight(true);
+			if (floorObj->getIsSight() == true) floorObj->setIsSaw();
+		}
 	}
 
 
@@ -183,33 +201,35 @@ void wall::rayCast()
 	}
 
 
-
-	obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
-	floorObj = OBJECTMANAGER->getCheckFloor(_idxX, _idxY - 1);
-
-	if (floorObj != NULL)
+	if (_idxY - 1 >= 0)
 	{
-		floorObj->setHasLight(true);
-		if (floorObj->getIsSight() == true) floorObj->setIsSaw();
-	}
+		obj = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
+		floorObj = OBJECTMANAGER->getCheckFloor(_idxX, _idxY - 1);
 
-	if (obj != NULL)
-	{
-		obj->setHasLight(true);
-		if (obj->getIsSight() == true) obj->setIsSaw();
-
-		if (obj->getObjType() != OBJECT_TYPE_WALL)
+		if (floorObj != NULL)
 		{
-			if ((obj2 = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 2)) != NULL)
+			floorObj->setHasLight(true);
+			if (floorObj->getIsSight() == true) floorObj->setIsSaw();
+		}
+
+		if (obj != NULL)
+		{
+			obj->setHasLight(true);
+			if (obj->getIsSight() == true) obj->setIsSaw();
+
+			if (obj->getObjType() != OBJECT_TYPE_WALL)
 			{
-				obj2->setHasLight(true);
-				if (obj2->getIsSight() == true) obj2->setIsSaw();
-			}
-			
-			if ((floorObj2 = OBJECTMANAGER->getCheckFloor(_idxX, _idxY - 2)) != NULL)
-			{
-				floorObj2->setHasLight(true);
-				if (floorObj2->getIsSight() == true) floorObj2->setIsSaw();
+				if ((obj2 = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 2)) != NULL)
+				{
+					obj2->setHasLight(true);
+					if (obj2->getIsSight() == true) obj2->setIsSaw();
+				}
+
+				if ((floorObj2 = OBJECTMANAGER->getCheckFloor(_idxX, _idxY - 2)) != NULL)
+				{
+					floorObj2->setHasLight(true);
+					if (floorObj2->getIsSight() == true) floorObj2->setIsSaw();
+				}
 			}
 		}
 	}

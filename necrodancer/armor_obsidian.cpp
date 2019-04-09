@@ -29,11 +29,20 @@ void armor_obsidian::update()
 	item::update();
 
 	if (OBJECTMANAGER->getChainCount() == 0)
+	{
 		_appliedValue = 1;
+		_frameX = 0;
+	}
 	else if (OBJECTMANAGER->getChainCount() == 1 || OBJECTMANAGER->getChainCount() == 2)
+	{
 		_appliedValue = 2;
+		_frameX = 1;
+	}
 	else if (OBJECTMANAGER->getChainCount() == 3)
+	{
 		_appliedValue = 3;
+		_frameX = 2;
+	}
 }
 
 void armor_obsidian::render()

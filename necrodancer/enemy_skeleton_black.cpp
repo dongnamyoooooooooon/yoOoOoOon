@@ -252,6 +252,7 @@ void enemy_skeleton_black::hitEnemy(int damage)
 
 void enemy_skeleton_black::patternMove()
 {
+	player* tempPlayer = OBJECTMANAGER->getPlayer();
 	_moveDistance = TILE_SIZE;
 	_direction = _skelDir;
 
@@ -269,6 +270,7 @@ void enemy_skeleton_black::patternMove()
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
 				attackEnemy(_direction);
+				EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 			}
 			else if (objType == OBJECT_TYPE_WALL)
 			{
@@ -296,6 +298,7 @@ void enemy_skeleton_black::patternMove()
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
 				attackEnemy(_direction);
+				EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 			}
 			else if (objType == OBJECT_TYPE_WALL)
 			{
@@ -322,6 +325,7 @@ void enemy_skeleton_black::patternMove()
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
 				attackEnemy(_direction);
+				EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 			}
 			else if (objType == OBJECT_TYPE_WALL)
 			{
@@ -348,6 +352,7 @@ void enemy_skeleton_black::patternMove()
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
 				attackEnemy(_direction);
+				EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 			}
 			else if (objType == OBJECT_TYPE_WALL)
 			{

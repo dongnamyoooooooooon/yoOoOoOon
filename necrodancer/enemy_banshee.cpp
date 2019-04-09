@@ -188,7 +188,12 @@ void enemy_banshee::hitEnemy(int damage)
 	_isDrawHP = true;
 	_heart -= damage;
 
-	if (_heart <= 0) this->dieEnemy();
+	if (_heart <= 0)
+	{
+		SOUNDMANAGER->setBgmVolume(1.0f);
+		SOUNDMANAGER->stop("sound_banshee_loop");
+		this->dieEnemy();
+	}
 
 
 	//if (tempX < 0) //По

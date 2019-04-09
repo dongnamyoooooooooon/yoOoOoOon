@@ -82,6 +82,8 @@ public:
 
 	//Àû
 	virtual void hitEnemy(int damage) {};
+
+	virtual void setNextScene(string sceneName) {  }
 	
 	//=======================================
 	//			  g e t & s e t5

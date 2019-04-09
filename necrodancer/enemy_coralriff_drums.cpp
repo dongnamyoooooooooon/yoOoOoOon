@@ -65,7 +65,7 @@ void enemy_coralriff_drums::update()
 			{
 				_isBeat = false;
 				_beatCount++;
-				if (_beatCount >= 53)
+				if (_beatCount >= 53 || OBJECTMANAGER->getBossHit())
 				{
 					_curMoveBeat++;
 					_shakeVal = 3;
@@ -95,14 +95,14 @@ void enemy_coralriff_drums::update()
 						else if (_moveBeat == _beatCount - 3)
 						{
 							_isShowShadow = false;
-							if (_isLeft)
+							if (_checkPos)
 							{
 								OBJECTMANAGER->setTileIdx(this, tempPlayer->getIdxX() + respawnX_left, tempPlayer->getIdxY() + respawnY_left);
 								_posX = ((tempPlayer->getIdxX() + respawnX_left) * 52) + 26;
 								_posY = ((tempPlayer->getIdxY() + respawnY_left) * 52) + 26;
 								OBJECTMANAGER->setTileFloor(_posX / TILE_SIZE, _posY / TILE_SIZE);
 							}
-							else if (!_isLeft)
+							else if (!_checkPos)
 							{
 								OBJECTMANAGER->setTileIdx(this, tempPlayer->getIdxX() + respawnX_right, tempPlayer->getIdxY() + respawnY_right);
 								_posX = ((tempPlayer->getIdxX() + respawnX_right) * 52) + 26;
@@ -120,15 +120,17 @@ void enemy_coralriff_drums::update()
 							{
 								if (!OBJECTMANAGER->getPlayer()->getIsHit())
 								{
-									if (_isLeft)
+									if (_checkPos)
 									{
 										_direction = DIRECTION_LEFT;
 										attackEnemy(_direction);
+										EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 									}
-									else if (!_isLeft)
+									else if (!_checkPos)
 									{
 										_direction = DIRECTION_RIGHT;
 										attackEnemy(_direction);
+										EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 									}
 									OBJECTMANAGER->getPlayer()->setIsHit(true);
 								}

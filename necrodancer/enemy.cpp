@@ -390,140 +390,6 @@ void enemy::jumpMoveEnemy()
 			break;
 		}
 	}
-
-	/*_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
-	_jumpPower = JUMPPOWER;
-	_gravity = GRAVETY;
-
-	if (!_isHalfMove)
-	{
-		switch (_direction)
-		{
-		case DIRECTION_LEFT:
-			_moveDistance -= _speed;
-			_posX -= _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				horizonSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-				_isHalfMove = false;
-			}
-			break;
-		case DIRECTION_RIGHT:
-			_moveDistance -= _speed;
-			_posX += _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				horizonSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-				_isHalfMove = false;
-			}
-			break;
-		case DIRECTION_UP:
-			_moveDistance -= _speed;
-			_posY -= _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				verticalSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-				_isHalfMove = false;
-			}
-			break;
-		case DIRECTION_DOWN:
-			_moveDistance -= _speed;
-			_posY += _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				verticalSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-				_isHalfMove = false;
-			}
-			break;
-		}
-	}
-	else
-	{
-		switch (_direction)
-		{
-		case DIRECTION_LEFT:
-			_posX -= _speed;
-			_moveDistance -= _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				horizonSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-			}
-
-			break;
-		case DIRECTION_RIGHT:
-			_posX += _speed;
-			_moveDistance -= _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				horizonSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-			}
-			break;
-		case DIRECTION_UP:
-			_posY -= _speed;
-			_moveDistance -= _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				horizonSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-			}
-			break;
-		case DIRECTION_DOWN:
-			_posY += _speed;
-			_moveDistance -= _speed;
-			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-			if (_posZ > 0) _posZ = 0;
-			if (_moveDistance < _speed)
-			{
-				verticalSet();
-				_jumpPower = 0;
-				_posZ = 0;
-				_direction = DIRECITON_NONE;
-			}
-			break;
-		}
-	}*/
 }
 
 void enemy::attackEnemy(DIRECTION dir)
@@ -549,7 +415,7 @@ void enemy::dieEnemy()
 {
 	soundDie();
 	OBJECTMANAGER->grooveChain();
-
+	
 	item_coin* coin = new item_coin;
 	coin->init("", _idxX, _idxY, ITEM_TYPE_COIN);
 
@@ -560,6 +426,8 @@ void enemy::dieEnemy()
 
 void enemy::rendomMove()
 {
+	player* _player = OBJECTMANAGER->getPlayer();
+
 	_moveDistance = TILE_SIZE;
 	if (RND->getInt(2) == 0)
 	{
@@ -595,6 +463,7 @@ void enemy::rendomMove()
 
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
+				EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 				attackEnemy(_direction);
 
 				_direction = DIRECITON_NONE;
@@ -623,6 +492,7 @@ void enemy::rendomMove()
 
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
+				EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 				attackEnemy(_direction);
 
 				_direction = DIRECITON_NONE;
@@ -651,6 +521,7 @@ void enemy::rendomMove()
 
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
+				EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 				attackEnemy(_direction);
 
 				_direction = DIRECITON_NONE;
@@ -679,6 +550,7 @@ void enemy::rendomMove()
 
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
+				EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 				attackEnemy(_direction);
 
 				_direction = DIRECITON_NONE;
@@ -704,6 +576,7 @@ void enemy::patternMove()
 {
 	_moveDistance = TILE_SIZE;
 	OBJECT_TYPE objType;
+	player* _player = OBJECTMANAGER->getPlayer();
 
 	if (_idxY % 2 == 0)
 	{
@@ -723,6 +596,7 @@ void enemy::patternMove()
 
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
+				EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 				attackEnemy(_direction);
 
 				_direction = DIRECITON_NONE;
@@ -747,6 +621,7 @@ void enemy::patternMove()
 
 			if (objType == OBJECT_TYPE_PLAYER)
 			{
+				EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 				attackEnemy(_direction);
 
 				_direction = DIRECITON_NONE;
@@ -787,7 +662,7 @@ bool enemy::aStarLoad()
 	if ((direction_X == -1 && direction_Y == 0) || (direction_X == 0 && direction_Y == -1)
 		|| (direction_X == 1 && direction_Y == 0) || (direction_X == 0 && direction_Y == 1))
 	{
-
+		EFFECTMANAGER->play("enemy_attack", _player->getPlayerPosX(), _player->getPlayerPosY());
 		attackEnemy(_direction);
 		return true;
 	}
@@ -1526,4 +1401,30 @@ void enemy::verticalSet()
 	_posY = (int)_posY / TILE_SIZE * TILE_SIZE + 26;
 	_moveDistance = 0;
 	_idxY = _posY / TILE_SIZE;
+}
+
+void enemy::dustAniSetUp()
+{
+	KEYANIMANAGER->addAnimationType("enemy_jump");
+
+	int enemy_jump[] = { 0, 1, 2, 3, 4 };
+	KEYANIMANAGER->addArrayFrameAnimation("enemy_jump", "enemy_jump", "enemy_jump", enemy_jump, 5, ANISPEED, false);
+
+	_dustAni = KEYANIMANAGER->findAnimation("enemy_jump", "enemy_jump");
+}
+
+void enemy::dustAniUpdate()
+{
+	KEYANIMANAGER->update("enemy_jump");
+}
+
+void enemy::dustAniStart()
+{
+	_dustAni = KEYANIMANAGER->findAnimation("enemy_jump", "enemy_jump");
+	_dustAni->start();
+}
+
+void enemy::dustAniRender()
+{
+	IMAGEMANAGER->findImage("enemy_jump")->aniRender(_savePos.x, _savePos.y, _dustAni);
 }

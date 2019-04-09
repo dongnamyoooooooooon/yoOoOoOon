@@ -40,6 +40,7 @@ void enemy_zombie::release()
 
 void enemy_zombie::update()
 {
+	player* tempPlayer = OBJECTMANAGER->getPlayer();
 	jumpMoveEnemy();
 
 	if (_isBeat)
@@ -65,6 +66,7 @@ void enemy_zombie::update()
 					if (objType == OBJECT_TYPE_PLAYER)
 					{
 						attackEnemy(_direction);
+						EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
@@ -95,6 +97,7 @@ void enemy_zombie::update()
 					if (objType == OBJECT_TYPE_PLAYER)
 					{
 						attackEnemy(_direction);
+						EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
@@ -125,6 +128,7 @@ void enemy_zombie::update()
 					if (objType == OBJECT_TYPE_PLAYER)
 					{
 						attackEnemy(_direction);
+						EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{
@@ -153,6 +157,7 @@ void enemy_zombie::update()
 					if (objType == OBJECT_TYPE_PLAYER)
 					{
 						attackEnemy(_direction);
+						EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					}
 					else if (objType == OBJECT_TYPE_WALL)
 					{

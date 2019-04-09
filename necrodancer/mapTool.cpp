@@ -270,7 +270,11 @@ void mapTool::activeButton(int num)
 	_choiceNum = num;
 	if (num == MAPTOOL_BUTTON_SAVE)					this->mapSave(_curMapNum);								//세이브한다.
 	else if (num == MAPTOOL_BUTTON_LOAD)			this->mapLoad();										//로드한다.
-	else if (num == MAPTOOL_BUTTON_PLAY)			SCENEMANAGER->changeScene("testMapScene");				//씬변경하는데 외않되?
+	else if (num == MAPTOOL_BUTTON_PLAY)
+	{
+		this->mapSave(_curMapNum);
+		SCENEMANAGER->changeScene("테슷흐");				//씬변경하는데 외않되?
+	}
 	else if (num == MAPTOOL_BUTTON_PLAYER)
 	{
 		_selectObj.init("", -1, -1, OBJECT_TYPE_PLAYER, 0);

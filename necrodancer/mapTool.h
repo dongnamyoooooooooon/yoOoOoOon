@@ -56,8 +56,8 @@ static string BUTTON_NAME[MAPTOOL_BUTTON_COUNT] = { "button_floor",			"button_wa
 													"button_size_x_down",	"button_size_y_up",		"button_size_y_down" };
 
 //던전이름
-static string MAP_NAME_INFO[MAP_NAME_COUNT] = { "test_Dungeon", "lobby_Dungeon", "tutorial_Dungeon",
-												"zone1_Dungeon", "zone2_Dungeon", "boss_Dungeon" };
+static string MAP_NAME_INFO[MAP_NAME_COUNT] = { "test_Dungeon", "lobby_Dungeon", "sight_Dungeon",
+												"enemy_Dungeon", "item_Dungeon", "boss_Dungeon" };
 
 
 

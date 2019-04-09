@@ -39,11 +39,14 @@ void soundManager::playZone(string keyName, float volume)
 			count_shop = count;
 		}
 	}
-	_system->playSound(FMOD_CHANNEL_FREE, *iter_BGM->second, false, &_channel[count_BGM]);
+	_system->playSound(FMOD_CHANNEL_REUSE, *iter_BGM->second, false, &_channel[count_BGM]);
 	_channel[count_BGM]->setVolume(volume);
 
-	_system->playSound(FMOD_CHANNEL_FREE, *iter_shop->second, false, &_channel[count_shop]);
-	_channel[count_shop]->setVolume(volume);
+	if (keyName != "music_loddy")
+	{
+		_system->playSound(FMOD_CHANNEL_REUSE, *iter_shop->second, false, &_channel[count_shop]);
+		_channel[count_shop]->setVolume(volume);
+	}
 }
 
 void soundManager::pauseZone(string keyName)
@@ -786,7 +789,7 @@ void soundManager::setBgmVolume(float volume)
 	else if (1.0f < volume)
 		volume = 1.0f;
 
-	_bgmGroup->setVolume(volume);
+	_bgmSoundGroup->setVolume(volume);
 
 	cout << "bgm volume : " << volume << endl;
 }

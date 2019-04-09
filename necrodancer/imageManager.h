@@ -78,5 +78,8 @@ public:
 	//ÁÂ¿ì¹ÝÀü
 	void frameRenderReverseX(string strKey, float destX, float destY, int currentFrameX, int currentFrameY, float alpha = 1.0f);
 	void frameRenderReverseX(string strKey, float destX, float destY, int showWidth, int showHeight, int currentFrameX, int currentFrameY, float alpha = 1.0f);
+
+	void frameRenderReverseY(string strKey, float destX, float destY, int currentFrameX, int currentFrameY, float alpha = 1.0f);
+	void frameRenderReverseY(string strKey, float destX, float destY, int showWidth, int showHeight, int currentFrameX, int currentFrameY, float alpha = 1.0f);
 };
 

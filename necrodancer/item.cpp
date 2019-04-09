@@ -69,16 +69,6 @@ void item::render()
 		}
 	}
 	else if (_isMoveInven)	_img->frameRender(_posX, _posY - _jumpPower, _frameX, _frameY);
-	/*else if (!_isCurInven)
-		{
-			if (_isSaw)
-			{
-				if (_hasLight)	_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 0);
-				else			_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 1);
-			}
-			else	_img->frameRender(_posX - 26, _posY - _jumpPower, _frameX, 1);
-		}
-*/
 }
 
 void item::itemInven(int moveX, int moveY)

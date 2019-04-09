@@ -36,6 +36,7 @@ void enemy_armadillo::release()
 
 void enemy_armadillo::update()
 {
+	dustAniUpdate();
 	jumpMoveEnemy();
 
 	player* tempPlayer = OBJECTMANAGER->getPlayer();
@@ -47,6 +48,7 @@ void enemy_armadillo::update()
 
 	if (_isBeat)
 	{
+		_savePos = { _posX, _posY };
 		if (_isStun)
 		{
 			_curMoveBeat++;
@@ -66,12 +68,14 @@ void enemy_armadillo::update()
 				{
 					_direction = DIRECTION_UP;
 					_isStop = false;
+					dustAniStart();
 					aniPlay_Vertical();
 				}
 				else if (_idxY < tempPlayer->getIdxY())
 				{
 					_direction = DIRECTION_DOWN;
 					_isStop = false;
+					dustAniStart();
 					aniPlay_Vertical();
 				}
 
@@ -83,6 +87,7 @@ void enemy_armadillo::update()
 					_direction = DIRECTION_LEFT;
 					_isStop = false;
 					_isLeft = true;
+					dustAniStart();
 					aniPlay_Horizon();
 				}
 				else if (_idxX < tempPlayer->getIdxX())
@@ -90,6 +95,7 @@ void enemy_armadillo::update()
 					_direction = DIRECTION_RIGHT;
 					_isLeft = false;
 					_isStop = false;
+					dustAniStart();
 					aniPlay_Horizon();
 				}
 			}
@@ -129,6 +135,7 @@ void enemy_armadillo::update()
 					_isStun = true;
 					SOUNDMANAGER->play("sound_armadillo_wallimpact");
 					attackEnemy(_direction);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 				}
 			}
 			else
@@ -169,6 +176,7 @@ void enemy_armadillo::update()
 					_isStun = true;
 					SOUNDMANAGER->play("sound_armadillo_wallimpact");
 					attackEnemy(_direction);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 				}
 			}
 			else
@@ -209,6 +217,7 @@ void enemy_armadillo::update()
 					_isStun = true;
 					SOUNDMANAGER->play("sound_armadillo_wallimpact");
 					attackEnemy(_direction);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 				}
 			}
 			else
@@ -249,6 +258,7 @@ void enemy_armadillo::update()
 					_isStun = true;
 					SOUNDMANAGER->play("sound_armadillo_wallimpact");
 					attackEnemy(_direction);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 				}
 			}
 			else
@@ -292,6 +302,7 @@ void enemy_armadillo::aniSetUp()
 {
 	KEYANIMANAGER->addAnimationType("enemy_armadillo");
 
+
 	int stand[] = { 0,1 };
 	KEYANIMANAGER->addArrayFrameAnimation("enemy_armadillo", "armadillo_stand", "enemy_armadillo", stand, 2, 2, true);
 
@@ -316,9 +327,10 @@ void enemy_armadillo::aniSetUp()
 	int horizon_Shadow[] = { 18,19,20,21 };
 	KEYANIMANAGER->addArrayFrameAnimation("enemy_armadillo", "armadillo_horizon_shadow", "enemy_armadillo", horizon_Shadow, 4, ANISPEED, true);
 
-
 	_ani = KEYANIMANAGER->findAnimation("enemy_armadillo", "armadillo_stand");
 	_ani->start();
+
+	dustAniSetUp();
 }
 
 void enemy_armadillo::aniPlay_Stand()
@@ -428,7 +440,7 @@ void enemy_armadillo::aniPlay_Vertical()
 void enemy_armadillo::jumpMoveEnemy()
 {
 	_speed = TIMEMANAGER->getElapsedTime() * PLAYER_SPEED;
-
+	_savePos = { _posX, _posY };
 
 	if (!_isHalfMove)
 	{
@@ -635,7 +647,7 @@ void enemy_armadillo::hitEnemy(int damage)
 	PLAYER_STATE tempState = tempPlayer->getAttDir();
 
 
-	if (!_isStun && !_isStop)
+	if (!_isStun && _isStop)
 	{
 		_direction = (DIRECTION)tempState;
 

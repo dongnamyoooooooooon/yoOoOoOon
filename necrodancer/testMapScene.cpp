@@ -14,15 +14,15 @@ testMapScene::~testMapScene()
 HRESULT testMapScene::init()
 {
 
-	load("map/bossMapSize.map", "map/bossMapData.map");
+	load("map/zone2MapSize.map", "map/zone2MapData.map");
 
 	_ii = 0;
 	_jj = 0;
 	_iiMax = 0;
 	_jjMax = 0;
 
-	OBJECTMANAGER->initBeat("sound/music/boss.txt", "boss");
-	SOUNDMANAGER->setShopBgmKey("test_music");
+	OBJECTMANAGER->initBeat("sound/music/zone1.txt", "music_item");
+	SOUNDMANAGER->setShopBgmKey("music_item");
 
 	return S_OK;
 }
@@ -34,20 +34,33 @@ void testMapScene::release()
 void testMapScene::update()
 {
 	playerMgr();
+	EFFECTMANAGER->update();
 	CAMERA->move(_pos.x, _pos.y);
 	OBJECTMANAGER->createBeat();
 	OBJECTMANAGER->deleteBeat();
 	OBJECTMANAGER->allObjectUpdate();
 	OBJECTMANAGER->update();
-
-	if (KEYMANAGER->isStayKeyDown(VK_F2)) SOUNDMANAGER->setPitch(2.0f);
-	if (KEYMANAGER->isStayKeyDown(VK_F3)) SOUNDMANAGER->setPitch(1.0f);
-
+	OBJECTMANAGER->weaponEff();
 }
 
 void testMapScene::render()
 {
 	OBJECTMANAGER->render();
+	EFFECTMANAGER->render();
+
+	player* tempPlayer = OBJECTMANAGER->getPlayer();
+
+	if (tempPlayer->getIsUseShovel())
+	{
+		if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+			IMAGEMANAGER->findImage(tempPlayer->getPlayerShovel()->getImgName())->frameRender(tempPlayer->getPlayerPosX() - 78, tempPlayer->getPlayerPosY() - 46, 0, 0);
+		else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+			IMAGEMANAGER->findImage(tempPlayer->getPlayerShovel()->getImgName())->frameRender(tempPlayer->getPlayerPosX() + 26, tempPlayer->getPlayerPosY() - 46, 0, 0);
+		else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+			IMAGEMANAGER->findImage(tempPlayer->getPlayerShovel()->getImgName())->frameRender(tempPlayer->getPlayerPosX() - 26, tempPlayer->getPlayerPosY() - 98, 0, 0);
+		else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+			IMAGEMANAGER->findImage(tempPlayer->getPlayerShovel()->getImgName())->frameRender(tempPlayer->getPlayerPosX() - 26, tempPlayer->getPlayerPosY(), 0, 0);
+	}
 }
 
 void testMapScene::load(const char * size, const char * data)

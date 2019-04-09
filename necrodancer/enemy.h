@@ -55,6 +55,7 @@ protected:
 	DIRECTION _move;
 
 	animation* _ani;
+	animation* _dustAni;
 
 	int _heart;						//체력
 	int _maxHeart;					//최대체력
@@ -69,6 +70,7 @@ protected:
 	int _maxFrameX;					//최대프레임X
 	int _maxFrameY;					//최대프레임Y
 
+	POINT _savePos;
 	int _posX;
 	int _posY;
 	float _posZ;
@@ -148,6 +150,11 @@ public:
 	void horizonSet();
 	void verticalSet();
 
+	void dustAniSetUp();
+	void dustAniUpdate();
+	void dustAniStart();
+	void dustAniRender();
+
 	virtual void setIsSaw() {
 
 		if (_isSaw == false)
@@ -156,5 +163,7 @@ public:
 			_isSaw = true;
 		}
 	}
+
+	void setXY(int x, int y) { this->_posX = x; this->_posY = y; }
 };
 

@@ -3,7 +3,7 @@
 class shovel_basic : public item
 {
 private:
-	int shovelPower;
+	int _shovelPower;
 	
 
 public:

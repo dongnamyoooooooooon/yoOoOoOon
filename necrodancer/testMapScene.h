@@ -21,6 +21,7 @@ private:
 	UINT								_jj;
 	UINT								_iiMax;
 	UINT								_jjMax;
+	
 
 public:
 	testMapScene();
@@ -33,5 +34,6 @@ public:
 
 	void load(const char* size, const char* data);
 	void playerMgr();
+
 };
 

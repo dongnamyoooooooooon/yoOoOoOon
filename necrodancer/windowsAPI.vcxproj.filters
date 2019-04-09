@@ -118,6 +118,9 @@
     <Filter Include="PlayGround\enemy\버그투성이ㅠㅠ">
       <UniqueIdentifier>{93b861b3-e04b-4bb5-af05-2e31838d6819}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\item\food">
+      <UniqueIdentifier>{94601dee-55d0-41dd-87cb-5c2e77453c58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -409,7 +412,70 @@
       <Filter>PlayGround\scene</Filter>
     </ClInclude>
     <ClInclude Include="item_coin.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>PlayGround\item</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_titanium.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_glass.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_obsidian.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_blood.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_crystal.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="shovel_glass_shard.h">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_rapier_basic.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_spear_basic.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_longsword_basic.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_bow_basic.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_blunderbuss.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_fiail_basic.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="torch_bright.h">
+      <Filter>PlayGround\item\getherItem\torch</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_golden_lute.h">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="torch_luminious.h">
+      <Filter>PlayGround\item\getherItem\torch</Filter>
+    </ClInclude>
+    <ClInclude Include="item_food_1.h">
+      <Filter>PlayGround\item\food</Filter>
+    </ClInclude>
+    <ClInclude Include="item_food_2.h">
+      <Filter>PlayGround\item\food</Filter>
+    </ClInclude>
+    <ClInclude Include="item_food_3.h">
+      <Filter>PlayGround\item\food</Filter>
+    </ClInclude>
+    <ClInclude Include="item_food_4.h">
+      <Filter>PlayGround\item\food</Filter>
+    </ClInclude>
+    <ClInclude Include="lobbyScene.h">
+      <Filter>PlayGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bossScene.h">
+      <Filter>PlayGround\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -681,7 +747,70 @@
       <Filter>PlayGround\scene</Filter>
     </ClCompile>
     <ClCompile Include="item_coin.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>PlayGround\item</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_titanium.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_glass.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_obsidian.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_blood.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_glass_shard.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="shovel_crystal.cpp">
+      <Filter>PlayGround\item\getherItem\shovel</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_rapier_basic.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_spear_basic.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_longsword_basic.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_bow_basic.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_blunderbuss.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_fiail_basic.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="torch_bright.cpp">
+      <Filter>PlayGround\item\getherItem\torch</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_golden_lute.cpp">
+      <Filter>PlayGround\item\getherItem\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="torch_luminious.cpp">
+      <Filter>PlayGround\item\getherItem\torch</Filter>
+    </ClCompile>
+    <ClCompile Include="item_food_1.cpp">
+      <Filter>PlayGround\item\food</Filter>
+    </ClCompile>
+    <ClCompile Include="item_food_2.cpp">
+      <Filter>PlayGround\item\food</Filter>
+    </ClCompile>
+    <ClCompile Include="item_food_3.cpp">
+      <Filter>PlayGround\item\food</Filter>
+    </ClCompile>
+    <ClCompile Include="item_food_4.cpp">
+      <Filter>PlayGround\item\food</Filter>
+    </ClCompile>
+    <ClCompile Include="lobbyScene.cpp">
+      <Filter>PlayGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bossScene.cpp">
+      <Filter>PlayGround\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

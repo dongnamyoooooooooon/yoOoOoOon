@@ -19,7 +19,7 @@ HRESULT enemy_slime_green::init(string imgName, int idxX, int idxY)
 	_subX = 26;
 	_subY = 36;
 	_damage = 500;
-	_heart = RND->getInt(3);
+	_heart = 3;
 	_maxHeart = _heart;
 
 	aniSetUp();

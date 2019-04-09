@@ -77,6 +77,7 @@ void enemy_clone::update()
 				if (objType == OBJECT_TYPE_PLAYER)
 				{
 					attackEnemy(_attDir);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					_attDir = DIRECITON_NONE;
 					_direction = DIRECITON_NONE;
 				}
@@ -111,6 +112,7 @@ void enemy_clone::update()
 				if (objType == OBJECT_TYPE_PLAYER)
 				{
 					attackEnemy(_attDir);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					_attDir = DIRECITON_NONE;
 					_direction = DIRECITON_NONE;
 				}
@@ -145,6 +147,7 @@ void enemy_clone::update()
 				if (objType == OBJECT_TYPE_PLAYER)
 				{
 					attackEnemy(_attDir);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					_attDir = DIRECITON_NONE;
 					_direction = DIRECITON_NONE;
 				}
@@ -179,6 +182,7 @@ void enemy_clone::update()
 				if (objType == OBJECT_TYPE_PLAYER)
 				{
 					attackEnemy(_attDir);
+					EFFECTMANAGER->play("enemy_attack", tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY());
 					_attDir = DIRECITON_NONE;
 					_direction = DIRECITON_NONE;
 				}

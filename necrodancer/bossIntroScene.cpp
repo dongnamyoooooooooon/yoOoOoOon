@@ -46,13 +46,13 @@ void bossIntroScene::update()
 
 void bossIntroScene::render()
 {
-	IMAGEMANAGER->findImage("boss_top")->render(_topPos.x, _topPos.y);
-	IMAGEMANAGER->findImage("boss_bottom")->render(_bottomPos.x, _bottomPos.y);
-	IMAGEMANAGER->findImage("boss_background")->render(_midPos.x, _midPos.y);
-	IMAGEMANAGER->findImage("boss_face")->render(_midPos.x, _midPos.y - 95);
-	IMAGEMANAGER->findImage("boss_name")->render(_bottomPos.x + 350, _bottomPos.y + 20);
+	IMAGEMANAGER->findImage("boss_top")->render(CAMERA->getPosX() + _topPos.x, CAMERA->getPosY() + _topPos.y);
+	IMAGEMANAGER->findImage("boss_bottom")->render(CAMERA->getPosX() + _bottomPos.x, CAMERA->getPosY() + _bottomPos.y);
+	IMAGEMANAGER->findImage("boss_background")->render(CAMERA->getPosX() + _midPos.x, CAMERA->getPosY() + _midPos.y);
+	IMAGEMANAGER->findImage("boss_face")->render(CAMERA->getPosX() + _midPos.x, CAMERA->getPosY() + _midPos.y - 95);
+	IMAGEMANAGER->findImage("boss_name")->render(CAMERA->getPosX() + _bottomPos.x + 350, CAMERA->getPosY() + _bottomPos.y + 20);
 
-	IMAGEMANAGER->findImage("alpha_black")->render(0, 0, WINSIZEX, WINSIZEY, _alpha);
+	IMAGEMANAGER->findImage("alpha_black")->render(CAMERA->getPosX() + 0, CAMERA->getPosY() + 0, CAMERA->getPosX() + WINSIZEX, CAMERA->getPosX() + WINSIZEY, _alpha);
 }
 
 void bossIntroScene::topMove(int num)
@@ -107,7 +107,7 @@ void bossIntroScene::showBoss()
 			_alpha = 1.0f;
 			if (_alpha > 0.9f || KEYMANAGER->isOnceKeyDown(VK_RETURN) || KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
-				SCENEMANAGER->changeScene("Å×½ÁÈå");
+				SCENEMANAGER->changeScene("º¸½º");
 			}
 		}
 	}

@@ -29,6 +29,7 @@ HRESULT player::init(UINT idx_X, UINT idx_Y)
 
 	_playerHead = "player_head";
 	_playerBody = "player_body";
+	_playerLute = "player_body_lute";
 
 	//boolean
 	_isLeft = false;
@@ -66,6 +67,16 @@ void player::update()
 	keyUpdate();
 
 	layCast();
+
+	if (_isUseShovel)
+	{
+		_count++;
+		if (_count > 10)
+		{
+			_isUseShovel = false;
+			_count = 0;
+		}
+	}
 }
 
 void player::render()
@@ -76,15 +87,18 @@ void player::render()
 	//layCast();
 	drawItemHint();
 
-	WCHAR temp[128];
-	swprintf_s(temp, L"%d", _moveDistance);
-	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 150, 30, RGB(0, 255, 255));
-	swprintf_s(temp, L"%.1f", _speed);
-	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 180, 30, RGB(0, 255, 255));
-	swprintf_s(temp, L"idxX : %d", _idxX);
-	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 210, 30, RGB(0, 255, 255));
-	swprintf_s(temp, L"idxY : %d", _idxY);
-	D2DMANAGER->drawText(temp, CAMERA->getPosX() + 100, CAMERA->getPosY() + 240, 30, RGB(0, 255, 255));
+
+	/*WCHAR temp[128];
+	swprintf_s(temp, L"%d", _playerStat.attack);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + WINSIZEX - 100, CAMERA->getPosY() + 150, 15, RGB(0, 255, 255));
+	swprintf_s(temp, L"%d", _playerStat.attackCount);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + WINSIZEX - 100, CAMERA->getPosY() + 180, 15, RGB(0, 255, 255));
+	swprintf_s(temp, L"%d", _playerStat.defence);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + WINSIZEX - 100, CAMERA->getPosY() + 210, 15, RGB(0, 255, 255));
+	swprintf_s(temp, L"%d", _playerStat.shovelPower);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + WINSIZEX - 100, CAMERA->getPosY() + 240, 15, RGB(0, 255, 255));
+	swprintf_s(temp, L"%d", _playerStat.torchLight);
+	D2DMANAGER->drawText(temp, CAMERA->getPosX() + WINSIZEX - 100, CAMERA->getPosY() + 260, 15, RGB(0, 255, 255));*/
 }
 
 void player::playerDead()
@@ -122,9 +136,9 @@ void player::layCast()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_F5))
 		{
-			D2DMANAGER->drawLine(RGB(0, 255, 255), this->_posX + 26, this->_posY + 26, 
-								this->_posX + 26 + _layValue * cos(_radius) * TILE_SIZE,
-								this->_posY + 26 + _layValue * (-sin(_radius)) * TILE_SIZE);
+			D2DMANAGER->drawLine(RGB(0, 255, 255), this->_posX + 26, this->_posY + 26,
+				this->_posX + 26 + _layValue * cos(_radius) * TILE_SIZE,
+				this->_posY + 26 + _layValue * (-sin(_radius)) * TILE_SIZE);
 		}
 
 		if (_layValue > _layMax) bright = 0;
@@ -216,7 +230,7 @@ void player::layCast()
 		currentSight += 0.25f;
 	}
 
-	
+
 
 }
 
@@ -265,6 +279,36 @@ void player::playerAniSetUp()
 	int right_body_glass[] = { 36, 37, 38, 39 };
 	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_GLASS], _playerBody.c_str(), right_body_glass, 4, ANISPEED, true);
 
+	int lute_right_body_noArmor[] = { 0, 1, 2, 3 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_NONE], _playerLute.c_str(), lute_right_body_noArmor, 4, ANISPEED, true);
+
+	int lute_right_body_leather[] = { 4, 5, 6, 7 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_LEATHER], _playerLute.c_str(), lute_right_body_leather, 4, ANISPEED, true);
+
+	int lute_right_body_chainmail[] = { 8, 9, 10, 11 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_CHAINMAIL], _playerLute.c_str(), lute_right_body_chainmail, 4, ANISPEED, true);
+
+	int lute_right_body_platemail[] = { 12, 13, 14, 15 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_PLATEMAIL], _playerLute.c_str(), lute_right_body_platemail, 4, ANISPEED, true);
+
+	int lute_right_body_heavyplate[] = { 16, 17, 18, 19 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_HEAVYPLATE], _playerLute.c_str(), lute_right_body_heavyplate, 4, ANISPEED, true);
+
+	int lute_right_body_karade[] = { 20, 21, 22, 23 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_KARADE], _playerLute.c_str(), lute_right_body_karade, 4, ANISPEED, true);
+
+	int lute_right_body_obsidian[] = { 24, 25, 26, 27 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_OBSIDIAN], _playerLute.c_str(), lute_right_body_obsidian, 4, ANISPEED, true);
+
+	int lute_right_body_obsidian_X2[] = { 28, 29, 30, 31 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_OBSIDIAN_X2], _playerLute.c_str(), lute_right_body_obsidian_X2, 4, ANISPEED, true);
+
+	int lute_right_body_obsidian_X3[] = { 32, 33, 34, 35 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_OBSIDIAN_X3], _playerLute.c_str(), lute_right_body_obsidian_X3, 4, ANISPEED, true);
+
+	int lute_right_body_glass[] = { 36, 37, 38, 39 };
+	KEYANIMANAGER->addArrayFrameAnimation(_playerBody, ARMOR_NAME[ITEM_ARMOR_GLASS], _playerLute.c_str(), lute_right_body_glass, 4, ANISPEED, true);
+
 	_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
 
 	playerAniStart_Head("right_head");
@@ -283,10 +327,33 @@ void player::playerAniStart_Body(string keyName)
 	_playerBody_Ani->start();
 }
 
+void player::playerAniStart_BodyLute(string keyName)
+{
+	_playerBody_Ani = KEYANIMANAGER->findAnimation(_playerLute, keyName);
+	_playerBody_Ani->start();
+}
+
 void player::drawBody()
 {
-	if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
-	else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+	if (_playerWeapon != NULL)
+	{
+		if (_playerWeapon->getImgName() == "weapon_golden_lute")
+		{
+			if (_isLeft)	IMAGEMANAGER->findImage("player_body_lute")->aniRenderReverseX(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+			else			IMAGEMANAGER->findImage("player_body_lute")->aniRender(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+		}
+		else
+		{
+			if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+			else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+		}
+	}
+	else
+	{
+		if (_isLeft)	IMAGEMANAGER->findImage("player_body")->aniRenderReverseX(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+		else			IMAGEMANAGER->findImage("player_body")->aniRender(_posX - 26, _posY + _posZ - 36, _playerBody_Ani);
+	}
+	
 }
 
 void player::drawHead()
@@ -298,7 +365,7 @@ void player::drawHead()
 
 void player::drawShadow()
 {
-	IMAGEMANAGER->findImage("player_shadow")->render(_posX -26, _posY - 36);
+	IMAGEMANAGER->findImage("player_shadow")->render(_posX - 26, _posY - 36);
 }
 
 void player::keyUpdate()
@@ -317,8 +384,22 @@ void player::keyUpdate()
 					//사운드적용
 				}
 				else
+				{
+					int num = RND->getFromIntTo(1, 3);
+					switch (num)
+					{
+					case 1:
+						SOUNDMANAGER->play("sound_heal_player_01");
+						break;
+					case 2:
+						SOUNDMANAGER->play("sound_heal_player_02");
+						break;
+					case 3:
+						SOUNDMANAGER->play("sound_heal_player_03");
+						break;
+					}
 					_playerItem->useItem(_idxX, _idxY, 0);
-				//사운드적용
+				}
 			}
 			_isBeat = false;
 		}
@@ -369,7 +450,7 @@ void player::keyUpdate()
 				target = OBJECTMANAGER->getCheckObj(_idxX - 1, _idxY);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX - 1, _idxY, 4))
 				{
-					
+					OBJECTMANAGER->setIsEffectUse(true);
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -391,14 +472,14 @@ void player::keyUpdate()
 					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
 					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
 					}
-					//카메라흔들림적용
+					CAMERA->isQuake();
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
 					_tempX = _idxX;
 					_tempY = _idxY;
 					OBJECTMANAGER->setTileIdx(this, _idxX - 1, _idxY);
-
+					
 					if (_putObj != NULL)
 					{
 						putItem(_putObj);
@@ -419,20 +500,22 @@ void player::keyUpdate()
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
 						SOUNDMANAGER->play("sound_door_open");
-						//카메라흔들림적용
+						CAMERA->isQuake();
 						OBJECTMANAGER->deleteObject(target);
 					}
 					else if (_playerShovel != NULL)
 					{
 						if (_playerShovel->useItem(_idxX - 1, _idxY, 4))
 						{
-							//카메라흔들림적용
-							//사운드적용
+							_isUseShovel = true;
+							CAMERA->isQuake();
 						}
+						_isUseShovel = true;
 					}
 				}
 			}
 			_isBeat = false;
+			//_isUseShovel = false;
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
@@ -443,7 +526,7 @@ void player::keyUpdate()
 				target = OBJECTMANAGER->getCheckObj(_idxX + 1, _idxY);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX + 1, _idxY, 6))
 				{
-					
+					OBJECTMANAGER->setIsEffectUse(true);
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -465,7 +548,7 @@ void player::keyUpdate()
 					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
 					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
 					}
-					//카메라흔들림적용
+					CAMERA->isQuake();
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
@@ -493,16 +576,17 @@ void player::keyUpdate()
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
 						SOUNDMANAGER->play("sound_door_open");
-						//카메라흔들림적용
+						CAMERA->isQuake();
 						OBJECTMANAGER->deleteObject(target);
 					}
 					else if (_playerShovel != NULL)
 					{
 						if (_playerShovel->useItem(_idxX + 1, _idxY, 6))
 						{
-							//카메라흔들림적용
-							//사운드적용
+							_isUseShovel = true;
+							CAMERA->isQuake();
 						}
+						_isUseShovel = true;
 					}
 				}
 			}
@@ -516,7 +600,7 @@ void player::keyUpdate()
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY - 1);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY - 1, 8))
 				{
-					
+					OBJECTMANAGER->setIsEffectUse(true);
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -538,7 +622,7 @@ void player::keyUpdate()
 					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
 					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
 					}
-					//카메라흔들림적용
+					CAMERA->isQuake();
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
@@ -566,16 +650,18 @@ void player::keyUpdate()
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
 						SOUNDMANAGER->play("sound_door_open");
-						//카메라흔들림적용
+						CAMERA->isQuake();
 						OBJECTMANAGER->deleteObject(target);
 					}
 					else if (_playerShovel != NULL)
 					{
 						if (_playerShovel->useItem(_idxX, _idxY - 1, 8))
 						{
-							//카메라흔들림적용
-							//사운드적용
+							_isUseShovel = true;
+							_isQuakeCamera = true;
+							CAMERA->isQuake();
 						}
+						_isUseShovel = true;
 					}
 				}
 			}
@@ -589,7 +675,7 @@ void player::keyUpdate()
 				target = OBJECTMANAGER->getCheckObj(_idxX, _idxY + 1);
 				if (_playerWeapon != NULL && _playerWeapon->useItem(_idxX, _idxY + 1, 2))
 				{
-				
+					OBJECTMANAGER->setIsEffectUse(true);
 					int num = RND->getFromIntTo(1, 17);
 					switch (num)
 					{
@@ -611,7 +697,7 @@ void player::keyUpdate()
 					case 16: SOUNDMANAGER->play("sound_cad_melee_4_04"); break;
 					case 17: SOUNDMANAGER->play("sound_cad_melee_4_05"); break;
 					}
-					//카메라흔들림적용
+					CAMERA->isQuake();
 				}
 				else if (target == NULL || target->getObjType() == OBJECT_TYPE_FLOOR || target->getObjType() == OBJECT_TYPE_ITEM)
 				{
@@ -639,16 +725,17 @@ void player::keyUpdate()
 					if (target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_01] || target->getImgName() == IMAGE_NAME[IMAGE_NAME_DOOR_02])
 					{
 						SOUNDMANAGER->play("sound_door_open");
-						//카메라흔들림적용
+						CAMERA->isQuake();
 						OBJECTMANAGER->deleteObject(target);
 					}
 					else if (_playerShovel != NULL)
 					{
 						if (_playerShovel->useItem(_idxX, _idxY + 1, 2))
 						{
-							//카메라흔들림적용
-							//사운드적용
+							_isUseShovel = true;
+							CAMERA->isQuake();
 						}
+						_isUseShovel = true;
 					}
 				}
 			}
@@ -664,74 +751,74 @@ void player::playerStateUpdate(bool check)
 	{
 		switch (_playerState)
 		{
-			case PLAYER_STATE_JUMP_LEFT:
+		case PLAYER_STATE_JUMP_LEFT:
+		{
+			_posX -= _speed;
+			_moveDistance -= _speed;
+			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+			if (_posZ > 0) _posZ = 0;
+			if (_moveDistance < _speed)
 			{
-				_posX -= _speed;
-				_moveDistance -= _speed;
-				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-				if (_posZ > 0) _posZ = 0;
-				if (_moveDistance < _speed)
-				{
-					horizonSet();
-					_jumpPower = 0;
-					_posZ = 0;
-					_isPress = true;
-					_playerState = PLAYER_STATE_NONE;
-				}
-				break;
+				horizonSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_isPress = true;
+				_playerState = PLAYER_STATE_NONE;
 			}
-			case PLAYER_STATE_JUMP_RIGHT:
+			break;
+		}
+		case PLAYER_STATE_JUMP_RIGHT:
+		{
+			_posX += _speed;
+			_moveDistance -= _speed;
+			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+			if (_posZ > 0) _posZ = 0;
+			if (_moveDistance < _speed)
 			{
-				_posX += _speed;
-				_moveDistance -= _speed;
-				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-				if (_posZ > 0) _posZ = 0;
-				if (_moveDistance < _speed)
-				{
-					horizonSet();
-					_jumpPower = 0;
-					_posZ = 0;
-					_isPress = true;
-					_playerState = PLAYER_STATE_NONE;
-				}
-				break;
+				horizonSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_isPress = true;
+				_playerState = PLAYER_STATE_NONE;
 			}
-			case PLAYER_STATE_JUMP_UP:
+			break;
+		}
+		case PLAYER_STATE_JUMP_UP:
+		{
+			_posY -= _speed;
+			_moveDistance -= _speed;
+			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+			if (_posZ > 0) _posZ = 0;
+			if (_moveDistance < _speed)
 			{
-				_posY -= _speed;
-				_moveDistance -= _speed;
-				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-				if (_posZ > 0) _posZ = 0;
-				if (_moveDistance < _speed)
-				{
-					verticalSet();
-					_jumpPower = 0;
-					_posZ = 0;
-					_isPress = true;
-					_playerState = PLAYER_STATE_NONE;
-				}
-				break;
+				verticalSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_isPress = true;
+				_playerState = PLAYER_STATE_NONE;
 			}
-			case PLAYER_STATE_JUMP_DOWN:
+			break;
+		}
+		case PLAYER_STATE_JUMP_DOWN:
+		{
+			_posY += _speed;
+			_moveDistance -= _speed;
+			_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
+			_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
+			if (_posZ > 0) _posZ = 0;
+			if (_moveDistance < _speed)
 			{
-				_posY += _speed;
-				_moveDistance -= _speed;
-				_posZ -= _jumpPower * TIMEMANAGER->getElapsedTime();
-				_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime();
-				if (_posZ > 0) _posZ = 0;
-				if (_moveDistance < _speed)
-				{
-					verticalSet();
-					_jumpPower = 0;
-					_posZ = 0;
-					_isPress = true;
-					_playerState = PLAYER_STATE_NONE;
-				}
-				break;
+				verticalSet();
+				_jumpPower = 0;
+				_posZ = 0;
+				_isPress = true;
+				_playerState = PLAYER_STATE_NONE;
 			}
+			break;
+		}
 		}
 		if (_moveDistance == 0) _isMove = true;
 	}
@@ -849,7 +936,7 @@ void player::setEquipUI(parentObj* obj)
 	}
 
 	//플레이어 스탯 초기화
-	_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
+	_playerStat = { _playerStat.heart, _playerStat.maxHeart, _playerStat.coin, };
 
 	if (_playerShovel != NULL)
 	{
@@ -859,6 +946,7 @@ void player::setEquipUI(parentObj* obj)
 
 		if (_playerShovel == obj)
 			obj->itemInven(_inven[0].pos.x + 8, _inven[0].pos.y + 13);
+		_playerStat.shovelPower += _playerShovel->getAppliedValue();
 	}
 	if (_playerWeapon != NULL)
 	{
@@ -872,6 +960,16 @@ void player::setEquipUI(parentObj* obj)
 
 				if (_playerWeapon == obj)
 					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+				_playerStat.attack += _playerWeapon->getAppliedValue();
+				if (_inven[i].object->getImgName() == "weapon_golden_lute")
+				{
+					if (_playerArmor == NULL)
+						_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
+					else
+						_curArmor = _playerArmor->getImgName();
+					playerAniStart_Body(_curArmor);
+
+				}
 
 				break;
 			}
@@ -889,11 +987,19 @@ void player::setEquipUI(parentObj* obj)
 
 				//if (_playerArmor == obj)
 				//	obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+				if (_inven[i].object->getImgName() == "weapon_golden_lute")
+				{
+					playerAniStart_Body(_curArmor);
+				}
+				else
+				{
+					_curArmor = _playerArmor->getImgName();
+					playerAniStart_Head("right_head");
+					playerAniStart_Body(_curArmor);
+				}
 
-				_curArmor = _playerArmor->getImgName();
-				playerAniStart_Head("right_head");
-				playerAniStart_Body(_curArmor);
 
+				_playerStat.defence += _playerArmor->getAppliedValue();
 				break;
 			}
 		}
@@ -910,6 +1016,7 @@ void player::setEquipUI(parentObj* obj)
 
 				if (_playerHeadWear == obj)
 					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
+				_playerStat.defence += _playerHeadWear->getAppliedValue();
 
 				break;
 			}
@@ -927,7 +1034,7 @@ void player::setEquipUI(parentObj* obj)
 
 				if (_playerFootWear == obj)
 					obj->itemInven(_inven[i].pos.x + 8, _inven[i].pos.y + 13);
-
+				_playerStat.defence += _playerFootWear->getAppliedValue();
 				break;
 			}
 		}
@@ -997,7 +1104,7 @@ void player::brokenItemEquipUI()
 	}
 
 	//플레이어 스탯 초기화
-	_playerStat = { _playerStat.heart, _playerStat.maxHeart, };
+	_playerStat = { _playerStat.heart, _playerStat.maxHeart, _playerStat.coin, };
 
 	if (_playerShovel != NULL)
 	{
@@ -1233,26 +1340,38 @@ void player::drawEquipUI()
 
 			if (_inven[i].object->getPosX() == _inven[i].pos.x + 3)
 			{
-				if (_inven[i].object->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
+				if (_inven[i].object->getImgName() == "weapon_blunderbuss")
 				{
-					IMAGEMANAGER->frameRender(_inven[i].UIKey, _inven[i].pos.x + 13, _inven[i].pos.y - 10, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
+					IMAGEMANAGER->frameRender(_inven[i].object->getImgName(), CAMERA->getPosX() + _inven[i].pos.x, CAMERA->getPosY() + _inven[i].pos.y - 13, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
 				}
 				else
 					IMAGEMANAGER->frameRender(_inven[i].object->getImgName(), CAMERA->getPosX() + _inven[i].pos.x + 8, CAMERA->getPosY() + _inven[i].pos.y + 13, _inven[i].object->getFrameX(), _inven[i].object->getFrameY());
 			}
-			if (_inven[i].object->getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
+			if (_inven[i].object->getImgName() == "weapon_blunderbuss")
 			{
-				if (_inven[i].object->getFrameX() == 1)
-					IMAGEMANAGER->frameRender("equipUI_reload", _inven[i].pos.x, _inven[i].pos.y, 0, 0);
+				if (_inven[6].object != NULL)
+				{
+					if (_inven[i].object->getFrameX() == 1)
+					{
+						IMAGEMANAGER->frameRender("equipUI_reload", CAMERA->getPosX() + _inven[7].pos.x, CAMERA->getPosY() + _inven[7].pos.y, 0, 0);
+						IMAGEMANAGER->findImage(_inven[i].object->getImgName())->frameRender2(CAMERA->getPosX() + _inven[7].pos.x + 5, CAMERA->getPosY() + _inven[7].pos.y - 12, _inven[i].object->getFrameX(), 0);
+					}
+				}
 				else
-					IMAGEMANAGER->frameRender("equipUI_weapon", _inven[i].pos.x, _inven[i].pos.y, 0, 0);
+				{
+					if (_inven[i].object->getFrameX() == 1)
+					{
+						IMAGEMANAGER->frameRender("equipUI_reload", CAMERA->getPosX() + _inven[6].pos.x, CAMERA->getPosY() + _inven[6].pos.y, 0, 0);
+						IMAGEMANAGER->findImage(_inven[i].object->getImgName())->frameRender2(CAMERA->getPosX() + _inven[6].pos.x + 5, CAMERA->getPosY() + _inven[6].pos.y - 12, _inven[i].object->getFrameX(), 0);
+					}
+				}
 			}
 			if (_inven[i].object->getIsThrow())
 			{
 				if (_inven[6].object != NULL)
 				{
 					IMAGEMANAGER->findImage("equipUI_throw")->render2(CAMERA->getPosX() + _inven[7].pos.x, CAMERA->getPosY() + _inven[7].pos.y);
-					IMAGEMANAGER->findImage(_inven[i].object->getImgName())->frameRender2(CAMERA->getPosX() + _inven[6].pos.x + 5, CAMERA->getPosY() + _inven[6].pos.y + 12, 0, 0);
+					IMAGEMANAGER->findImage(_inven[i].object->getImgName())->frameRender2(CAMERA->getPosX() + _inven[7].pos.x + 5, CAMERA->getPosY() + _inven[7].pos.y + 12, 0, 0);
 				}
 				else
 				{
@@ -1307,7 +1426,7 @@ void player::initItem()
 	parentObj* pTempObj;
 	weapon_dagger_basic weapon;
 
-	weapon.init(WEAPON_NAME[ITEM_WEAPON_DAGGER_BASIC], _idxX, _idxY - 1, ITEM_TYPE_WEAPON);
+	weapon.init(WEAPON_NAME[ITEM_WEAPON_DAGGER_BASIC], 0, 0, ITEM_TYPE_WEAPON);
 	tempObj = weapon;
 	pTempObj = OBJECTMANAGER->objectPush(tempObj);
 
@@ -1318,7 +1437,7 @@ void player::initItem()
 	_playerWeapon->setIsThrow(true);
 
 	shovel_basic shovel;
-	shovel.init(SHOVEL_NAME[ITEM_SHOVEL_BASIC], _idxX - 1, _idxY, ITEM_TYPE_SHOVEL);
+	shovel.init(SHOVEL_NAME[ITEM_SHOVEL_BASIC], 0, 0, ITEM_TYPE_SHOVEL);
 	tempObj = shovel;
 	pTempObj = OBJECTMANAGER->objectPush(tempObj);
 
@@ -1327,7 +1446,7 @@ void player::initItem()
 	OBJECTMANAGER->setTileIdx(_playerShovel, 0, 0);
 	_playerShovel->setIsMoveInven(false);
 
-	
+
 	if (_playerShovel != NULL)
 	{
 		if (_inven[0].isUse == false)
@@ -1365,185 +1484,181 @@ void player::addInven(parentObj * obj)
 	{
 		switch (obj->getItemKind())
 		{
-			case ITEM_TYPE_SHOVEL:
+		case ITEM_TYPE_SHOVEL:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
 			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				_putObj = _playerShovel;
-				_playerShovel = obj;
-
-				//적용값
-				//_playerStat.shovelPower += obj
-
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
 				break;
 			}
-			case ITEM_TYPE_WEAPON:
+			_putObj = _playerShovel;
+			_playerShovel = obj;
+
+			break;
+		}
+		case ITEM_TYPE_WEAPON:
+		{
+			SOUNDMANAGER->play("sound_pickup_weapon");
+			_putObj = _playerWeapon;
+			_putObj->setIsSight(true);
+			_playerWeapon = obj;
+			break;
+		}
+		case ITEM_TYPE_TORCH:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
 			{
-				SOUNDMANAGER->play("sound_pickup_weapon");
-				_putObj = _playerWeapon;
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
+				break;
+			}
+			_putObj = _playerTorch;
+			_playerTorch = obj;
+			break;
+		}
+		case ITEM_TYPE_ARMOR:
+		{
+			SOUNDMANAGER->play("sound_pickup_armor");
+			_putObj = _playerArmor;
+			if (_playerArmor != NULL)
 				_putObj->setIsSight(true);
-				_playerWeapon = obj;
+			_playerArmor = obj;
+			_curArmor = _playerArmor->getImgName();
+			break;
+		}
+		case ITEM_TYPE_HEADWEAR:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
+			{
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
+				break;
+			}
+			_putObj = _playerHeadWear;
+			_playerHeadWear = obj;
+			
+			break;
+		}
+		case ITEM_TYPE_FOOTWEAR:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
+			{
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
+				break;
+			}
+			_putObj = _playerFootWear;
+			_playerFootWear = obj;
 
-				//적용값
-				//_playerStat.attack += obj
-				break;
-			}
-			case ITEM_TYPE_TORCH:
+			break;
+		}
+		case ITEM_TYPE_CONSUMABLE:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
 			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				_putObj = _playerTorch;
-				_playerTorch = obj;
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
 				break;
 			}
-			case ITEM_TYPE_ARMOR:
+			_putObj = _playerItem;
+			_playerItem = obj;
+			break;
+		}
+		case ITEM_TYPE_HEART:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
 			{
-				SOUNDMANAGER->play("sound_pickup_armor");
-				_putObj = _playerArmor;
-				if(_playerArmor != NULL)
-					_putObj->setIsSight(true);
-				_playerArmor = obj;
-				_curArmor = _playerArmor->getImgName();
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
 				break;
 			}
-			case ITEM_TYPE_HEADWEAR:
+			//하트증가시키자
+			//_playerStat.heart += 
+			OBJECTMANAGER->deleteObject(obj);
+			break;
+		}
+		case ITEM_TYPE_COIN:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
 			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				_putObj = _playerShovel;
-				_playerShovel = obj;
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
 				break;
 			}
-			case ITEM_TYPE_FOOTWEAR:
+			//코인증가시키자
+			_playerStat.coin += obj->getAppliedValue();
+			OBJECTMANAGER->deleteObject(obj);
+			break;
+		}
+		case ITEM_TYPE_BOMB:
+		{
+			int random = RND->getFromIntTo(1, 3);
+			switch (random)
 			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				_putObj = _playerFootWear;
-				_playerFootWear = obj;
+			case 1:
+				SOUNDMANAGER->play("sound_pickup_gold_01");
+				break;
+			case 2:
+				SOUNDMANAGER->play("sound_pickup_gold_02");
+				break;
+			case 3:
+				SOUNDMANAGER->play("sound_pickup_gold_03");
 				break;
 			}
-			case ITEM_TYPE_CONSUMABLE:
-			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				_putObj = _playerItem;
-				_playerItem = obj;
-				break;
-			}
-			case ITEM_TYPE_HEART:
-			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				//하트증가시키자
-				//_playerStat.heart += 
-				OBJECTMANAGER->deleteObject(obj);
-				break;
-			}
-			case ITEM_TYPE_COIN:
-			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				//코인증가시키자
-				_playerStat.coin += obj->getAppliedValue();
-				OBJECTMANAGER->deleteObject(obj);
-				break;
-			}
-			case ITEM_TYPE_BOMB:
-			{
-				int random = RND->getFromIntTo(1, 3);
-				switch (random)
-				{
-				case 1:
-					SOUNDMANAGER->play("sound_pickup_gold_01");
-					break;
-				case 2:
-					SOUNDMANAGER->play("sound_pickup_gold_02");
-					break;
-				case 3:
-					SOUNDMANAGER->play("sound_pickup_gold_03");
-					break;
-				}
-				_putObj = _playerBomb;
-				_playerBomb = obj;
-				break;
-			}
+			_putObj = _playerBomb;
+			_playerBomb = obj;
+			break;
+		}
 		}
 		setEquipUI(obj);
 	}
@@ -1574,8 +1689,24 @@ void player::hitPlayer(int damage)
 		{
 			_curArmor = ARMOR_NAME[ITEM_ARMOR_NONE];
 
-			playerAniStart_Head("right_head");
-			playerAniStart_Body(_curArmor);
+			if (_playerWeapon != NULL)
+			{
+				if (_playerWeapon->getImgName() == "weapon_golden_lute")
+				{
+					playerAniStart_Head("right_head");
+					playerAniStart_BodyLute(_curArmor);
+				}
+				else
+				{
+					playerAniStart_Head("right_head");
+					playerAniStart_Body(_curArmor);
+				}
+			}
+			else
+			{
+				playerAniStart_Head("right_head");
+				playerAniStart_Body(_curArmor);
+			}
 
 			//적용값설정
 			//_playerStat.defence -= _playerArmor.방어력
@@ -1588,8 +1719,8 @@ void player::hitPlayer(int damage)
 			}
 		}
 	}
-	else if (_playerHeadWear != NULL)
-	{	
+	if (_playerHeadWear != NULL)
+	{
 		if (_playerHeadWear->getImgName() == HEADWEAR_NAME[ITEM_HEADWEAR_TELEPORT])
 		{
 			SOUNDMANAGER->play("sound_teleport");
@@ -1611,12 +1742,12 @@ void player::hitPlayer(int damage)
 
 		switch (rand)
 		{
-			case 1: SOUNDMANAGER->play("sound_hurt_player_01"); break;
-			case 2: SOUNDMANAGER->play("sound_hurt_player_02"); break;
-			case 3: SOUNDMANAGER->play("sound_hurt_player_03"); break;
-			case 4: SOUNDMANAGER->play("sound_hurt_player_04"); break;
-			case 5: SOUNDMANAGER->play("sound_hurt_player_05"); break;
-			case 6: SOUNDMANAGER->play("sound_hurt_player_06"); break;
+		case 1: SOUNDMANAGER->play("sound_hurt_player_01"); break;
+		case 2: SOUNDMANAGER->play("sound_hurt_player_02"); break;
+		case 3: SOUNDMANAGER->play("sound_hurt_player_03"); break;
+		case 4: SOUNDMANAGER->play("sound_hurt_player_04"); break;
+		case 5: SOUNDMANAGER->play("sound_hurt_player_05"); break;
+		case 6: SOUNDMANAGER->play("sound_hurt_player_06"); break;
 		}
 
 		int hurt;
@@ -1624,8 +1755,17 @@ void player::hitPlayer(int damage)
 		if (_playerArmor != NULL)
 		{
 			if (_playerArmor->getImgName() == ARMOR_NAME[ITEM_ARMOR_KARADE])	hurt = (damage * 2 - _playerStat.defence) * 2;	//(적공격력 - 내방어력) X 2;
+			else if (damage < _playerStat.defence)
+			{
+				hurt = 1;
+			}
+			else
+				hurt = damage - _playerStat.defence;	//플레이어가 입은 데미지 = 적데미지 * 2 - 플레이어 방어력
+		
 		}
-		else																hurt = damage - _playerStat.defence;	//플레이어가 입은 데미지 = 적데미지 * 2 - 플레이어 방어력
+		else
+			hurt = damage - _playerStat.defence;
+		
 
 		if (hurt < 0) hurt = 0;
 
@@ -1671,11 +1811,11 @@ void player::hitPlayer(int damage)
 			}
 		}
 	}
-	//카메라 흔들림 설정
+	CAMERA->isQuake();
 	if (_playerStat.heart <= 0)
 	{
-		_playerStat.heart = 0;
-		this->playerDead();
+		_playerStat.heart = 1;
+		//this->playerDead();
 	}
 
 }

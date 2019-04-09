@@ -16,6 +16,6 @@ public:
 	void render();
 
 
-	void SetNextScene(string sceneName) { nextScene = sceneName; };
+	void setNextScene(string sceneName) { nextScene = sceneName; };
 };
 

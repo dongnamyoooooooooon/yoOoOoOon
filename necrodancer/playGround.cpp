@@ -14,8 +14,11 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
+	SOUNDMANAGER->addSound("music_loading", "sound/music/loading.ogg", true, true);
+	IMAGEMANAGER->addImage("loadingImg", L"image/mainmenu.png", 960, 540);
+	IMAGEMANAGER->addImage("continue", L"image/continue.png", 440, 36);
+	IMAGEMANAGER->addFrameImage("zombie_run", L"image/zombie_electric.png", 2784, 116, 48, 2);
 	
-
 	{
 		//맵툴배경
 		IMAGEMANAGER->addImage("maptoolbackground", L"image/mapTool/maptoolBackground.png", 240, 540);
@@ -137,6 +140,8 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addFrameImage(SHOVEL_NAME[ITEM_SHOVEL_BLOOD], L"image/items/shovel_blood.png", 48, 96, 1, 2);
 		IMAGEMANAGER->addFrameImage(SHOVEL_NAME[ITEM_SHOVEL_CRYSTAL], L"image/items/shovel_crystal.png", 48, 96, 1, 2);
 		IMAGEMANAGER->addFrameImage(SHOVEL_NAME[ITEM_SHOVEL_GLASSSHARD], L"image/items/shovel_shard.png", 48, 96, 1, 2);
+
+		EFFECTMANAGER->addEffect(SHOVEL_NAME[ITEM_SHOVEL_BASIC], "image/items/shovel_basic.png", 48, 48, 48, 48, 8, 1, 50);
 
 		//무기
 		IMAGEMANAGER->addFrameImage(WEAPON_NAME[ITEM_WEAPON_DAGGER_BASIC], L"image/items/weapon_dagger.png", 48, 96, 1, 2);
@@ -268,16 +273,14 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addFrameImage(COIN_NAME[ITEM_COIN_35], L"image/items/resource_hoard_gold.png", 48, 96, 1, 2);
 		IMAGEMANAGER->addFrameImage(COIN_NAME[ITEM_COIN_50], L"image/items/resource_hoard.png", 68, 76, 1, 2);
 
-		//무기이펙트
-		IMAGEMANAGER->addFrameImage("attack_dagger_basic", L"image/effect/swipe_dagger.png", 144, 48, 3, 1);
-	
-
 		//몬스터(잡잡잡)
 		IMAGEMANAGER->addImage("enemy_heart_empty", L"image/enemy/heart_empty_small.png", 24, 24);
 		IMAGEMANAGER->addImage("enemy_heart", L"image/enemy/heart_small.png", 24, 24);
 		IMAGEMANAGER->addImage("enemy_shadow", L"image/enemy/shadow_standard.png", 48, 54);
 		IMAGEMANAGER->addImage("boss_shadow", L"image/enemy/tentacle_tell.png", 30, 20);
 		IMAGEMANAGER->addFrameImage("boss_attack", L"image/enemy/boss_attack.png", 710, 145, 5, 1);
+		IMAGEMANAGER->addFrameImage("enemy_jump", L"image/enemy/enemy_jump.png", 240, 48, 5, 1);
+		EFFECTMANAGER->addEffect("enemy_attack", "image/enemy/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 		//아이템
 		IMAGEMANAGER->addFrameImage("shovel_basic", L"image/items/shovel_basic.png", 48, 96, 1, 2);
@@ -286,9 +289,10 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addImage("player_shadow", L"image/player/player_shadow.png", 48, 54);
 		IMAGEMANAGER->addFrameImage("player_head", L"image/player/player_heads.png", 192, 96, 4, 2);
 		IMAGEMANAGER->addFrameImage("player_body", L"image/player/player_body.png", 192, 480, 4, 10);
+		IMAGEMANAGER->addFrameImage("player_body_lute", L"image/player/player_body_lute.png", 192, 480, 4, 10);
 
 		//상점주인
-		IMAGEMANAGER->addImage("musical_note", L"image/musical_note.png", 6, 6);
+		//IMAGEMANAGER->addImage("musical_note", L"image/musical_note.png", 6, 6);
 
 		//UI
 		IMAGEMANAGER->addImage("ui_beat_marker", L"image/ui/ui_beat_marker.png", 12, 64);
@@ -300,6 +304,7 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addImage("ui_large_half_heart", L"image/ui/ui_half_heart_large.png", 57, 53);
 		IMAGEMANAGER->addImage("ui_X", L"image/ui/ui_X.png", 9, 9);
 		IMAGEMANAGER->addImage("ui_coins", L"image/ui/ui_coins.png", 48, 48);
+		IMAGEMANAGER->addImage("ui_multiplier", L"image/game_coinmultiplier.png", 81, 18);
 
 		IMAGEMANAGER->addFrameImage("ui_digit", L"image/ui/ui_digits.png", 198, 24, 11, 1);
 		IMAGEMANAGER->addFrameImage("ui_beat_heart", L"image/ui/ui_beat_heart.png", 160, 100, 2, 1);
@@ -323,10 +328,41 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addImage("equipUI_throw", L"image/ui/ui_slot_throw.png", 60, 84);
 		IMAGEMANAGER->addImage("equipUI_throw2", L"image/ui/ui_slot_throw2.png", 60, 84);
 
+
+		//무기이펙트
+		IMAGEMANAGER->addFrameImage("attack_dagger_basic", L"image/effect/swipe_dagger.png", 144, 48, 3, 1);
+		IMAGEMANAGER->addFrameImage("attack_dagger_basic_ver", L"image/effect/swipe_dagger_v.png", 48, 144, 1, 3);
+		IMAGEMANAGER->addFrameImage("attack_broadsword_basic", L"image/effect/swipe_broadsword.png", 144, 144, 3, 1);
+		IMAGEMANAGER->addFrameImage("attack_broadsword_basic_ver", L"image/effect/swipe_broadsword_v.png", 144, 144, 1, 3);
+		IMAGEMANAGER->addFrameImage("attack_rapier_basic", L"image/effect/swipe_rapier.png", 384, 48, 4, 1);
+		IMAGEMANAGER->addFrameImage("attack_rapier_basic_v", L"image/effect/swipe_rapier_v.png", 48, 384, 1, 4);
+		IMAGEMANAGER->addFrameImage("attack_longsword_basic", L"image/effect/swipe_longsword.png", 384, 48, 4, 1);
+		IMAGEMANAGER->addFrameImage("attack_longsword_basic_v", L"image/effect/swipe_longsword_v.png", 48, 384, 1, 4);
+		IMAGEMANAGER->addFrameImage("attack_bow_basic", L"image/effect/swipe_arrow.png", 288, 48, 6, 1);
+		IMAGEMANAGER->addFrameImage("attack_bow_basic_v", L"image/effect/swipe_arrow_v.png", 48, 188, 1, 6);
+		IMAGEMANAGER->addFrameImage("attack_flail_basic", L"image/effect/swipe_flail.png", 590, 156, 5, 1);
+		IMAGEMANAGER->addFrameImage("attack_flail_basic_v", L"image/effect/swipe_flail_v.png", 156, 590, 1, 5);
+		IMAGEMANAGER->addFrameImage("attack_blunderbuss", L"image/effect/swipe_blunderbuss.png", 1408, 218, 8, 1);
+		IMAGEMANAGER->addFrameImage("attack_blunderbuss_v", L"image/effect/swipe_blunderbuss_v.png", 218, 1408, 1, 8);
+		IMAGEMANAGER->addFrameImage("attack_golden_lute", L"image/effect/musical_note.png", 6, 6, 1, 1);
+
 		//아이템설명
 		IMAGEMANAGER->addImage("hint_dagger_basic", L"image/hint/hint_daggerthrowable.png", 140, 18);
 		IMAGEMANAGER->addImage("hint_broadsword_basic", L"image/hint/hint_widerattack.png", 97, 18);
+		IMAGEMANAGER->addImage("hint_rapier_basic", L"image/hint/hint_lungefordoubledamage.png", 152, 18);
+		IMAGEMANAGER->addImage("hint_spear_basic", L"image/hint/hint_longattackthrowable.png", 164, 18);
+		IMAGEMANAGER->addImage("hint_longsword_basic", L"image/hint/hint_longattack.png", 56, 18);
+		IMAGEMANAGER->addImage("hint_bow_basic", L"image/hint/hint_rangedattack.png", 92, 18);
+		IMAGEMANAGER->addImage("hint_fiail_basic", L"image/hint/hint_knockbackattack.png", 73, 18);
+		IMAGEMANAGER->addImage("hint_blunderbuss", L"image/hint/hint_conicalblastneedsreloadingpiercing.png", 328, 18);
+		IMAGEMANAGER->addImage("hint_golden_lute", L"image/hint/hint_moveandattack.png", 111, 18);
 		IMAGEMANAGER->addImage("hint_shovel_basic", L"image/hint/hint_1dig.png", 85, 18);
+		IMAGEMANAGER->addImage("hint_shovel_titanium", L"image/hint/hint_2dig.png", 85, 18);
+		IMAGEMANAGER->addImage("hint_shovel_glass", L"image/hint/hint_2digbreakable.png", 175, 18);
+		IMAGEMANAGER->addImage("hint_shovel_obsidian", L"image/hint/hint_multiplierbaseddig.png", 158, 18);
+		IMAGEMANAGER->addImage("hint_shovel_blood", L"image/hint/hint_diganythingbuttakedamage.png", 326, 18);
+		IMAGEMANAGER->addImage("hint_shovel_crystal", L"image/hint/hint_3dig.png", 85, 18);
+		IMAGEMANAGER->addImage("hint_shovel_glassShard", L"image/hint/hint_glassshardshovel.png", 77, 18);
 		IMAGEMANAGER->addImage("hint_armor_gi", L"image/hint/hint_takeanddealdoubledamage.png", 223, 18);
 		IMAGEMANAGER->addImage("hint_armor_leather", L"image/hint/hint_0-5defense.png", 95, 18);
 		IMAGEMANAGER->addImage("hint_armorchainmail", L"image/hint/hint_1defense.png", 81, 18);
@@ -334,8 +370,14 @@ HRESULT playGround::init()
 		IMAGEMANAGER->addImage("hint_armor_heavyplate", L"image/hint/hint_2defenseheavy.png", 127, 18);
 		IMAGEMANAGER->addImage("hint_armor_obsidian", L"image/hint/hint_multiplierbaseddefense.png", 136, 18);
 		IMAGEMANAGER->addImage("hint_armor_glass", L"image/hint/hint_preventsdamagethenshatters.png", 169, 18);
+		IMAGEMANAGER->addImage("hint_food_1", L"image/hint/hint_restore1health.png", 110, 18);
+		IMAGEMANAGER->addImage("hint_food_2", L"image/hint/hint_restore2health.png", 110, 18);
+		IMAGEMANAGER->addImage("hint_food_3", L"image/hint/hint_restore3health.png", 110, 18);
+		IMAGEMANAGER->addImage("hint_food_4", L"image/hint/hint_restore4health.png", 110, 18);
 
 		IMAGEMANAGER->addImage("hint_torch_basic", L"image/hint/hint_1visionradius.png", 63, 18);
+		IMAGEMANAGER->addImage("hint_torch_bright", L"image/hint/hint_2visionradius.png", 63, 18);
+		IMAGEMANAGER->addImage("hint_torch_luminious", L"image/hint/hint_3visionradius.png", 63, 18);
 
 		//보스인트로
 		IMAGEMANAGER->addImage("boss_bottom", L"image/bossUI/bg_bottomblade.png", 728, 64);
@@ -348,13 +390,14 @@ HRESULT playGround::init()
 
 		//음악
 		SOUNDMANAGER->addSound("mapTool", "sound/music/boss_10.ogg", true, true);
-		SOUNDMANAGER->addSound("test_music", "sound/music/zone1.ogg", true, true);
-		SOUNDMANAGER->addSound("test_music_shopkeeper", "sound/music/zone1_shopkeeper.ogg", true, true);
+		SOUNDMANAGER->addSound("music_item", "sound/music/zone1.ogg", true, true);
+		SOUNDMANAGER->addSound("music_item_shopkeeper", "sound/music/zone1_shopkeeper.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_bass", "sound/music/boss4_bass.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_drum", "sound/music/boss4_drum.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_horn", "sound/music/boss4_horn.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_keytar", "sound/music/boss4_keytar.ogg", true, true);
 		SOUNDMANAGER->addSound("boss_strings", "sound/music/boss4_strings.ogg", true, true);
+		SOUNDMANAGER->addSound("music_lobby", "sound/music/lobby.ogg", true, true);
 
 		//사운드
 		SOUNDMANAGER->addSound("sound_dig_fail", "sound/effect/sfx_dig_fail.ogg", false, false);
@@ -372,6 +415,12 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_pickup_gold_01", "sound/effect/sfx_pickup_gold_01.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_pickup_gold_02", "sound/effect/sfx_pickup_gold_02.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_pickup_gold_03", "sound/effect/sfx_pickup_gold_03.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_blunderbuss_fire", "sound/effect/wep_blunderbuss_fire.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_blunderbuss_reload", "sound/effect/wep_blunderbuss_reload.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_item_food", "sound/effect/sfx_item_food.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_heal_player_01", "sound/effect/vo_cad_heal_01.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_heal_player_02", "sound/effect/vo_cad_heal_02.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_heal_player_03", "sound/effect/vo_cad_heal_03.ogg", false, false);
 	
 		SOUNDMANAGER->addSound("sound_dig_brick", "sound/effect/mov_dig_brick.ogg", false, false);
 		SOUNDMANAGER->addSound("sound_dig_dirt", "sound/effect/mov_dig_dirt.ogg", false, false);
@@ -518,18 +567,33 @@ HRESULT playGround::init()
 		SOUNDMANAGER->addSound("sound_boss_wall", "sound/effect/boss_zone1_walls.ogg", false, false);
 
 		SOUNDMANAGER->addSound("sound_boss_intro", "sound/effect/vo_announcer_coralriff.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_ui_toggle", "sound/effect/sfx_ui_toggle.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_ui_start", "sound/effect/sfx_ui_start.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_ui_select_up", "sound/effect/sfx_ui_select_up.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_ui_select_down", "sound/effect/sfx_ui_select_down.ogg", false, false);
+		SOUNDMANAGER->addSound("sound_ui_back", "sound/effect/sfx_ui_back.ogg", false, false);
 
 	}
+	
+	_loading = new loadingScene;
+	_maptool = new mapToolScene;
+	_boss = new bossScene;
 	_bossIntro = new bossIntroScene;
 	_testMap = new testMapScene;
+	_lobby = new lobbyScene;
 
-	SCENEMANAGER->addScene("맵툴", new mapToolScene);
+	
+	SCENEMANAGER->addScene("맵툴", _maptool);
 	SCENEMANAGER->addScene("테슷흐", _testMap);
-	SCENEMANAGER->addScene("로딩", new loadingScene);
-	SCENEMANAGER->addScene("보스", _bossIntro);
+	SCENEMANAGER->addScene("보스인트로", _bossIntro);
+	SCENEMANAGER->addScene("로비", _lobby);
+	SCENEMANAGER->addScene("보스", _boss);
+	
+
+	SCENEMANAGER->addScene("로딩", _loading);
 
 
-	SCENEMANAGER->changeScene("보스");
+	SCENEMANAGER->changeScene("테슷흐");
 	
 	//커서
 	initCursor();

@@ -45,8 +45,7 @@ void enemy_dragon_green::update()
 		if (_moveBeat == _curMoveBeat)
 		{
 			_curMoveBeat = 0;
-			aStarLoad();
-
+			
 			if (_direction == DIRECTION_LEFT)
 			{
 				_isLeft = true;
@@ -129,6 +128,8 @@ void enemy_dragon_green::update()
 					}
 				}
 			}
+
+			aStarLoad();
 		}
 		_isBeat = false;
 	}
@@ -221,6 +222,7 @@ void enemy_dragon_green::jumpMoveEnemy()
 				_posZ = 0;
 				_jumpPower = 0;
 				horizonSet();
+				CAMERA->isQuake();
 				int num = RND->getFromIntTo(1, 3);
 				switch (num)
 				{
@@ -253,6 +255,7 @@ void enemy_dragon_green::jumpMoveEnemy()
 				_posZ = 0;
 				_jumpPower = 0;
 				horizonSet();
+				CAMERA->isQuake();
 				int num = RND->getFromIntTo(1, 3);
 				switch (num)
 				{
@@ -284,6 +287,7 @@ void enemy_dragon_green::jumpMoveEnemy()
 				_posZ = 0;
 				_jumpPower = 0;
 				verticalSet();
+				CAMERA->isQuake();
 				int num = RND->getFromIntTo(1, 3);
 				switch (num)
 				{
@@ -316,6 +320,7 @@ void enemy_dragon_green::jumpMoveEnemy()
 				_posZ = 0;
 				_jumpPower = 0;
 				verticalSet();
+				CAMERA->isQuake();
 				int num = RND->getFromIntTo(1, 3);
 				switch (num)
 				{

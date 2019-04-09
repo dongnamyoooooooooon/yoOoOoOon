@@ -157,6 +157,7 @@
     <ClInclude Include="armor_obsidian.h" />
     <ClInclude Include="armor_platemail.h" />
     <ClInclude Include="bossIntroScene.h" />
+    <ClInclude Include="bossScene.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="d2dManager.h" />
@@ -203,9 +204,14 @@
     <ClInclude Include="Infomation.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="item_coin.h" />
+    <ClInclude Include="item_food_1.h" />
+    <ClInclude Include="item_food_2.h" />
+    <ClInclude Include="item_food_3.h" />
+    <ClInclude Include="item_food_4.h" />
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="loadingScene.h" />
+    <ClInclude Include="lobbyScene.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="objectManager.h" />
@@ -217,6 +223,12 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="shovel_basic.h" />
+    <ClInclude Include="shovel_blood.h" />
+    <ClInclude Include="shovel_crystal.h" />
+    <ClInclude Include="shovel_glass.h" />
+    <ClInclude Include="shovel_glass_shard.h" />
+    <ClInclude Include="shovel_obsidian.h" />
+    <ClInclude Include="shovel_titanium.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -226,6 +238,8 @@
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="torch_basic.h" />
+    <ClInclude Include="torch_bright.h" />
+    <ClInclude Include="torch_luminious.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="wall.h" />
@@ -242,8 +256,15 @@
     <ClInclude Include="wallStone_Cracked_02.h" />
     <ClInclude Include="wallZone_01.h" />
     <ClInclude Include="wallZone_02.h" />
+    <ClInclude Include="weapon_blunderbuss.h" />
+    <ClInclude Include="weapon_bow_basic.h" />
     <ClInclude Include="weapon_broadsword_basic.h" />
     <ClInclude Include="weapon_dagger_basic.h" />
+    <ClInclude Include="weapon_fiail_basic.h" />
+    <ClInclude Include="weapon_golden_lute.h" />
+    <ClInclude Include="weapon_longsword_basic.h" />
+    <ClInclude Include="weapon_rapier_basic.h" />
+    <ClInclude Include="weapon_spear_basic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
@@ -256,6 +277,7 @@
     <ClCompile Include="armor_obsidian.cpp" />
     <ClCompile Include="armor_platemail.cpp" />
     <ClCompile Include="bossIntroScene.cpp" />
+    <ClCompile Include="bossScene.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="d2dManager.cpp" />
@@ -299,9 +321,14 @@
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="item_coin.cpp" />
+    <ClCompile Include="item_food_1.cpp" />
+    <ClCompile Include="item_food_2.cpp" />
+    <ClCompile Include="item_food_3.cpp" />
+    <ClCompile Include="item_food_4.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="loadingScene.cpp" />
+    <ClCompile Include="lobbyScene.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="objectManager.cpp" />
@@ -311,6 +338,12 @@
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="shovel_basic.cpp" />
+    <ClCompile Include="shovel_blood.cpp" />
+    <ClCompile Include="shovel_crystal.cpp" />
+    <ClCompile Include="shovel_glass.cpp" />
+    <ClCompile Include="shovel_glass_shard.cpp" />
+    <ClCompile Include="shovel_obsidian.cpp" />
+    <ClCompile Include="shovel_titanium.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -322,6 +355,8 @@
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="torch_basic.cpp" />
+    <ClCompile Include="torch_bright.cpp" />
+    <ClCompile Include="torch_luminious.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -338,8 +373,15 @@
     <ClCompile Include="wallStone_Cracked_02.cpp" />
     <ClCompile Include="wallZone_01.cpp" />
     <ClCompile Include="wallZone_02.cpp" />
+    <ClCompile Include="weapon_blunderbuss.cpp" />
+    <ClCompile Include="weapon_bow_basic.cpp" />
     <ClCompile Include="weapon_broadsword_basic.cpp" />
     <ClCompile Include="weapon_dagger_basic.cpp" />
+    <ClCompile Include="weapon_fiail_basic.cpp" />
+    <ClCompile Include="weapon_golden_lute.cpp" />
+    <ClCompile Include="weapon_longsword_basic.cpp" />
+    <ClCompile Include="weapon_rapier_basic.cpp" />
+    <ClCompile Include="weapon_spear_basic.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

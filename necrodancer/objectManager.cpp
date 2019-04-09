@@ -9,9 +9,25 @@
 #include "floorWater.h"
 #include "floorStair.h"
 #include "floorStair_nothing.h"
+
 #include "weapon_dagger_basic.h"
 #include "weapon_broadsword_basic.h"
+#include "weapon_rapier_basic.h"
+#include "weapon_spear_basic.h"
+#include "weapon_longsword_basic.h"
+#include "weapon_bow_basic.h"
+#include "weapon_fiail_basic.h"
+#include "weapon_blunderbuss.h"
+#include "weapon_golden_lute.h"
+
 #include "shovel_basic.h"
+#include "shovel_titanium.h"
+#include "shovel_glass.h"
+#include "shovel_obsidian.h"
+#include "shovel_blood.h"
+#include "shovel_crystal.h"
+#include "shovel_glass_shard.h"
+
 #include "armor_Gi.h"
 #include "armor_leather.h"
 #include "armor_chainmail.h"
@@ -19,8 +35,16 @@
 #include "armor_heavyplate.h"
 #include "armor_obsidian.h"
 #include "armor_glass.h"
+
 #include "torch_basic.h"
+#include "torch_bright.h"
+
 #include "item_coin.h"
+#include "item_food_1.h"
+#include "item_food_2.h"
+#include "item_food_3.h"
+#include "item_food_4.h"
+
 #include "wallZone_01.h"
 #include "wallZone_02.h"
 #include "wallShop.h"
@@ -100,7 +124,6 @@ void objectManager::release()
 
 void objectManager::update()
 {
-
 	SOUNDMANAGER->getSingShopkeeper(_musicKey);
 
 
@@ -181,11 +204,172 @@ void objectManager::render()
 	_viObj = _vObj.begin();
 	for (_viObj; _viObj != _vObj.end(); ++_viObj)
 	{
-		if ((*_viObj)->getObjType() == OBJECT_TYPE_ENEMY && (*_viObj)->getImgName() != "enemy_coralriff_head")
+		if ((*_viObj)->getImgName() == "enemy_coralriff_drums" || (*_viObj)->getImgName() == "enemy_coralriff_horns" ||
+			(*_viObj)->getImgName() == "enemy_coralriff_keytar" || (*_viObj)->getImgName() == "enemy_coralriff_strings" ||
+			(*_viObj)->getImgName() == "enemy_coralriff_head")
 		{
 			(*_viObj)->render();
 		}
 	}
+
+	player* tempPlayer = OBJECTMANAGER->getPlayer();
+
+	if (_isEffectUse)
+	{
+		if (tempPlayer->getPlayerWeapon()->getImgName() == "weapon_bow_basic")
+		{
+			switch (_player->getAttDir())
+			{
+			case PLAYER_STATE_JUMP_LEFT:
+				for (int i = 0; i < _rangeVal; i++)
+				{
+					_effectHImg->frameRenderReverseX(tempPlayer->getPlayerPosX() - 78 - i * 52, tempPlayer->getPlayerPosY() - 26 - _subY, 6 - _effectX - i, 0);
+				}
+				break;
+
+			case PLAYER_STATE_JUMP_RIGHT:
+				for (int i = 0; i < _rangeVal; i++)
+				{
+					_effectHImg->frameRender(tempPlayer->getPlayerPosX() + 26 + i * 52, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX - i, 0);
+				}
+				break;
+
+			case PLAYER_STATE_JUMP_UP:
+				for (int i = 0; i < _rangeVal; i++)
+				{
+					_effectVImg->frameRenderReverseY(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() - 78 - i * 52, 0, 6 - _effectY - i);
+				}
+				break;
+
+			case PLAYER_STATE_JUMP_DOWN:
+				for (int i = 0; i < _rangeVal; i++)
+				{
+					_effectVImg->frameRender(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() + 26 + i * 52, 0, 6 - _effectY - i);
+				}
+				break;
+
+			}
+
+		}
+		else if (tempPlayer->getPlayerWeapon()->getImgName() == "weapon_spear_basic")
+		{
+			if (tempPlayer->getIsLong())
+			{
+				if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+				{
+					_effectHImg->frameRenderReverseX(tempPlayer->getPlayerPosX() - 78 - 26, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+				}
+				else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+				{
+					_effectHImg->frameRender(tempPlayer->getPlayerPosX() + 26 + 26, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+				}
+				else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+				{
+					_effectVImg->frameRenderReverseY(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() - 78 - 52, 0, _effectY);
+				}
+				else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+				{
+					_effectVImg->frameRender(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() + 26 + 26, 0, _effectY);
+				}
+			}
+			else
+			{
+				if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+				{
+					_effectHImg->frameRenderReverseX(tempPlayer->getPlayerPosX() - 78, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+				}
+				else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+				{
+					_effectHImg->frameRender(tempPlayer->getPlayerPosX() + 26, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+				}
+				else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+				{
+					_effectVImg->frameRenderReverseY(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() - 78, 0, _effectY);
+				}
+				else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+				{
+					_effectVImg->frameRender(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() + 26, 0, _effectY);
+				}
+			}
+		}
+		else if (tempPlayer->getPlayerWeapon()->getImgName() == "weapon_longsword_basic" || tempPlayer->getPlayerWeapon()->getImgName() == "weapon_fiail_basic")
+		{
+			if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+			{
+				_effectHImg->frameRenderReverseX(tempPlayer->getPlayerPosX() - 78 - 26, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+			{
+				_effectHImg->frameRender(tempPlayer->getPlayerPosX() + 26 + 26, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+			{
+				_effectVImg->frameRenderReverseY(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() - 78 - 52, 0, _effectY);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+			{
+				_effectVImg->frameRender(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() + 26 + 52, 0, _effectY);
+			}
+		}
+		else if (tempPlayer->getPlayerWeapon()->getImgName() == "weapon_blunderbuss")
+		{
+			if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+			{
+				_effectHImg->frameRenderReverseX(tempPlayer->getPlayerPosX() - 78 - 128, tempPlayer->getPlayerPosY() + 10 - _subY, _effectX, 0);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+			{
+				_effectHImg->frameRender(tempPlayer->getPlayerPosX() + 26 + 16, tempPlayer->getPlayerPosY() + 26 - _subY, _effectX, 0);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+			{
+				_effectVImg->frameRenderReverseY(tempPlayer->getPlayerPosX() - 52 - _subX, tempPlayer->getPlayerPosY() - 78 - 156, 0, _effectY);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+			{
+				_effectVImg->frameRender(tempPlayer->getPlayerPosX() - 52 - _subX, tempPlayer->getPlayerPosY() + 26, 0, _effectY);
+			}
+		}
+		else if (_player->getPlayerWeapon()->getImgName() == "weapon_golden_lute")
+		{
+			if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+			{
+				_effectHImg->frameRender(tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY() - 10 - _posZ, 0, 0, _ruteAlpha);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+			{
+				_effectHImg->frameRender(tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY() - 10 - _posZ, 0, 0, _ruteAlpha);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+			{
+				_effectVImg->frameRender(tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY() - 10 - _posZ, 0, 0, _ruteAlpha);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+			{
+				_effectVImg->frameRender(tempPlayer->getPlayerPosX(), tempPlayer->getPlayerPosY() - 10 - _posZ, 0, 0, _ruteAlpha);
+			}
+		}
+		else
+		{
+			if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_LEFT)
+			{
+				_effectHImg->frameRenderReverseX(tempPlayer->getPlayerPosX() - 78, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_RIGHT)
+			{
+				_effectHImg->frameRender(tempPlayer->getPlayerPosX() + 26, tempPlayer->getPlayerPosY() - 26 - _subY, _effectX, 0);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_UP)
+			{
+				_effectVImg->frameRenderReverseY(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() - 78, 0, _effectY);
+			}
+			else if (tempPlayer->getAttDir() == PLAYER_STATE_JUMP_DOWN)
+			{
+				_effectVImg->frameRender(tempPlayer->getPlayerPosX() - 26 - _subX, tempPlayer->getPlayerPosY() + 26, 0, _effectY);
+			}
+		}
+	}
+
 
 	/*_viObj = _vObj.begin();
 	for (_viObj; _viObj != _vObj.end(); ++_viObj)
@@ -219,6 +403,9 @@ void objectManager::render()
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 0, 0);
 	else
 		IMAGEMANAGER->findImage("ui_beat_heart")->frameRender2((CAMERA->getPosX() + (WINSIZEX / 2) - 40), CAMERA->getPosY() + WINSIZEY - 124, 1, 0);
+
+	IMAGEMANAGER->render("ui_multiplier", CAMERA->getPosX() + WINSIZEX / 2 - 80, CAMERA->getPosY() + WINSIZEY - 20);
+	IMAGEMANAGER->findImage("ui_digit")->frameRender(CAMERA->getPosX() + WINSIZEX / 2 + 10, CAMERA->getPosY() + WINSIZEY - 25, 1 + _chainCount, 0);
 
 	_player->drawEquipUI();
 	_player->drawPlayerUI();
@@ -381,8 +568,10 @@ void objectManager::initBeat(const char * fileName, string musicKey)
 
 	if (_musicKey == "boss")
 		SOUNDMANAGER->playBossZone(_musicKey, 1.0f);
+	else if (_musicKey == "어쩌고")
+		SOUNDMANAGER->playZone(_musicKey, 0.8f);
 	else
-		SOUNDMANAGER->playZone(_musicKey, 1.0f);
+		SOUNDMANAGER->play(_musicKey, 0.8f);
 
 	_vBeat = SOUNDMANAGER->getVBeat();
 	_viBeat = _vBeat.begin();
@@ -393,7 +582,10 @@ void objectManager::initBeat(const char * fileName, string musicKey)
 void objectManager::createBeat()
 {
 
-	_playTime = SOUNDMANAGER->getPosition(_musicKey + "_bass");
+	if (_musicKey == "boss")
+		_playTime = SOUNDMANAGER->getPosition(_musicKey + "_bass");
+	else
+		_playTime = SOUNDMANAGER->getPosition(_musicKey);
 	_time = SOUNDMANAGER->getLength(_musicKey);
 
 	//RECT rc;
@@ -410,18 +602,6 @@ void objectManager::createBeat()
 							  (float)(WINSIZEX / 2) + ((_vBeat[i].beat - _playTime) / 3.7f) + 12,
 							  (float)WINSIZEY - 42 };
 
-		/*if (_musicKey != "boss")
-		{
-			if ((_vBeat.back().beat - 30000) > _vBeat[i].beat)
-				_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
-			else
-				_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker_red");
-		}
-		else if (_musicKey == "boss")
-		{
-			_vBeat[i].img = IMAGEMANAGER->findImage("ui_beat_marker");
-		}*/
-
 		if (_vBeat[i].left_RC.left >= 0) _vBeat[i].alpha += 0.03f;
 
 	}
@@ -436,7 +616,7 @@ void objectManager::createBeat()
 					(float)(WINSIZEX / 2) + 70,
 					(float)WINSIZEY - 40 };
 
-	
+
 }
 
 void objectManager::deleteBeat()
@@ -460,6 +640,122 @@ void objectManager::replaySong()
 	_viBeat = SOUNDMANAGER->getVIBeat();
 	_mBeat = SOUNDMANAGER->getMBeat();
 	_miBeat = SOUNDMANAGER->getMIBeat();
+}
+
+void objectManager::weaponEff()
+{
+	player* _player = OBJECTMANAGER->getPlayer();
+
+	if (_player->getPlayerWeapon()->getImgName() == "weapon_dagger_basic")
+	{
+		_effectHImg = IMAGEMANAGER->findImage("attack_dagger_basic");
+		_effectVImg = IMAGEMANAGER->findImage("attack_dagger_basic_ver");
+		_subX = 0;
+		_subY = 0;
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_broadsword_basic")
+	{
+		_effectHImg = IMAGEMANAGER->findImage("attack_broadsword_basic");
+		_effectVImg = IMAGEMANAGER->findImage("attack_broadsword_basic_ver");
+		_subX = 26;
+		_subY = 26;
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_rapier_basic" || _player->getPlayerWeapon()->getImgName() == "weapon_spear_basic")
+	{
+		if (_player->getIsLong())
+		{
+			_effectHImg = IMAGEMANAGER->findImage("attack_rapier_basic");
+			_effectVImg = IMAGEMANAGER->findImage("attack_rapier_basic_v");
+			_subX = 0;
+			_subY = 26;
+		}
+		else
+		{
+			_effectHImg = IMAGEMANAGER->findImage("attack_dagger_basic");
+			_effectVImg = IMAGEMANAGER->findImage("attack_dagger_basic_ver");
+			_subX = 0;
+			_subY = 0;
+		}
+
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_longsword_basic")
+	{
+		if (_player->getIsLong())
+		{
+			_effectHImg = IMAGEMANAGER->findImage("attack_longsword_basic");
+			_effectVImg = IMAGEMANAGER->findImage("attack_longsword_basic_v");
+			_subX = 0;
+			_subY = 26;
+		}
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_bow_basic")
+	{
+		if (_player->getIsLong())
+		{
+			_effectHImg = IMAGEMANAGER->findImage("attack_bow_basic");
+			_effectVImg = IMAGEMANAGER->findImage("attack_bow_basic_v");
+			_subX = 0;
+			_subY = 26;
+		}
+		else
+		{
+			_effectHImg = IMAGEMANAGER->findImage("attack_dagger_basic");
+			_effectVImg = IMAGEMANAGER->findImage("attack_dagger_basic_ver");
+			_subX = 0;
+			_subY = 0;
+		}
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_fiail_basic")
+	{
+		_effectHImg = IMAGEMANAGER->findImage("attack_flail_basic");
+		_effectVImg = IMAGEMANAGER->findImage("attack_flail_basic_v");
+		_subX = 26;
+		_subY = 52;
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_blunderbuss")
+	{
+		_effectHImg = IMAGEMANAGER->findImage("attack_blunderbuss");
+		_effectVImg = IMAGEMANAGER->findImage("attack_blunderbuss_v");
+		_subX = 52;
+		_subY = 150;
+	}
+	else if (_player->getPlayerWeapon()->getImgName() == "weapon_golden_lute")
+	{
+		_effectHImg = IMAGEMANAGER->findImage("attack_golden_lute");
+		_effectVImg = IMAGEMANAGER->findImage("attack_golden_lute");
+	}
+
+	if (_isEffectUse)
+	{
+		_effectCount++;
+		if (_effectCount >= 3)
+		{
+			_effectCount = 0;
+			if (_effectX == _effectHImg->GetMaxFrameX() || _effectY == _effectVImg->GetMaxFrameY())
+			{
+				_isEffectUse = false;
+				_effectX = 0;
+				_effectY = 0;
+			}
+			else
+			{
+				_effectX++;
+				_effectY++;
+			}
+
+			if (_posZ >= 15.0f)
+			{
+				_ruteAlpha = 1.0f;
+				_posZ = 0;
+				_isEffectUse = false;
+			}
+			else
+			{
+				_posZ += 0.5f;
+				_ruteAlpha -= 0.1f;
+			}
+		}
+	}
 }
 
 parentObj* objectManager::objectPush(parentObj obj)
@@ -662,27 +958,39 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_TITANIUM])
 	{
-
+		shovel_titanium* tempObj = new shovel_titanium;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_GLASS])
 	{
-
+		shovel_glass* tempObj = new shovel_glass;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_OBSIDIAN])
 	{
-
+		shovel_obsidian* tempObj = new shovel_obsidian;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_BLOOD])
 	{
-
+		shovel_blood* tempObj = new shovel_blood;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_CRYSTAL])
 	{
-
+		shovel_crystal* tempObj = new shovel_crystal;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == SHOVEL_NAME[ITEM_SHOVEL_GLASSSHARD])
 	{
-
+		shovel_glass_shard* tempObj = new shovel_glass_shard;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_SHOVEL);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_DAGGER_BASIC])
 	{
@@ -738,7 +1046,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_RAPIER_BASIC])
 	{
-
+		weapon_rapier_basic* tempObj = new weapon_rapier_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_RAPIER_TITANIUM])
 	{
@@ -762,7 +1072,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_SPEAR_BASIC])
 	{
-
+		weapon_spear_basic* tempObj = new weapon_spear_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_SPEAR_TITANIUM])
 	{
@@ -786,7 +1098,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_LONGSWORD_BASIC])
 	{
-
+		weapon_longsword_basic* tempObj = new weapon_longsword_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_LONGSWORD_TITANIUM])
 	{
@@ -834,7 +1148,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_BOW_BASIC])
 	{
-
+		weapon_bow_basic* tempObj = new weapon_bow_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_BOW_TITANIUM])
 	{
@@ -906,7 +1222,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_FIAIL_BASIC])
 	{
-
+		weapon_fiail_basic* tempObj = new weapon_fiail_basic;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_FIAIL_TITANIUM])
 	{
@@ -930,7 +1248,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_BLUNDERBUSS])
 	{
-
+		weapon_blunderbuss* tempObj = new weapon_blunderbuss;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_RIFLE])
 	{
@@ -946,7 +1266,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == WEAPON_NAME[ITEM_WEAPON_GOLDENLUTE])
 	{
-
+		weapon_golden_lute* tempObj = new weapon_golden_lute;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_WEAPON);
+		return tempObj;
 	}
 	else if (obj.getImgName() == TORCH_NAME[ITEM_TORCH_BASIC])
 	{
@@ -956,7 +1278,9 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == TORCH_NAME[ITEM_TORCH_BRIGHT])
 	{
-
+		torch_bright* tempObj = new torch_bright;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_TORCH);
+		return tempObj;
 	}
 	else if (obj.getImgName() == TORCH_NAME[ITEM_TORCH_LUMINIOUS])
 	{
@@ -1054,19 +1378,27 @@ parentObj * objectManager::createItem(parentObj obj)
 	}
 	else if (obj.getImgName() == CONSUMABLE_NAME[ITEM_CONSUMABLE_APPLE])
 	{
-
+		item_food_1* tempObj = new item_food_1;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_CONSUMABLE);
+		return tempObj;
 	}
 	else if (obj.getImgName() == CONSUMABLE_NAME[ITEM_CONSUMABLE_CHEESE])
 	{
-
+		item_food_2* tempObj = new item_food_2;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_CONSUMABLE);
+		return tempObj;
 	}
 	else if (obj.getImgName() == CONSUMABLE_NAME[ITEM_CONSUMABLE_DRUMSTICK])
 	{
-
+		item_food_3* tempObj = new item_food_3;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_CONSUMABLE);
+		return tempObj;
 	}
 	else if (obj.getImgName() == CONSUMABLE_NAME[ITEM_CONSUMABLE_HAM])
 	{
-
+		item_food_4* tempObj = new item_food_4;
+		tempObj->init(obj.getImgName(), obj.getIdxX(), obj.getIdxY(), ITEM_TYPE_CONSUMABLE);
+		return tempObj;
 	}
 	else if (obj.getImgName() == CONSUMABLE_NAME[ITEM_CONSUMABLE_WARDRUM])
 	{
@@ -1285,7 +1617,7 @@ void objectManager::grooveChain()
 	{
 		_chainCount++;
 		//사운드 적용
-		SOUNDMANAGER->play("sound_chain_groove");
+		SOUNDMANAGER->play("sound_chain_groove", 1.0f);
 	}
 
 	_killCount++;
@@ -1294,7 +1626,7 @@ void objectManager::grooveChain()
 	{
 		_chainCount++;
 		//사운드 적용
-		SOUNDMANAGER->play("sound_chain_groove");
+		SOUNDMANAGER->play("sound_chain_groove", 1.0f);
 	}
 
 }

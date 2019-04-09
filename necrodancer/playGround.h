@@ -4,6 +4,8 @@
 #include "testMapScene.h"
 #include "loadingScene.h"
 #include "bossIntroScene.h"
+#include "lobbyScene.h"
+#include "bossScene.h"
 
 
 
@@ -21,6 +23,10 @@ private:
 
 	bossIntroScene* _bossIntro;
 	testMapScene* _testMap;
+	lobbyScene* _lobby;
+	mapToolScene* _maptool;
+	loadingScene* _loading;
+	bossScene* _boss;
 
 
 public:

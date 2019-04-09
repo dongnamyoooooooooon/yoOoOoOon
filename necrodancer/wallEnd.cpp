@@ -15,7 +15,7 @@ HRESULT wallEnd::init(string imgName, int idxX, int idxY, bool isTorch)
 {
 
 	wall::init(imgName, idxX, idxY, isTorch);
-	_wallPower = 10;
+	_wallPower = 999;
 	_hasLight = false;
 	_isSight = false;
 

@@ -15,6 +15,9 @@ HRESULT camera::init()
 {
 	_posX = 0;
 	_posY = 0;
+	_isQuake = false;
+	_count = 0;
+
 	return S_OK;
 }
 
@@ -43,6 +46,8 @@ void camera::move(int x, int y)
 	if (_posX <= 0) _posX = 0;
 	_posY = y - 260;
 	if (_posY <= 0) _posY = 0;
+
+	quakeCamera();
 }
 
 void camera::mapToolMove()
@@ -113,5 +118,24 @@ void camera::sampleToolMove()
 		_posY -= CAMERA_SPEED;
 		if (_posY < 0)
 			_posY = 0;
+	}
+}
+
+void camera::quakeCamera()
+{
+	if (_isQuake)
+	{
+		_quakeX= RND->getInt(4) - 2;
+		_quakeY= RND->getInt(4) - 2;
+
+		_posX += _quakeX;
+		_posY += _quakeY;
+		_count++;
+
+		if (_count > 10)
+		{
+			_isQuake = false;
+			_count = 0;
+		}
 	}
 }

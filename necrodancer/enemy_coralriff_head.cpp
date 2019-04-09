@@ -41,6 +41,8 @@ void enemy_coralriff_head::release()
 
 void enemy_coralriff_head::update()
 {
+	KEYANIMANAGER->update("boss_attack");
+
 	if(!OBJECTMANAGER->getIsEnter())
 		createWall();
 
@@ -54,6 +56,7 @@ void enemy_coralriff_head::update()
 			_beatCount++;
 			if (_beatCount >= 53 || _heart != _maxHeart)
 			{
+				OBJECTMANAGER->setBossHit(true);
 				_curMoveBeat++;
 				_shakeVal = 3;
 				SOUNDMANAGER->setBossVolume("boss", 1.0f);
@@ -61,6 +64,7 @@ void enemy_coralriff_head::update()
 				if (_curMoveBeat == 2)
 				{
 					aStarLoad();
+					setFrame();
 					_shakeVal = 0;
 					if (_beatCount >= 1000) _beatCount = 54;
 					_curMoveBeat = 0;
@@ -84,24 +88,25 @@ void enemy_coralriff_head::update()
 			}
 		}
 	}
-
-	setFrame();
 }
 
 void enemy_coralriff_head::render()
 {
-	if (_beatCount >= 53 || _heart != _maxHeart)
+	if (_heart > 0)
 	{
-		if (_shakeVal == 0)
-			IMAGEMANAGER->findImage("boss_attack")->frameRender(_posX - _subX - 20, _posY - _subY, _frameX, 0);
-	}
-	if (_isSaw)
-	{
-		//IMAGEMANAGER->findImage("enemy_shadow")->render(_posX - 24, _posY - 26 + _posZ);
-		if (!_isLeft)
-			_img->aniRenderReverseX(_posX - _subX + _shakeVal, _posY - _subY + _posZ, _ani);
-		else
-			_img->aniRender(_posX - _subX + _shakeVal, _posY - _subY + _posZ, _ani);
+		if (_beatCount >= 53 || _heart != _maxHeart)
+		{
+			if (_shakeVal == 0)
+				IMAGEMANAGER->findImage("boss_attack")->aniRender(_posX - _subX - 25, _posY - _subY, _attackAni);
+		}
+		if (_isSaw)
+		{
+			//IMAGEMANAGER->findImage("enemy_shadow")->render(_posX - 24, _posY - 26 + _posZ);
+			if (!_isLeft)
+				_img->aniRenderReverseX(_posX - _subX + _shakeVal, _posY - _subY + _posZ, _ani);
+			else
+				_img->aniRender(_posX - _subX + _shakeVal, _posY - _subY + _posZ, _ani);
+		}
 	}
 	
 
@@ -121,6 +126,10 @@ void enemy_coralriff_head::render()
 void enemy_coralriff_head::aniSetUp()
 {
 	KEYANIMANAGER->addAnimationType("enemy_coralriff_head");
+	KEYANIMANAGER->addAnimationType("boss_attack");
+
+	int attack[] = { 0,1,2,3,4 };
+	KEYANIMANAGER->addArrayFrameAnimation("boss_attack", "boss_attack", "boss_attack", attack, 5, ANISPEED, false);
 
 	int stand[] = { 0,1,2,3 };
 	KEYANIMANAGER->addArrayFrameAnimation("enemy_coralriff_head", "coralriff_head_stand", "enemy_coralriff_head", stand, 4, ANISPEED, true);
@@ -130,6 +139,9 @@ void enemy_coralriff_head::aniSetUp()
 
 	_ani = KEYANIMANAGER->findAnimation("enemy_coralriff_head", "coralriff_head_stand");
 	_ani->start();
+
+	_attackAni = KEYANIMANAGER->findAnimation("boss_attack", "boss_attack");
+	//_attackAni->start();
 }
 
 void enemy_coralriff_head::aniPlay_Stand()
@@ -387,20 +399,40 @@ void enemy_coralriff_head::createWall()
 			OBJECTMANAGER->deleteObject(OBJECTMANAGER->getCheckObj(idxX, 16));
 			OBJECTMANAGER->setBossWall(idxX, 16);
 		}
+
+		/*for (int idxY = 15; idxY >= 1; idxY--)
+		{
+			for (int idxX = 7; idxX < 12; idxX++)
+			{
+				if (OBJECTMANAGER->getCheckObj(idxX, idxY) == NULL) continue;
+				OBJECTMANAGER->deleteObject(OBJECTMANAGER->getCheckObj(idxX, idxY));
+			}
+		}
+
+		for (int idxY = 15; idxY >= 1; idxY--)
+		{
+			for (int idxX = 7; idxX < 12; idxX++)
+			{
+				if (OBJECTMANAGER->getCheckFloor(idxX, idxY) == NULL) continue;
+				OBJECTMANAGER->deleteFloorTile(OBJECTMANAGER->getCheckFloor(idxX, idxY));
+			}
+		}*/
 		SOUNDMANAGER->play("sound_boss_wall", 0.5f);
 		OBJECTMANAGER->setIsEnter(true);
+		CAMERA->isQuake();
 	}
 
 }
 
 void enemy_coralriff_head::setFrame()
 {
-	_count++;
+	_attackAni = KEYANIMANAGER->findAnimation("boss_attack", "boss_attack");
+	_attackAni->start();
+}
 
-	if (_count % 15 == 0)
-	{
-		_frameX++;
-		if (_frameX >= 4) _frameX = 0;
-		_count = 0;
-	}
+void enemy_coralriff_head::dieEnemy()
+{
+	soundDie();
+	OBJECTMANAGER->grooveChain();
+	OBJECTMANAGER->deleteObject(this);
 }

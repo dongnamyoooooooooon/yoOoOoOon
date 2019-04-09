@@ -23,6 +23,7 @@ HRESULT weapon_dagger_basic::init(string imgName, int idxX, int idxY, ITEM_TYPE 
 	_appliedValue = 1;
 
 	_isThrow = true;
+	_isEffectUse = false;
 
 	return S_OK;
 }
@@ -39,25 +40,6 @@ void weapon_dagger_basic::update()
 void weapon_dagger_basic::render()
 {
 	item::render();
-
-	if (_isEffectUse)
-	{
-		switch (_attackWay)
-		{
-		case 8:
-			IMAGEMANAGER->findImage("attack_dagger_basic")->frameRenderAngle(_posX, _posY, _effectX, 0 , 90);
-			break;
-		case 2:
-			IMAGEMANAGER->findImage("attack_dagger_basic")->frameRenderAngle(_posX, _posY, _effectX, 0 ,-90);
-			break;
-		case 4:
-			IMAGEMANAGER->findImage("attack_dagger_basic")->frameRenderAngle(_posX, _posY, _effectX, 0 , 0);
-			break;
-		case 6:
-			IMAGEMANAGER->findImage("attack_dagger_basic")->frameRenderAngle(_posX, _posY, _effectX, 0 , 180);
-			break;
-		}
-	}
 }
 
 void weapon_dagger_basic::drawHint()
@@ -76,14 +58,12 @@ bool weapon_dagger_basic::useItem(int idxX, int idxY, int way)
 		_effectX = 0;
 		_effectY = 0;
 
-		_posX = tempObj->getIdxX() * TILE_SIZE;
-		_posY = tempObj->getIdxY() * TILE_SIZE;
+		_drawX = tempObj->getIdxX() * TILE_SIZE;
+		_drawY = tempObj->getIdxY() * TILE_SIZE;
 
 		tempObj->hitEnemy(_appliedValue);
 
-		_isEffectUse = true;
 		return true;
 	}
-	_isEffectUse = false;
 	return false;
 }

@@ -9,6 +9,7 @@ protected:
 	bool _isMoveInven;
 	bool _isEffectUse;
 	bool _isThrow;
+	bool _isReload;
 
 	float _gravity;
 	float _jumpPower;
@@ -22,6 +23,8 @@ protected:
 	int _drawX;
 	int _drawY;
 	int _effectCount;
+
+	image* _effectImg;
 
 public:
 	item();

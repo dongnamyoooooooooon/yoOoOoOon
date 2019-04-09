@@ -43,8 +43,8 @@ bool weapon_broadsword_basic::useItem(int idxX, int idxY, int way)
 {
 	parentObj* tempObj[3];
 
-	_posX = OBJECTMANAGER->getPlayer()->getPosX();
-	_posY = OBJECTMANAGER->getPlayer()->getPosY();
+	_posX = OBJECTMANAGER->getPlayer()->getPlayerPosX();
+	_posY = OBJECTMANAGER->getPlayer()->getPlayerPosY();
 
 	switch (way)
 	{

@@ -55,7 +55,10 @@ private:
 	bool					_isMove;						//움직이는지?
 	bool					_isPress;						//눌렀는지?
 	bool					_isHit;							//맞았는지?
-	
+	bool					_isUseShovel;
+	bool					_isQuakeCamera;
+	bool					_isLong;
+	int						_count;
 
 	D2D1_RECT_F				_rc;
 	int						_posX;							//플레이어위치
@@ -68,6 +71,7 @@ private:
 
 	string					_playerHead;					//플레이어키값
 	string					_playerBody;					//플레이어키값
+	string					_playerLute;					//플레이어키값
 	string					_curArmor;						//현재갑옷
 
 	tagInven				_inven[9];						//인벤토리
@@ -121,6 +125,7 @@ public:
 	void playerAniSetUp();
 	void playerAniStart_Head(string keyName);
 	void playerAniStart_Body(string keyName);
+	void playerAniStart_BodyLute(string keyName);
 	void drawBody();
 	void drawHead();
 	void drawShadow();
@@ -156,7 +161,21 @@ public:
 	void drawItemHint();
 	void hitPlayer(int damage);		//맞았을때
 	void equipUpdate();
-	
+
+
+	void setjump(PLAYER_STATE state)
+	{
+		_isMove = false;
+		_playerState = state;
+		_moveDistance = 52;
+	}
+
+	void setHeart(int heart)
+	{
+		int temp = _playerStat.heart + heart;
+		if (temp > _playerStat.maxHeart) _playerStat.heart = _playerStat.maxHeart;
+		else _playerStat.heart = temp;
+	}
 
 	int getPlayerPosX() { return _posX; }
 	int getPlayerPosY() { return _posY; }
@@ -183,6 +202,18 @@ public:
 
 	bool getIsHit() { return _isHit; }
 	void setIsHit(bool check) { _isHit = check; }
+
+	bool getIsUseShovel() { return _isUseShovel; }
+	void setIsUseShovel(bool check) { _isUseShovel = check; }
+
+	parentObj* getPlayerShovel() { return _playerShovel; }
+	parentObj* getPlayerWeapon() { return _playerWeapon; }
+
+	bool getIsQuakeCamera() { return _isQuakeCamera; }
+	void setIsQuakeCamera(bool check) { _isQuakeCamera = check; }
+
+	bool getIsLong() { return _isLong; }
+	void setIsLong(bool check) { _isLong = check; }
 
 };
 
